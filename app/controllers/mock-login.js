@@ -16,14 +16,17 @@ export default class MockLoginController extends Controller {
   *queryStore() {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
     if (this.gemeente) {
-      filter.gebruiker = { bestuurseenheden: this.gemeente };
+      filter.user = {
+        'family-name': this.gemeente,
+      };
     }
     const accounts = yield this.store.query('account', {
-      include: 'gebruiker,gebruiker.bestuurseenheden',
+      include: 'user,user.groups',
       filter: filter,
       page: { size: this.size, number: this.page },
-      sort: 'gebruiker.achternaam',
+      sort: 'user.first-name',
     });
+    console.log(accounts);
     return accounts;
   }
 

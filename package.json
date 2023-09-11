@@ -78,6 +78,9 @@
   },
   "dependencies": {
     "@appuniversum/ember-appuniversum": "^2.12.0",
-    "ember-simple-auth": "^6.0.0"
+    "@lblod/ember-mock-login": "^0.7.0",
+    "ember-cli-sass": "^11.0.1",
+    "ember-simple-auth": "^6.0.0",
+    "sass": "^1.66.1"
   }
 }

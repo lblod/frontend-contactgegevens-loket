@@ -1,0 +1,32 @@
+// Data pagination styles
+.data-table-pagination {
+  margin-top: $au-unit;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.data-table-pagination-left {
+  @extend .au-c-help-text;
+}
+
+.data-table-pagination-right {
+  display: flex;
+  gap: $au-unit-tiny;
+
+  button {
+    @extend .au-c-button;
+    @extend .au-c-button--link;
+  }
+
+  select {
+    background-color: var(--au-white);
+    border: .1rem solid var(--au-gray-300);
+    border-radius: $au-radius;
+    padding: $au-unit-tiny;
+  }
+}
