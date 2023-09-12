@@ -26,8 +26,15 @@ export default class MockLoginController extends Controller {
       page: { size: this.size, number: this.page },
       sort: 'user.first-name',
     });
-    console.log(accounts);
     return accounts;
+  }
+
+  @task
+  *callLogin(loginFunction, account) {
+    const user = yield account.user;
+    const group = (yield user.groups)[0];
+    const groupId = (yield group).id;
+    loginFunction(account.id, groupId);
   }
 
   @restartableTask

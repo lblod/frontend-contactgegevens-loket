@@ -21,12 +21,11 @@ export default class MockLoginRoute extends Route {
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
     if (params.gemeente) filter.user = { groups: params.gemeente };
     const accounts = await this.store.query('account', {
-      include: 'user.groups',
+      include: 'user,user.groups',
       filter: filter,
       page: { size: 10, number: params.page },
       sort: 'user.first-name',
     });
-    console.log(accounts);
     return accounts;
   }
 }

@@ -24,7 +24,7 @@
                   @skin="tertiary"
                   {{on
                     "click"
-                    (fn login.login account.id account.user.group.id)
+                    (perform this.callLogin login.login account)
                   }}
                 >
                   <strong>
@@ -32,7 +32,6 @@
                     {{account.user.familyName}}
                     -&nbsp;
                   </strong>
-                  {{account.user.group.name}}
                 </AuButton>
               </div>
             </li>
