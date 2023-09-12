@@ -82,5 +82,10 @@
     "ember-cli-sass": "^11.0.1",
     "ember-simple-auth": "^6.0.0",
     "sass": "^1.66.1"
+  },
+  "overrides": {
+    "@appuniversum/ember-appuniversum": {
+      "ember-source": "$ember-source"
+    }
   }
 }
