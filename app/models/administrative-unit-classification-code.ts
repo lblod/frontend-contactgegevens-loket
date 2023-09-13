@@ -68,7 +68,7 @@ export const CLASSIFICATION = {
 };
 
 export default class AdministrativeUnitClassificationCodeModel extends Model {
-  @attr label;
+  @attr declare label: string;
 
   get isAgbOrApb() {
     return (

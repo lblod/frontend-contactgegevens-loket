@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
+import type StructuredIdentifierModel from '../models/structured-identifier';
 
 export const ID_NAME = {
   KBO: 'KBO nummer',
@@ -9,11 +10,11 @@ export const ID_NAME = {
 };
 
 export default class IdentifierModel extends Model {
-  @attr idName;
+  @attr declare idName: string;
 
   @belongsTo('structured-identifier', {
     inverse: null,
     async: true,
   })
-  structuredIdentifier;
+  structuredIdentifier: StructuredIdentifierModel | undefined;
 }

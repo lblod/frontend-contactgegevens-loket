@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
+import type AddressModel from '../models/address';
 
 export const CONTACT_TYPE = {
   PRIMARY: 'Primary',
@@ -6,27 +7,27 @@ export const CONTACT_TYPE = {
 };
 
 export default class ContactPointModel extends Model {
-  @attr email;
-  @attr telephone;
-  @attr fax;
-  @attr website;
-  @attr type;
+  @attr declare email: string;
+  @attr declare telephone: string;
+  @attr declare fax: string;
+  @attr declare website: string;
+  @attr declare type: string;
 
   @belongsTo('address', {
     inverse: null,
     async: true,
   })
-  contactAddress;
+  contactAddress: AddressModel | undefined;
 }
 
-export function createPrimaryContact(store) {
+export function createPrimaryContact(store: any) {
   let record = store.createRecord('contact-point');
   record.type = CONTACT_TYPE.PRIMARY; // Workaround for: https://github.com/emberjs/ember-inspector/issues/1898
 
   return record;
 }
 
-export function createSecondaryContact(store) {
+export function createSecondaryContact(store: any) {
   let record = store.createRecord('contact-point');
   record.type = CONTACT_TYPE.SECONDARY; // Workaround for: https://github.com/emberjs/ember-inspector/issues/1898
 

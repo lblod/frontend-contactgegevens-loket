@@ -1,7 +1,7 @@
 import Model, { attr } from '@ember-data/model';
 
 export default class ConceptsModel extends Model {
-  @attr label;
-  @attr altLabel;
-  @attr notation;
+  @attr declare label: string;
+  @attr declare altLabel: string;
+  @attr declare notation: string;
 }
