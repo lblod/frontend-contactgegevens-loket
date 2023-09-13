@@ -1,24 +1,31 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
-
+interface Adress {
+  street: string;
+  number: string;
+  boxNumber: string;
+  postcode: string;
+  municipality: string;
+  country: string;
+}
 export default class AddressModel extends Model {
-  @attr number;
-  @attr boxNumber;
-  @attr street;
-  @attr postcode;
-  @attr municipality;
-  @attr province;
-  @attr addressRegisterUri;
-  @attr country;
-  @attr fullAddress;
+  @attr declare number: string;
+  @attr declare boxNumber: string;
+  @attr declare street: string;
+  @attr declare postcode: string;
+  @attr declare municipality: string;
+  @attr declare province: string;
+  @attr declare addressRegisterUri: string;
+  @attr declare country: string;;
+  @attr declare fullAddress: string;
 
   @belongsTo('concept', {
     inverse: null,
     async: true,
   })
-  source;
+  source: any;
 }
 
-export function combineFullAddress(address) {
+export function combineFullAddress(address: Adress) {
   let fullAddress = [];
 
   const fullStreet = `${address.street || ''} ${address.number || ''} ${
@@ -44,7 +51,7 @@ export function combineFullAddress(address) {
   }
 }
 
-export function createAddress(store) {
+export function createAddress(store: any) {
   let record = store.createRecord('address');
   return record;
 }

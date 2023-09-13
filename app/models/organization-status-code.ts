@@ -7,5 +7,5 @@ export const ORGANIZATION_STATUS = {
 };
 
 export default class OrganizationStatusCodeModel extends Model {
-  @attr label;
+  @attr declare label: string;
 }
