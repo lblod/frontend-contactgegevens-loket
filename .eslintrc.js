@@ -7,6 +7,11 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     requireConfigFile: false,
+    babelOptions: {
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
+    },
   },
   plugins: ['ember'],
   extends: [
@@ -19,7 +24,6 @@ module.exports = {
   },
   rules: {},
   overrides: [
-    // node files
     {
       files: [
         './.eslintrc.js',
@@ -34,7 +38,7 @@ module.exports = {
         './server/**/*.js',
       ],
       parserOptions: {
-        project: './tsconfig.json',
+        sourceType: 'script',
       },
       env: {
         browser: false,
@@ -43,26 +47,17 @@ module.exports = {
       extends: ['plugin:n/recommended'],
     },
     {
-      // typescript files
-      files: ['**/*.ts'],
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: __dirname,
-      },
-      plugins: ['@typescript-eslint'],
-      extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-      ],
-      rules: {
-        '@typescript-eslint/explicit-module-boundary-types': 'error',
-      },
-    },
-
-    {
-      // test files
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+    },
+    {
+      // typescript files
+      files: ['**/*.ts'],
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': false,
+      },
     },
   ],
 };

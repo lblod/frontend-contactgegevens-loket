@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+      "lifeart.vscode-glimmer-syntax",
+      "hridoy.ember-snippets",
+      "dhedgecock.ember-syntax"
+  ]
+}

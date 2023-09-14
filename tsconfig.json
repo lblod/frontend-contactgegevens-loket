@@ -5,11 +5,35 @@
     // The combination of `baseUrl` with `paths` allows Ember's classic package
     // layout, which is not resolvable with the Node resolution algorithm, to
     // work with TypeScript.
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "target": "ES2021",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowJs": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "allowSyntheticDefaultImports": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noEmitOnError": true,
+    "noEmit": true,
+    "types": [],
+
     "baseUrl": ".",
     "paths": {
       "frontend-contactgegevens-loket/tests/*": ["tests/*"],
       "frontend-contactgegevens-loket/*": ["app/*"],
       "*": ["types/*"]
     }
+  },
+  "include": [
+    "app/**/*",
+    "tests/**/*",
+    "types/**/*"
+  ],
+  "glint": {
+    "environment": "ember-loose"
   }
 }
