@@ -8,14 +8,14 @@
         <Item>
           <:label>Adres</:label>
           <:content>
-            {{@address.fullAddress}}
+            {{@address}}
           </:content>
         </Item>
         {{#if @province}}
           <Item>
             <:label>Provincie</:label>
             <:content>
-              {{@address.province}}
+              {{@province}}
             </:content>
           </Item>
         {{/if}}
@@ -25,7 +25,7 @@
           <Item>
             <:label>Primair telefoonnummer</:label>
             <:content>
-              {{@primaryContact.telephone}}
+              {{@primaryContact}}
             </:content>
           </Item>
         {{else}}
@@ -40,7 +40,7 @@
           <Item>
             <:label>Secundair telefoonnummer</:label>
             <:content>
-              {{@secondaryContact.telephone}}
+              {{@secondaryContact}}
             </:content>
           </Item>
         {{else}}
@@ -59,12 +59,12 @@
             </:content>
           </Item>
         {{/if}}
-        {{#if @primaryContact.website}}
+        {{#if @website}}
           <Item>
             <:label>Website</:label>
             <:content>
               <AuLinkExternal href={{@website}}>
-                {{@primaryContact.website}}
+                {{@website}}
                 (externe link)
               </AuLinkExternal>
             </:content>
