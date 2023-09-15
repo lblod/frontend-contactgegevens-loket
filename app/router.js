@@ -8,6 +8,7 @@ export default class Router extends EmberRouter {
 
 Router.map(function () {
   this.route('mock-login');
+
   this.route('contact-data', { path: '/contactgegevens' }, function () {
     this.route('core-data-overview', { path: '/kerngegevens' });
     this.route('core-data-edit', { path: '/bewerk-kerngegevens' });
