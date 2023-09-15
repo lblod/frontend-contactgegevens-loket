@@ -9,10 +9,10 @@ export default class ContactDataSitesSiteIndexRoute extends Route {
     let { id: siteId } = this.paramsFor('contact-data.sites.site');
     const site = sites['sites'].find((site) => site.id === siteId);
     const primaryContact = site['contacts'].find(
-      (contact) => contact.type === 'Primary'
+      (contact) => contact.type === 'Primary',
     );
     const secondaryContact = site['contacts'].find(
-      (contact) => contact.type === 'Secondary'
+      (contact) => contact.type === 'Secondary',
     );
     return { site, sites, primaryContact, secondaryContact };
   }
