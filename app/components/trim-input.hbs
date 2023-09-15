@@ -1,0 +1,12 @@
+<AuInput
+  @disabled={{@disabled}}
+  @error={{@error}}
+  autocomplete={{@autocomplete}}
+  @width={{@width}}
+  @id={{@id}}
+  @value={{@value}}
+  @mask={{@mask}}
+  @maskPlaceholder={{@maskPlaceholder}}
+  {{on "focusout" (perform this.trimInput)}}
+  ...attributes
+/>
