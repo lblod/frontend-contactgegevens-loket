@@ -17,7 +17,6 @@ export default class MockLoginRoute extends Route {
   }
 
   async model(params) {
-    console.log('route');
     const filter = { provider: 'https://github.com/lblod/mock-login-service' };
     if (params.gemeente) filter.user = { groups: params.gemeente };
     const accounts = await this.store.query('account', {
