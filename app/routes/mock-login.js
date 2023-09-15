@@ -25,6 +25,7 @@ export default class MockLoginRoute extends Route {
       page: { size: 10, number: params.page },
       sort: 'user.first-name',
     });
+    console.log('accounts', accounts);
     return accounts;
   }
 }

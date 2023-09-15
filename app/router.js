@@ -14,6 +14,14 @@ Router.map(function () {
   });
   this.route('test');
 
+  this.route('auth', { path: '/authorization' }, function () {
+    this.route('callback');
+    this.route('login');
+    this.route('logout');
+    this.route('switch');
+  });
+  this.route('test');
+
   this.route('contact-data', { path: '/contactgegevens' }, function () {
     this.route('core-data-overview', { path: '/kerngegevens' });
     this.route('core-data-edit', { path: '/bewerk-kerngegevens' });

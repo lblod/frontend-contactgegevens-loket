@@ -1,4 +1,4 @@
-{{page-title this.appTitle}}
+{{page-title "Contactgegevens"}}
 
 <AuApp>
   <AuMainHeader
@@ -7,7 +7,6 @@
       "https://www.vlaanderen.be/nl"
     }}
     @homeRoute="index"
-    @appTitle={{this.appTitle}}
   >
     <li class="au-c-list-horizontal__item">
       <AuLinkExternal
@@ -26,19 +25,11 @@
           @alignment="right"
           role="menu"
         >
-          <AuLink
-            @route="auth.switch"
-            @icon="switch"
-            role="menuitem"
-          >
+          <AuLink @route="auth.switch" @icon="switch" role="menuitem">
             Wissel van bestuurseenheid
           </AuLink>
 
-          <AuLink
-            @route="auth.logout"
-            @icon="logout"
-            role="menuitem"
-          >
+          <AuLink @route="auth.logout" @icon="logout" role="menuitem">
             Afmelden
           </AuLink>
         </AuDropdown>
@@ -48,10 +39,10 @@
     </li>
   </AuMainHeader>
   <AuBodyContainer>
-      {{outlet}}
+    {{outlet}}
   </AuBodyContainer>
 </AuApp>
 
 <AuModalContainer />
-{{!-- <EpmModalContainer /> --}}
+<EpmModalContainer />
 <AuToaster />
