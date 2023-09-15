@@ -1,20 +1,11 @@
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 
 export default class ApplicationController extends Controller {
-  appTitle = 'Contactgegevens';
+  @service currentSession;
+  @service router;
 
-  currentSession = {
-    user: {
-      voornaam: 'Karel',
-      achternaam: 'Kilogram',
-    },
-    groupClassification: {
-      label: 'DummyClass',
-    },
-    group: {
-      naam: 'DummyGroup',
-    },
-  };
+  appTitle = 'Contactgegevens';
 
   get isIndex() {
     return this.router.currentRouteName === 'index';

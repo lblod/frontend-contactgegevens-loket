@@ -4,17 +4,17 @@ import { getSiteValidations } from 'frontend-contactgegevens-loket/validations/s
 import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
 
 export default class ContactDataSitesSiteEditRoute extends Route {
-  // @service currentSession;
+  @service currentSession;
   @service store;
   @service router;
 
-  // beforeModel() {
-  //   if (!this.currentSession.canEdit) {
-  //     this.router.transitionTo('route-not-found', {
-  //       wildcard: 'pagina-niet-gevonden',
-  //     });
-  //   }
-  // }
+  beforeModel() {
+    if (!this.currentSession.canEdit) {
+      this.router.transitionTo('route-not-found', {
+        wildcard: 'pagina-niet-gevonden',
+      });
+    }
+  }
 
   async model() {
     const sites = this.modelFor('contact-data.sites');

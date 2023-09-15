@@ -10,6 +10,7 @@ Router.map(function () {
   this.route('mock-login');
   this.route('auth', { path: '/authorization' }, function () {
     this.route('logout');
+    this.route('login');
   });
   this.route('test');
 

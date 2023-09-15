@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 
 export default class CoreDataEditController extends Controller {
   @service router;
+  @service currentSession;
 
   @task
   *save(event) {
