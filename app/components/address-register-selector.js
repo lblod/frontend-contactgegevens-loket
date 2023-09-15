@@ -4,7 +4,7 @@ import { task, restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class AddressRegisterSelectorComponent extends Component {
-  @service('addressregister') addressRegister;
+  @service addressRegister;
   @service store;
 
   @tracked addressSuggestion;

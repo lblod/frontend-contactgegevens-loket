@@ -85,7 +85,8 @@
     "ember-changeset-validations": "^4.1.1",
     "ember-cli-sass": "^11.0.1",
     "ember-simple-auth": "^6.0.0",
-    "sass": "^1.66.1"
+    "sass": "^1.66.1",
+    "@lblod/ember-address-search": "^0.1.0"
   },
   "overrides": {
     "@appuniversum/ember-appuniversum": {
