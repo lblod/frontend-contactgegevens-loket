@@ -19,14 +19,17 @@ export default class CurrentSessionService extends Service {
         include: 'user',
       });
 
-      this.user = await this.account.gebruiker;
+      this.user = await this.account.user;
       this.roles = this.session.data.authenticated.data.attributes.roles;
 
       let groupId = this.session.data.authenticated.relationships.group.data.id;
       this.group = await this.store.findRecord('administrative-unit', groupId, {
         include: 'classification',
       });
-      this.groupClassification = await this.group.classificatie;
+      this.groupClassification = await this.group.classification;
     }
+  }
+  get canEdit() {
+    return true; // for demo purposes only -> change asap
   }
 }
