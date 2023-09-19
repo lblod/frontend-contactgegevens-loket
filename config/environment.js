@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'history',
+    contactEmail: 'organisaties.abb@vlaanderen.be',
     EmberENV: {
       EXTEND_PROTOTYPES: false,
       FEATURES: {
