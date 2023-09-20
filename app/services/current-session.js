@@ -26,19 +26,10 @@ export default class CurrentSessionService extends Service {
       this.group = await this.store.findRecord('administrative-unit', groupId, {
         include: 'classification',
       });
-      this.groupClassification = await this.group.classification;
+      this.groupClassification = await this.group.classificatie;
     }
   }
-
-  get fullName() {
-    if (!this.user) throw new Error('User not loaded.');
-    return this.user.fullName;
-  }
-
-  get groupClassificationLabel() {
-    if (!this.group) throw new Error('Group (aministrative unit) not loaded');
-    if (!this.groupClassification)
-      throw new Error('Group classification not loaded');
-    return this.groupClassification.label;
+  get canEdit() {
+    return true; // for demo purposes only -> change asap
   }
 }

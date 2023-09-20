@@ -14,6 +14,13 @@ export default class ContactDataSitesSiteIndexRoute extends Route {
     const secondaryContact = site['contacts'].find(
       (contact) => contact.type === 'Secondary',
     );
+    console.log(
+      this.store
+        .findRecord('site', '981a82bb-f144-402c-8445-474f62b67a24')
+        .then((site) => {
+          console.log(site.get('address'));
+        }),
+    );
     return { site, sites, primaryContact, secondaryContact };
   }
 }
