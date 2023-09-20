@@ -1,11 +1,12 @@
+{{page-title "Vestigingen"}}
 <PageHeader class="au-o-box">
   <:title>Vestigingen</:title>
   <:subtitle
-  >{{this.currentSession.user.fullName}}({{this.currentSession.groupClassification.label}})</:subtitle>
+  >{{this.currentSession.fullName}}({{this.currentSession.groupClassificationLabel}})</:subtitle>
 </PageHeader>
 
 <AuDataTable
-  @content={{this.model.sites}}
+  @content={{@model.sites}}
   @noDataMessage="Geen vestigingen"
   as |t|
 >
@@ -13,23 +14,19 @@
     <c.header>
       <th class="au-c-data-table__header-title">Locatie</th>
       <th class="au-c-data-table__header-title">Type vestiging</th>
-      <th class="au-c-data-table__header-title">Primair correspondentieadres
-      </th>
-
-      <th></th>
-
+      <th class="au-c-data-table__header-title">Primair correspondentieadres</th>
+      <th>&nbsp;</th>
     </c.header>
     <c.body as |site|>
       <td>
-        <AuLink @model={{site.id}} @route="contact-data.sites.site">
+        <AuLink @model={{site.id}} @route="contact-data.view-site">
           {{site.address.fullAddress}}
         </AuLink>
       </td>
       <td>{{site.siteType.label}}</td>
-      <td>{{if (eq site.id this.model.primarySite.id) "Ja" "Neen"}}</td>
-
+      <td>{{if (eq site.id @model.primarySite.id) "Ja" "Neen"}}</td>
       <td>
-        <AuLink @model={{site.id}} @route="contact-data.sites.site.edit">
+        <AuLink @model={{site.id}} @route="contact-data.edit-site">
           Bewerk
         </AuLink>
       </td>

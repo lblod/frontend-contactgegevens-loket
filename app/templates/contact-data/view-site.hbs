@@ -5,7 +5,8 @@
       <:subtitle>{{@model.site.address.municipality}}</:subtitle>
       <:action>
         <AuLink
-          @route="contact-data.sites.site.edit"
+          @route="contact-data.edit-site"
+          @model={{@model.site}}
           @skin="button-secondary"
           @icon="pencil"
           @iconAlignment="left"

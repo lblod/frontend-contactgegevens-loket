@@ -64,7 +64,7 @@ export default class CoreDataOverviewRoute extends Route {
       );
 
     const primarySite = await administrativeUnitRecord.primarySite;
-    const address = await primarySite.address;
+    const address = await primarySite.address; // Hier bekakt ie -> 500 WHY? Backend shittery
     const debug = EmberObject.create({
       administrativeUnitRecord,
       primarySite,
@@ -72,7 +72,6 @@ export default class CoreDataOverviewRoute extends Route {
     });
     console.log(debug.getProperties('administrativeUnitRecord', 'primarySite'));
 
-    // const address = primarySite.address;
     // const contacts = await primarySite.get('contacts');
     // const primaryContact = contacts.find(
     //   (contactPoint) => (contactPoint.type = CONTACT_TYPE.PRIMARY),

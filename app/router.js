@@ -20,11 +20,9 @@ Router.map(function () {
   this.route('contact-data', { path: '/contactgegevens' }, function () {
     this.route('core-data-overview', { path: '/kerngegevens' });
     this.route('core-data-edit', { path: '/bewerk-kerngegevens' });
-    this.route('sites', { path: '/vestigingen' }, function () {
-      this.route('site', { path: '/:id/' }, function () {
-        this.route('edit');
-      });
-    });
+    this.route('sites-overview', { path: '/vestigingen' });
+    this.route('view-site', { path: '/bekijk-vestiging/:id' });
+    this.route('edit-site', { path: '/bewerk-vestiging/:id' });
   });
 
   this.route('route-not-found', {
