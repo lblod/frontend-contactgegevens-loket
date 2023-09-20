@@ -17,7 +17,13 @@
               @skin="button-secondary"
               @route="contact-data.sites.site"
             >Annuleer</AuLink>
-            <AuButton @skin="primary" type="submit">Opslaan</AuButton>
+            <AuButton
+              @skin="primary"
+              type="submit"
+              @loading={{this.save.isRunning}}
+              @disabled={{this.save.isRunning}}
+              form="edit-site-form"
+            >Opslaan</AuButton>
           </AuButtonGroup>
           <ReportWrongData />
         </div>
@@ -29,7 +35,7 @@
     {{#let (changeset @model this.validate) as |changesetObj|}}
 
       <form
-        id="edit-vestiging-form"
+        id="edit-site-form"
         aria-label="Edit site"
         {{on "submit" (perform this.save)}}
       >
@@ -42,7 +48,7 @@
                   <Item
                     @labelFor="site-type"
                     @required={{true}}
-                    @errorMessage={{this.model.site.error.siteType.validation}}
+                    @errorMessage={{changesetObj.site.error.siteType.validation}}
                   >
                     <:label>Type vestiging</:label>
                     <:content as |hasError|>
