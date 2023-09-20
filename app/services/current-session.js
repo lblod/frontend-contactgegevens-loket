@@ -26,7 +26,7 @@ export default class CurrentSessionService extends Service {
       this.group = await this.store.findRecord('administrative-unit', groupId, {
         include: 'classification',
       });
-      this.groupClassification = await this.group.classification;
+      this.groupClassification = await this.group.classificatie;
     }
   }
   get canEdit() {
