@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { CONTACT_TYPE } from '../../models/contact-point';
+import EmberObject from '@ember/object';
 
 const hardcodedAdministrativeUnitDataForDemo = {
   name: 'Aalst',
@@ -52,28 +54,55 @@ const hardcodedAdministrativeUnitDataForDemo = {
 
 export default class CoreDataOverviewRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model() {
-    // This is demo code with a hardcoded record
-    // Normally this should be an ember model
-    const administrativeUnitRecord = hardcodedAdministrativeUnitDataForDemo;
+    const administrativeUnitRecord = this.currentSession.group;
+    if (!administrativeUnitRecord)
+      throw new Error(
+        `The user, derived from the currentSession service, should always be associated with at least one administrative unit (also called a 'group'). Please check the data in the back-end.`,
+      );
 
-    const address = administrativeUnitRecord.primarySite.address;
+    const primarySite = await administrativeUnitRecord.primarySite;
+    const address = await primarySite.address;
+    const debug = EmberObject.create({
+      administrativeUnitRecord,
+      primarySite,
+      address,
+    });
+    console.log(debug.getProperties('administrativeUnitRecord', 'primarySite'));
 
-    const kbo = administrativeUnitRecord.identifiers.find(
-      (sub) => sub.idName === 'KBO nummer'
-    ).structuredIdentifier.localId;
-    const ovo = administrativeUnitRecord.identifiers.find(
-      (sub) => sub.idName === 'OVO-nummer'
-    ).structuredIdentifier.localId;
+    // const address = primarySite.address;
+    // const contacts = await primarySite.get('contacts');
+    // const primaryContact = contacts.find(
+    //   (contactPoint) => (contactPoint.type = CONTACT_TYPE.PRIMARY),
+    // );
+    // const secondaryContact = contacts.find(
+    //   (contactPoint) => (contactPoint.type = CONTACT_TYPE.SECONDARY),
+    // );
+
+    // const kbo = administrativeUnitRecord.identifiers.find(
+    //   (sub) => sub.idName === 'KBO nummer',
+    // ).structuredIdentifier.localId;
+    // const ovo = administrativeUnitRecord.identifiers.find(
+    //   (sub) => sub.idName === 'OVO-nummer',
+    // ).structuredIdentifier.localId;
+
+    // No administrative unit is an error
+    // No site is not an error but I should display a message
 
     return {
       administrativeUnit: administrativeUnitRecord,
-      kbo,
-      ovo,
-      address,
-      primaryContact: administrativeUnitRecord.primarySite.contacts[0],
-      secondaryContact: administrativeUnitRecord.primarySite.contacts[1],
+      address: undefined,
+      primaryContact: undefined,
+      secondaryContact: undefined,
+      kbo: undefined,
+      ovo: undefined,
+      // address,
+      // primaryContact,
+      // secondaryContact,
+      // kbo,
+      // ovo,
     };
   }
 }

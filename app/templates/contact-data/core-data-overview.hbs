@@ -2,7 +2,7 @@
   <div class="au-o-box au-o-flow au-o-flow--large">
     <PageHeader>
       <:title>Kerngegevens</:title>
-      <:subtitle>{{this.currentSession.fullName}}({{this.currentSession.groupClassification.label}})</:subtitle>
+      <:subtitle>{{this.currentSession.fullName}} ({{this.currentSession.groupClassificationLabel}})</:subtitle>
       <:action>
         {{! Secured area }}
         <AuLink
@@ -73,6 +73,7 @@
         </Card.Columns>
       </:card>
     </DataCard>
+    {{#if this.hasContactData}}
     <Site::ContactDataCard
       @address={{@model.address}}
       @primaryContact={{@model.primaryContact}}
@@ -82,5 +83,12 @@
         Primaire contactgegevens
       </:title>
     </Site::ContactDataCard>
+    {{else}}
+    <AuCard as |c|>
+      <c.content class="au-u-error">
+        <p>Er kon geen contact data gevonden worden voor de bestuurseenheid gelinkt met jouw gebruiker. Neem contact op met ons als dit niet klopt.</p>
+      </c.content>
+    </AuCard>
+    {{/if}}
   </div>
 </div>
