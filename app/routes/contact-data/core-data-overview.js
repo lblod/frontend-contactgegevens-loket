@@ -3,54 +3,54 @@ import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from '../../models/contact-point';
 import EmberObject from '@ember/object';
 
-const hardcodedAdministrativeUnitDataForDemo = {
-  name: 'Aalst',
-  classification: {
-    label: 'OCMW',
-  },
-  organizationStatus: {
-    id: '63cc561de9188d64ba5840a42ae8f0d6',
-    label: 'Actief',
-  },
-  identifiers: [
-    {
-      idName: 'KBO nummer',
-      structuredIdentifier: {
-        localId: '0212.237.186',
-      },
-    },
-    {
-      idName: 'SharePoint identificator',
-      structuredIdentifier: {
-        localId: '324',
-      },
-    },
-    {
-      idName: 'OVO-nummer',
-      structuredIdentifier: {
-        localId: 'OVO002601',
-      },
-    },
-  ],
-  primarySite: {
-    address: {
-      fullAddress: 'Gasthuisstraat 40, 9300 Aalst, België',
-      province: 'Oost-Vlaanderen',
-    },
-    contacts: [
-      {
-        telephone: '081000000',
-        email: 'fakeemail@gmail.com',
-        website: 'https://google.com',
-      },
-      {
-        telephone: '081000002',
-        email: 'fakeemail2@gmail.com',
-        website: 'https://wikipedia.org',
-      },
-    ],
-  },
-};
+// const hardcodedAdministrativeUnitDataForDemo = {
+//   name: 'Aalst',
+//   classification: {
+//     label: 'OCMW',
+//   },
+//   organizationStatus: {
+//     id: '63cc561de9188d64ba5840a42ae8f0d6',
+//     label: 'Actief',
+//   },
+//   identifiers: [
+//     {
+//       idName: 'KBO nummer',
+//       structuredIdentifier: {
+//         localId: '0212.237.186',
+//       },
+//     },
+//     {
+//       idName: 'SharePoint identificator',
+//       structuredIdentifier: {
+//         localId: '324',
+//       },
+//     },
+//     {
+//       idName: 'OVO-nummer',
+//       structuredIdentifier: {
+//         localId: 'OVO002601',
+//       },
+//     },
+//   ],
+//   primarySite: {
+//     address: {
+//       fullAddress: 'Gasthuisstraat 40, 9300 Aalst, België',
+//       province: 'Oost-Vlaanderen',
+//     },
+//     contacts: [
+//       {
+//         telephone: '081000000',
+//         email: 'fakeemail@gmail.com',
+//         website: 'https://google.com',
+//       },
+//       {
+//         telephone: '081000002',
+//         email: 'fakeemail2@gmail.com',
+//         website: 'https://wikipedia.org',
+//       },
+//     ],
+//   },
+// };
 
 export default class CoreDataOverviewRoute extends Route {
   @service store;
