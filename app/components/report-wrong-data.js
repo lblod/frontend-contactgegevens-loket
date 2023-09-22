@@ -3,7 +3,7 @@ import config from 'frontend-contactgegevens-loket/config/environment';
 
 export default class ReportWrongDataComponent extends Component {
   get contactEmail() {
-    return `${config.contactEmail}`;
+    return config.contactEmail;
   }
 
   get subject() {

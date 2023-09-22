@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from '../../models/contact-point';
 import EmberObject from '@ember/object';
+import { ID_NAME } from '../../models/identifier';
 
 const hardcodedAdministrativeUnitDataForDemo = {
   name: 'Aalst',
@@ -56,52 +57,73 @@ export default class CoreDataOverviewRoute extends Route {
   @service store;
   @service currentSession;
 
-  async model() {
-    const administrativeUnitRecord = this.currentSession.group;
+  async realDataModel() {
+    const administrativeUnitRecord = await this.store.findRecord(
+      'administrative-unit',
+      this.currentSession.group.id,
+    );
     if (!administrativeUnitRecord)
       throw new Error(
         `The user, derived from the currentSession service, should always be associated with at least one administrative unit (also called a 'group'). Please check the data in the back-end.`,
       );
 
     const primarySite = await administrativeUnitRecord.primarySite;
-    const address = await primarySite.address; // Hier bekakt ie -> 500 WHY? Backend shittery
-    const debug = EmberObject.create({
-      administrativeUnitRecord,
-      primarySite,
-      address,
-    });
-    console.log(debug.getProperties('administrativeUnitRecord', 'primarySite'));
+    const address = await primarySite.address; // null?
 
-    // const contacts = await primarySite.get('contacts');
-    // const primaryContact = contacts.find(
-    //   (contactPoint) => (contactPoint.type = CONTACT_TYPE.PRIMARY),
-    // );
-    // const secondaryContact = contacts.find(
-    //   (contactPoint) => (contactPoint.type = CONTACT_TYPE.SECONDARY),
-    // );
+    const contacts = await primarySite.contacts;
+    const identifiers = await administrativeUnitRecord.identifiers; // []
+    const primaryContact = contacts.find(
+      (contactPoint) => contactPoint.type === CONTACT_TYPE.PRIMARY,
+    );
+    const secondaryContact = contacts.find(
+      (contactPoint) => contactPoint.type === CONTACT_TYPE.SECONDARY,
+    );
 
-    // const kbo = administrativeUnitRecord.identifiers.find(
-    //   (sub) => sub.idName === 'KBO nummer',
-    // ).structuredIdentifier.localId;
-    // const ovo = administrativeUnitRecord.identifiers.find(
-    //   (sub) => sub.idName === 'OVO-nummer',
-    // ).structuredIdentifier.localId;
+    const kbo = (
+      await identifiers.find((identifier) => identifier.idName === ID_NAME.KBO)
+        .structuredIdentifier
+    ).localId;
+    const ovo = (
+      await identifiers.find((identifier) => identifier.idName === ID_NAME.OVO)
+        .structuredIdentifier
+    ).localId;
 
     // No administrative unit is an error
     // No site is not an error but I should display a message
 
     return {
       administrativeUnit: administrativeUnitRecord,
-      address: undefined,
-      primaryContact: undefined,
-      secondaryContact: undefined,
-      kbo: undefined,
-      ovo: undefined,
-      // address,
-      // primaryContact,
-      // secondaryContact,
-      // kbo,
-      // ovo,
+      address,
+      primaryContact,
+      secondaryContact,
+      kbo,
+      ovo,
     };
+  }
+  async fakeDataModel() {
+    const administrativeUnitRecord = hardcodedAdministrativeUnitDataForDemo;
+    const primarySite = hardcodedAdministrativeUnitDataForDemo.primarySite;
+    const address = primarySite.address;
+    const contacts = primarySite.contacts;
+    const primaryContact = contacts[0];
+    const secondaryContact = contacts[1];
+    const kbo = 'Dummy';
+    const ovo = 'Dummy';
+    return {
+      administrativeUnit: administrativeUnitRecord,
+      address,
+      primaryContact,
+      secondaryContact,
+      kbo,
+      ovo,
+    };
+  }
+
+  async model(params) {
+    console.log(params);
+    if (params.fake) {
+      return this.fakeDataModel();
+    }
+    return this.realDataModel();
   }
 }
