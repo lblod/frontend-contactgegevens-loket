@@ -45,10 +45,10 @@
     </DataCard>
 
     <Site::ContactDataCard
-      @address={{@model.site.address.fullAddress}}
-      @province={{@model.site.address.province}}
-      @primaryContact={{@model.contact.telephone}}
-      @secondaryContact={{@model.secondaryContact.telephone}}
+      @address={{@model.site.address}}
+      @province={{@model.site.address}}
+      @primaryContact={{@model.contact}}
+      @secondaryContact={{@model.secondaryContact}}
       @website={{@model.contact.website}}
     >
       <:title>Contactgegevens</:title>
