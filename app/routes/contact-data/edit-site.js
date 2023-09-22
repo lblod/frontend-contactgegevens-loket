@@ -1,16 +1,16 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { getSiteValidations } from 'frontend-contactgegevens-loket/validations/sites';
-import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
-import contactValidations from 'frontend-contactgegevens-loket/validations/contact-point';
-import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
-import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
-// import {
-//   createPrimaryContact,
-//   createSecondaryContact,
-//   findPrimaryContact,
-//   findSecondaryContact,
-// } from 'frontend-contactgegevens-loket/models/contact-point';
+// import { getSiteValidations } from 'frontend-contactgegevens-loket/validations/sites';
+// import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
+// import contactValidations from 'frontend-contactgegevens-loket/validations/contact-point';
+// import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
+// import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
+import {
+  createPrimaryContact,
+  createSecondaryContact,
+  findPrimaryContact,
+  findSecondaryContact,
+} from 'frontend-contactgegevens-loket/models/contact-point';
 
 export default class ContactDataEditSiteRoute extends Route {
   @service currentSession;
@@ -26,45 +26,53 @@ export default class ContactDataEditSiteRoute extends Route {
   // }
 
   async model() {
-    // // the following code is a workaround for the mock data
-    // let sites = this.modelFor('contact-data.sites');
-    // let { id: siteId } = this.paramsFor('contact-data.sites.site');
-    // let site = sites['sites'].find((site) => site.id === siteId);
-    // let address = site.address;
-    // let contact = site['contacts'].find(
-    //   (contact) => contact.type === 'Primary',
-    // );
-    // let secondaryContact = site['contacts'].find(
-    //   (contact) => contact.type === 'Secondary',
-    // );
+    let siteId = this.paramsFor('contact-data.edit-site').id;
+    const site = await this.store.findRecord('site', siteId);
+    let contacts = await site.contacts;
+    let contact = findPrimaryContact(contacts);
+    if (!contact) {
+      contact = createPrimaryContact(this.store);
+    }
 
-    //let contact = findPrimaryContact(contacts); // uncomment when backend works
-
-    // if (!contact) {
-    //   // contact = createPrimaryContact(this.store); // uncomment when backend works
-    //   contact = true; // delete this when backend works
-    // }
-
-    // if (!secondaryContact) {
-    //   // secondaryContact = createSecondaryContact(this.store); // uncomment when backend works
-    //   secondaryContact = true; // change this when backend works
-    // }
-
-    // return {
-    //   site: createValidatedChangeset(site, getSiteValidations()),
-    //   sites,
-    //   contact: createValidatedChangeset(contact, contactValidations),
-    //   secondaryContact: createValidatedChangeset(
-    //     secondaryContact,
-    //     secondaryContactValidations,
-    //   ),
-    //   address: createValidatedChangeset(address, getAddressValidations()),
-    // };
-    return {
-      site: undefined,
-      contact: undefined,
-      secondaryContact: undefined,
-      address: undefined,
-    };
+    let secondaryContact = findSecondaryContact(contacts);
+    if (!secondaryContact) {
+      secondaryContact = createSecondaryContact(this.store);
+    }
+    return { site, siteId, contact, secondaryContact };
   }
 }
+
+// // the following code is a workaround for the mock data
+// let sites = this.modelFor('contact-data.sites');
+// let { id: siteId } = this.paramsFor('contact-data.sites.site');
+// let site = sites['sites'].find((site) => site.id === siteId);
+// let address = site.address;
+// let contact = site['contacts'].find(
+//   (contact) => contact.type === 'Primary',
+// );
+// let secondaryContact = site['contacts'].find(
+//   (contact) => contact.type === 'Secondary',
+// );
+
+//let contact = findPrimaryContact(contacts); // uncomment when backend works
+
+// if (!contact) {
+//   // contact = createPrimaryContact(this.store); // uncomment when backend works
+//   contact = true; // delete this when backend works
+// }
+
+// if (!secondaryContact) {
+//   // secondaryContact = createSecondaryContact(this.store); // uncomment when backend works
+//   secondaryContact = true; // change this when backend works
+// }
+
+// return {
+//   site: createValidatedChangeset(site, getSiteValidations()),
+//   sites,
+//   contact: createValidatedChangeset(contact, contactValidations),
+//   secondaryContact: createValidatedChangeset(
+//     secondaryContact,
+//     secondaryContactValidations,
+//   ),
+//   address: createValidatedChangeset(address, getAddressValidations()),
+// };

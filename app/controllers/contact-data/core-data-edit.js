@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class CoreDataEditController extends Controller {
+export default class ContactDataCoreDataEditController extends Controller {
   @service router;
   @service currentSession;
 

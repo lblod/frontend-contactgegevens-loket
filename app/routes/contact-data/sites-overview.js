@@ -11,6 +11,7 @@ export default class ContactDataSitesOverviewRoute extends Route {
       include: ['address', 'siteType'],
     });
     const primarySite = await this.currentSession.group.primarySite;
+    console.log('sites', sites);
 
     return { sites, primarySite };
   }
