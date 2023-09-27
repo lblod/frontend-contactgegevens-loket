@@ -1,15 +1,11 @@
 {{page-title "Vestigingen"}}
 <PageHeader class="au-o-box">
   <:title>Vestigingen</:title>
-  <:subtitle
-  >{{this.currentSession.fullName}}({{this.currentSession.groupClassificationLabel}})</:subtitle>
+  <:subtitle>{{this.currentSession.fullName}}
+    ({{this.currentSession.groupClassificationLabel}})</:subtitle>
 </PageHeader>
 
-<AuDataTable
-  @content={{@model.sites}}
-  @noDataMessage="Geen vestigingen"
-  as |t|
->
+<AuDataTable @content={{@model.sites}} @noDataMessage="Geen vestigingen" as |t|>
   <t.content as |c|>
     <c.header>
       <th class="au-c-data-table__header-title">Locatie</th>

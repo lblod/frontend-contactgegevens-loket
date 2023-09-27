@@ -9,10 +9,15 @@ import {
 
 export default class ContactDataViewSiteRoute extends Route {
   @service store;
+  @service currentSession;
 
   async model() {
     let siteId = this.paramsFor('contact-data.view-site').id;
-    const site = await this.store.findRecord('site', siteId);
+    let administrativeUnit = await this.store.findRecord(
+      'administrative-unit',
+      this.currentSession.group.id,
+    );
+    let site = await this.store.findRecord('site', siteId);
     let contacts = await site.contacts;
     let contact = findPrimaryContact(contacts);
     if (!contact) {
@@ -23,7 +28,13 @@ export default class ContactDataViewSiteRoute extends Route {
     if (!secondaryContact) {
       secondaryContact = createSecondaryContact(this.store);
     }
-    return { site, siteId, contact, secondaryContact };
+    return {
+      site,
+      siteId,
+      contact,
+      secondaryContact,
+      administrativeUnit,
+    };
   }
 }
 

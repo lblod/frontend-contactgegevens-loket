@@ -4,7 +4,8 @@
     <PageHeader>
       <:title>Bewerk vestiging</:title>
       <:subtitle>
-        {{@model.site.address.fullAddress}},
+        {{this.model.site.address.fullAddress}}
+        {{this.model.administrativeUnit.name}}
       </:subtitle>
       <:action>
         {{! Secured area }}
@@ -16,7 +17,7 @@
             <AuLink
               @skin="button-secondary"
               @route="contact-data.view-site"
-              @model={{@model.site}}
+              @model={{this.model.site}}
             >Annuleer</AuLink>
             <AuButton
               @skin="primary"
@@ -97,7 +98,7 @@
           </EditCard>
 
           {{! Contactgegevens }}
-
+          {{!-- 
           <Site::ContactEditCard
             @address={{changesetObj.site.address}}
             @primaryContact={{changesetObj.primaryContact.telephone}}
@@ -106,7 +107,7 @@
             @email={{changesetObj.primaryContact.email}}
           >
             <:title>Contactgegevens</:title>
-          </Site::ContactEditCard>
+          </Site::ContactEditCard> --}}
         </div>
       </form>
     {{/let}}

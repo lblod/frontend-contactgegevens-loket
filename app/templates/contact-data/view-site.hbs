@@ -2,11 +2,10 @@
   <div class="au-o-box au-o-flow au-o-flow--large">
     <PageHeader>
       <:title>Vestiging: {{@model.site.address.fullAddress}}</:title>
-      <:subtitle>{{@model.site.address.municipality}}</:subtitle>
+      <:subtitle>{{@model.administrativeUnit.name}}</:subtitle>
       <:action>
         <AuLink
           @route="contact-data.edit-site"
-          @model={{@model.site}}
           @skin="button-secondary"
           @icon="pencil"
           @iconAlignment="left"
