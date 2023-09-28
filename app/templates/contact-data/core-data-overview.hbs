@@ -32,11 +32,11 @@
             </Item>
             <Item>
               <:label>Stadstitel</:label>
-              <:content>TODO</:content>
+              <:content>TODO when model data is expanded</:content>
             </Item>
             <Item>
               <:label>Regio</:label>
-              <:content>TODO</:content>
+              <:content>TODO when model data is expanded</:content>
             </Item>
           </:left>
           <:right as |Item|>
@@ -45,7 +45,7 @@
               <:content>
                 <OrganizationStatus
                   @id="Derp"
-                  @label={{@model.administrativeUnit.organizationStatus.label}}
+                  @label={{@model.organizationStatus.label}}
                 />
               </:content>
             </Item>
@@ -58,8 +58,12 @@
                 }}</:content>
             </Item>
             <Item>
-              <:label>NIS</:label>
-              <:content>TODO</:content>
+              <:label>NIS code</:label>
+              <:content>{{if
+                  @model.nis
+                  @model.nis
+                  "Niet ingegesteld"
+                }}</:content>
             </Item>
             <Item>
               <:label>OVO-nummer</:label>
@@ -73,7 +77,7 @@
         </Card.Columns>
       </:card>
     </DataCard>
-    {{#if this.hasContactData}}
+
     <Site::ContactDataCard
       @address={{@model.address}}
       @primaryContact={{@model.primaryContact}}
@@ -83,12 +87,6 @@
         Primaire contactgegevens
       </:title>
     </Site::ContactDataCard>
-    {{else}}
-    <AuCard as |c|>
-      <c.content class="au-u-error">
-        <p>Er kon geen contact data gevonden worden voor de bestuurseenheid gelinkt met jouw gebruiker. Neem contact op met ons als dit niet klopt.</p>
-      </c.content>
-    </AuCard>
-    {{/if}}
+
   </div>
 </div>
