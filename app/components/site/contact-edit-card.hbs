@@ -4,7 +4,7 @@
     <Card.Columns>
       <:left as |Item|>
         <AddressSearch
-          @address={{@address}}
+          @address={{@model.address}}
           @itemComponent={{Item}}
           @isSearchEnabledInitially={{@isAddressSearchEnabledInitially}}
           @required={{true}}
