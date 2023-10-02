@@ -29,4 +29,16 @@ export default class OrganizationModel extends Model {
     async: true,
   })
   sites;
+
+  @hasMany('organization', {
+    inverse: 'isSubOrganizationOf',
+    async: true,
+  })
+  subOrganizations;
+
+  @belongsTo('organization', {
+    inverse: 'subOrganizations',
+    async: true,
+  })
+  isSubOrganizationOf;
 }

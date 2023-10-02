@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { CLASSIFICATION_CODE } from '../models/administrative-unit-classification-code';
-import { trackedTask } from 'ember-resources/util/ember-concurrency';
 
 export default class MunicipalitySelectComponent extends Component {
   @service store;

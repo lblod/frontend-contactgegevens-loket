@@ -84,7 +84,7 @@ export default class ContactDataEditFormComponent extends Component {
           break;
         default:
           throw new Error(
-            'Second argument needs to equal primary or secondary'
+            'Second argument needs to equal primary or secondary',
           );
       }
       this.args.onChange(this.computeResult());

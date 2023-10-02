@@ -7,18 +7,30 @@ import { action } from '@ember/object';
 export default class ContactDataCoreDataEditController extends Controller {
   @service router;
   @service currentSession;
-
   @task
   *save(event) {
     event.preventDefault();
-    const { address, coreData, primaryContact, secondaryContact } = this.model;
-    console.log('Before validation');
-    yield Promise.all([
-      coreData.validate(),
+    const {
+      adminUnit,
+      primarySite,
+      organizationStatus,
+      address,
+      primaryContact,
+      secondaryContact,
+      kbo,
+      ovo,
+      nis,
+    } = this.model;
+    const functionCalls = [
+      adminUnit.validate(),
       address.validate(),
-      primaryContact.validate(),
-      secondaryContact.validate(),
-    ]);
+      kbo ? kbo.validate() : null,
+      ovo ? ovo.validate() : null,
+      nis ? nis.validate() : null,
+      primaryContact ? primaryContact.validate() : null,
+      secondaryContact ? secondaryContact.validate() : null,
+    ].filter((item) => item !== null);
+    yield Promise.all(functionCalls);
   }
 
   @action

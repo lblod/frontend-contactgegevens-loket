@@ -11,16 +11,7 @@ export default class ProvinceSelectComponent extends Component {
   @tracked previousMunicipality;
   @tracked previousProvince;
 
-  provinces = trackedTask(this, this.loadProvincesTask, () => [
-    this.args.selectedMunicipality,
-  ]);
-
-  @task
-  *loadProvincesTask() {
-    // Trick used to avoid infinite loop
-    // See https://github.com/NullVoxPopuli/ember-resources/issues/340 for more details
-    yield Promise.resolve();
-
+  loadProvincesTask = task(async () => {
     let provinces = [];
     if (
       this.args.selectedMunicipality &&
@@ -36,8 +27,8 @@ export default class ProvinceSelectComponent extends Component {
         return [this.previousProvince];
       }
 
-      // If a municipality is selected, load the province it belongs to
-      provinces = yield this.store.query('administrative-unit', {
+      // If a municipality is selected, load the provinces it belongs to
+      provinces = await this.store.query('administrative-unit', {
         filter: {
           'sub-organizations': {
             ':exact:name': this.args.selectedMunicipality,
@@ -48,26 +39,28 @@ export default class ProvinceSelectComponent extends Component {
         },
       });
     } else {
-      // Else load all the provinces
-      const query = {
+      provinces = await this.store.query('administrative-unit', {
         filter: {
           classification: {
             id: CLASSIFICATION_CODE.PROVINCE,
           },
         },
         sort: 'name',
-      };
-      provinces = yield this.store.query('administrative-unit', query);
+      });
     }
-
-    if (provinces.toArray().length === 1) {
+    const names = provinces.map((item) => item.name);
+    if (provinces.length === 1) {
       this.previousMunicipality = this.args.selectedMunicipality;
-      this.previousProvince = provinces.mapBy('name').toArray()[0];
+      this.previousProvince = names[0];
       this.args.onChange(this.previousProvince);
     } else {
       this.previousMunicipality = null;
       this.previousProvince = null;
     }
-    return provinces.mapBy('name');
-  }
+    return names;
+  });
+
+  provinces = trackedTask(this, this.loadProvincesTask, () => [
+    this.args.selectedMunicipality,
+  ]);
 }

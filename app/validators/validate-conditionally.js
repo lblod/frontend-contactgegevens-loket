@@ -14,7 +14,7 @@ export function validateConditionally(validators, condition) {
     newValue,
     oldValue,
     changes,
-    content
+    content,
   ) {
     let shouldValidate = await condition(changes, content);
 
