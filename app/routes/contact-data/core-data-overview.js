@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from '../../models/contact-point';
-import EmberObject from '@ember/object';
 import { ID_NAME } from '../../models/identifier';
+import { findStructuredIdentifierByIdName, findContactByType } from './util';
 
 export default class CoreDataOverviewRoute extends Route {
   @service store;
@@ -34,12 +34,21 @@ export default class CoreDataOverviewRoute extends Route {
       contacts,
       CONTACT_TYPE.SECONDARY,
     );
-    const kbo = await findIntentifierByIdName(identifiers, ID_NAME.KBO);
-    const ovo = await findIntentifierByIdName(identifiers, ID_NAME.OVO);
-    const nis = await findIntentifierByIdName(identifiers, ID_NAME.NIS);
+    const kbo = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.KBO,
+    );
+    const ovo = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.OVO,
+    );
+    const nis = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.NIS,
+    );
 
     const result = {
-      administrativeUnit: administrativeUnitRecord,
+      adminUnit: administrativeUnitRecord,
       primarySite,
       organizationStatus,
       address,
@@ -49,36 +58,6 @@ export default class CoreDataOverviewRoute extends Route {
       ovo,
       nis,
     };
-    console.log('model', result);
     return result;
   }
-}
-
-/**
- *
- */
-function findContactByType(contacts, contactType) {
-  if (contacts.length === 0) return null;
-  const result = contacts.find(
-    (contactPoint) => contactPoint.type === contactType,
-  );
-  if (!result) return null;
-  return result;
-}
-
-/**
- * Tries to find a contact type in an identifier array (ember array) efficiently. Returns null if not found.
- */
-async function findIntentifierByIdName(identifiers, idName) {
-  if (identifiers.length === 0) return null;
-  const resultIdentifier = identifiers.find(
-    (identifier) => identifier.idName === idName,
-  );
-  if (!resultIdentifier) return null;
-  const structuredIdentifier = await resultIdentifier.structuredIdentifier;
-  if (!structuredIdentifier)
-    throw new Error(
-      `Identifier with id ${identifier.id} does not have an associated structuredIdentifier. Is not possible.`,
-    );
-  return structuredIdentifier.localId;
 }

@@ -116,30 +116,30 @@ export default class SiteTypeSelectComponent extends Component {
     let filteredTypes = [];
 
     filteredTypes.push(
-      allTypes.find((type) => type.id == 'f1381723dec42c0b6ba6492e41d6f5dd') // Maatschappelijke zetel
+      allTypes.find((type) => type.id == 'f1381723dec42c0b6ba6492e41d6f5dd'), // Maatschappelijke zetel
     );
 
     if (this.args.selected.content.label === 'Hoofdgebouw erediensten') {
       filteredTypes.push(
-        allTypes.find((type) => type.id == 'dd0418307e7038c0c3809e3ec03a0932') // Hoofdgebouw erediensten
+        allTypes.find((type) => type.id == 'dd0418307e7038c0c3809e3ec03a0932'), // Hoofdgebouw erediensten
       );
     } else if (
       this.args.selected.content.label === 'Gemeentehuis' ||
       this.args.selected.content.label === 'Ander administratief adres'
     ) {
       filteredTypes.push(
-        allTypes.find((type) => type.id == '57e8e5498ca84056b8a87631a26c90af') // Gemeentehuis
+        allTypes.find((type) => type.id == '57e8e5498ca84056b8a87631a26c90af'), // Gemeentehuis
       );
       filteredTypes.push(
-        allTypes.find((type) => type.id == 'fbec5e94aba343b0a7361aca8a0c7d79') // Ander administratief adres
+        allTypes.find((type) => type.id == 'fbec5e94aba343b0a7361aca8a0c7d79'), // Ander administratief adres
       );
     } else if (this.args.selected.content.label === 'Provinciehuis') {
       filteredTypes.push(
-        allTypes.find((type) => type.id == '15f2683c61b74541b27b64b4365806c7') // Provinciehuis
+        allTypes.find((type) => type.id == '15f2683c61b74541b27b64b4365806c7'), // Provinciehuis
       );
     } else if (this.args.selected.content.label === 'Districtshuis') {
       filteredTypes.push(
-        allTypes.find((type) => type.id == 'db13a289b78e42d19d8d1d269b61b18f') // Districtshuis
+        allTypes.find((type) => type.id == 'db13a289b78e42d19d8d1d269b61b18f'), // Districtshuis
       );
     }
 

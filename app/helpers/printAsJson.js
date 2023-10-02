@@ -5,7 +5,7 @@ export default function printAsJson(ob) {
     `<span style="white-space: pre-line;"><pre>${JSON.stringify(
       ob,
       undefined,
-      '&Tab;'
-    )}</</span>`
+      '&Tab;',
+    )}</</span>`,
   );
 }

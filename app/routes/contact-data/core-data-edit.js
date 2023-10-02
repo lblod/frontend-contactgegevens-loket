@@ -1,103 +1,81 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import EmberObject from '@ember/object';
+import { ID_NAME } from '../../models/identifier';
+import { CONTACT_TYPE } from '../../models/contact-point';
 import { createValidatedChangeset } from '../../utils/changeset';
+import { Changeset } from 'ember-changeset';
 import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
-import coreDataValidations from 'frontend-contactgegevens-loket/validations/coreData';
-import contactValidations from 'frontend-contactgegevens-loket/validations/contact-point';
+import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
+import {
+  kboValidations,
+  ovoValidations,
+} from 'frontend-contactgegevens-loket/validations/core-data';
+import contactValidations from 'frontend-contactgegevens-loket/validations/contact';
 import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
+
+import { findStructuredIdentifierByIdName, findContactByType } from './util';
 
 export default class CoreDataEditRoute extends Route {
   @service store;
-
-  demoRecord = undefined;
-
-  _insertDemoRecord() {
-    this.demoRecord = EmberObject.create({
-      name: 'Aalst',
-      classification: EmberObject.create({
-        label: 'OCMW',
-      }),
-      organizationStatus: EmberObject.create({
-        id: '63cc561de9188d64ba5840a42ae8f0d6',
-        label: 'Actief',
-      }),
-      identifiers: [
-        EmberObject.create({
-          idName: 'KBO nummer',
-          structuredIdentifier: EmberObject.create({
-            localId: '0212.237.186',
-          }),
-        }),
-        EmberObject.create({
-          idName: 'SharePoint identificator',
-          structuredIdentifier: EmberObject.create({
-            localId: 'flqskjdfqkjsd',
-          }),
-        }),
-        EmberObject.create({
-          idName: 'OVO-nummer',
-          structuredIdentifier: EmberObject.create({
-            localId: 'OVO002601',
-          }),
-        }),
-      ],
-      primarySite: EmberObject.create({
-        address: EmberObject.create({}),
-        contacts: [
-          EmberObject.create({
-            telephone: '081000000',
-            email: 'fakeemail@gmail.com',
-            website: 'https://google.com',
-          }),
-          EmberObject.create({
-            telephone: '081000002',
-            email: 'fakeemail2@gmail.com',
-            website: 'https://wikipedia.org',
-          }),
-        ],
-      }),
-    });
-    return this.demoRecord;
-  }
+  @service currentSession;
 
   async model() {
-    // This is demo code with a hardcoded record
-    // Normally this should be an ember model
-    const administrativeUnitRecord =
-      this.demoRecord ?? this._insertDemoRecord();
+    const administrativeUnitRecord = await this.store.findRecord(
+      'administrative-unit',
+      this.currentSession.group.id,
+      {
+        reload: true,
+        include:
+          'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status',
+      },
+    );
+    if (!administrativeUnitRecord)
+      throw new Error(
+        `The user, derived from the currentSession service, should always be associated with at least one administrative unit (also called a 'group'). This administrative unit is not present.`,
+      );
 
-    const address = administrativeUnitRecord.primarySite.address;
-
-    const kbo = administrativeUnitRecord.identifiers.find(
-      (sub) => sub.idName === 'KBO nummer',
-    ).structuredIdentifier.localId;
-    const ovo = administrativeUnitRecord.identifiers.find(
-      (sub) => sub.idName === 'OVO-nummer',
-    ).structuredIdentifier.localId;
-
-    const coreData = EmberObject.create({
-      name: administrativeUnitRecord.name,
-      adminType: administrativeUnitRecord.classification.label,
-      region: 'Onbekend',
-      status: administrativeUnitRecord.organizationStatus.label,
-      kbo,
-      nis: '0',
-      ovo,
-    });
-
-    return {
-      administrativeUnit: administrativeUnitRecord,
-      coreData: createValidatedChangeset(coreData, coreDataValidations),
+    const organizationStatus =
+      await administrativeUnitRecord.get('organizationStatus');
+    const primarySite = await administrativeUnitRecord.primarySite;
+    const identifiers = await administrativeUnitRecord.identifiers;
+    const address = await primarySite.get('address');
+    const contacts = await primarySite.get('contacts');
+    const primaryContact = findContactByType(contacts, CONTACT_TYPE.PRIMARY);
+    const secondaryContact = findContactByType(
+      contacts,
+      CONTACT_TYPE.SECONDARY,
+    );
+    const kbo = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.KBO,
+    );
+    const ovo = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.OVO,
+    );
+    const nis = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.NIS,
+    );
+    const result = {
+      adminUnit: createValidatedChangeset(
+        administrativeUnitRecord,
+        adminUnitValidations,
+      ),
+      primarySite,
+      organizationStatus,
       address: createValidatedChangeset(address, getAddressValidations(true)),
       primaryContact: createValidatedChangeset(
-        administrativeUnitRecord.primarySite.contacts[0],
+        primaryContact,
         contactValidations,
       ),
-      secondaryContact: createValidatedChangeset(
-        administrativeUnitRecord.primarySite.contacts[1],
-        secondaryContactValidations,
-      ),
+      secondaryContact: secondaryContact
+        ? createValidatedChangeset(secondaryContact, contactValidations)
+        : null,
+      kbo: kbo ? createValidatedChangeset(kbo, kboValidations) : null,
+      ovo: ovo ? createValidatedChangeset(ovo, ovoValidations) : null,
+      nis,
     };
+    return result;
   }
 }

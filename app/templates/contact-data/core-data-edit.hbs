@@ -31,12 +31,20 @@
         {{! End of secured area }}
       </:action>
     </PageHeader>
+    <p class="au-u-para">
+      De contactgegevens zijn geässocieerd met de primaire vestiging van deze bestuurseenheid.
+    </p>
     <form
       id="core-data-edit"
       aria-label="edit-core-info-form"
       {{on "submit" (perform this.save)}}
     >
-      <CoreDataEditCard @coreData={{@model.coreData}}>
+      <CoreDataEditCard
+        @adminUnit={{@model.adminUnit}}
+        @kbo={{@model.kbo}}
+        @ovo={{@model.ovo}}
+        @nis={{@model.nis}}
+      >
         <:title>Bestuurseenheid</:title>
       </CoreDataEditCard>
       <ContactDataEditCard
@@ -50,6 +58,7 @@
         @secondaryContact={{@model.secondaryContact}}
       >
         <:title>Primaire contactgegevens</:title>
+
       </ContactDataEditCard>
     </form>
   </div>

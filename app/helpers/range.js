@@ -1,6 +1,6 @@
 export default function range(a, b = NaN) {
   const validationError = new Error(
-    'Range helper function only takes one or two positive integers.'
+    'Range helper function only takes one or two positive integers.',
   );
   if (typeof a !== 'number') throw validationError;
   if (typeof b !== 'number') throw validationError;

@@ -6,6 +6,12 @@ export const ORGANIZATION_STATUS = {
   IN_FORMATION: 'abf4fee82019f88cf122f986830621ab',
 };
 
+export const ORGANIZATION_LABELS = {
+  ACTIVE: 'Actief',
+  INACTIVE: 'Niet actief',
+  IN_FORMATION: 'In oprichting',
+};
+
 export default class OrganizationStatusCodeModel extends Model {
   @attr label;
 }

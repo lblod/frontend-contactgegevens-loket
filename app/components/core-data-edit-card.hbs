@@ -5,7 +5,7 @@
       <:left as |Item|>
         <Item
           @labelFor="name"
-          @errorMessage={{@coreData.error.name.validation}}
+          @errorMessage={{@adminUnit.error.name.validation}}
         >
           <:label>Naam</:label>
           <:content as |hasError|>
@@ -13,14 +13,14 @@
               @width="block"
               @id="name"
               @error={{hasError}}
-              @value={{@coreData.name}}
-              @onUpdate={{fn (mut @coreData.name)}}
+              @value={{@adminUnit.name}}
+              @onUpdate={{fn (mut @adminUnit.name)}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
           @labelFor="adminType"
-          @errorMessage={{@coreData.error.adminType.validation}}
+          @errorMessage={{@adminUnit.error.classification}}
         >
           <:label>Type bestuur</:label>
           <:content as |hasError|>
@@ -29,9 +29,9 @@
                 @allowClear={{false}}
                 @options={{this.selectAdminTypeOptions}}
                 @renderInPlace={{false}}
-                @onChange={{fn (mut @coreData.adminType)}}
+                @onChange={{fn (mut @adminUnit.classification.label)}}
                 @searchEnabled={{false}}
-                @selected={{@coreData.adminType}}
+                @selected={{@adminUnit.classification.label}}
                 @error={{hasError}}
                 id="adminType" as |adminType|>
                   {{adminType}}
@@ -41,12 +41,12 @@
         </Item>
         <Item
           @labelFor="region"
-          @errorMessage={{@coreData.error.region.validation}}
+          {{!-- @errorMessage={{@coreData.error.region.validation}} --}}
         >
           <:label>Regio</:label>
           <:content as |hasError|>
             <div class={{if hasError "ember-power-select--error"}}>
-              <PowerSelect
+              {{!-- <PowerSelect
                   @allowClear={{false}}
                   @options={{this.selectRegionOptions}}
                   @renderInPlace={{false}}
@@ -56,7 +56,8 @@
                   @error={{hasError}}
                   id="region" as |region|>
                   {{region}}
-              </PowerSelect>
+              </PowerSelect> --}}
+              TODO when model data is expanded
             </div>
           </:content>
         </Item>
@@ -64,7 +65,7 @@
       <:right as |Item|>
         <Item
           @labelFor="status"
-          @errorMessage={{@coreData.error.status.validation}}
+          @errorMessage={{@adminUnit.error.organizationStatus.validation}}
         >
           <:label>Status</:label>
           <:content as |hasError|>
@@ -73,9 +74,9 @@
                   @allowClear={{false}}
                   @options={{this.selectStatusOptions}}
                   @renderInPlace={{false}}
-                  @onChange={{fn (mut @coreData.status)}}
+                  @onChange={{fn (mut @adminUnit.organizationStatus.label)}}
                   @searchEnabled={{false}}
-                  @selected={{@coreData.status}}
+                  @selected={{@adminUnit.organizationStatus.label}}
                   @error={{hasError}}
                   id="status" as |status|>
                     {{status}}
@@ -85,7 +86,7 @@
         </Item>
         <Item
           @labelFor="kbo"
-          @errorMessage={{@coreData.error.kbo.validation}}
+          @errorMessage={{@kbo.error.localId.validation}}
         >
           <:label>KBO nummer</:label>
           <:content as |hasError|>
@@ -93,16 +94,17 @@
               @width="block"
               @id="kbo"
               @error={{hasError}}
-              @value={{@coreData.kbo}}
-              @onUpdate={{fn (mut @coreData.kbo)}}
+              @value={{@kbo.localId}}
+              @onUpdate={{fn (mut @kbo.localId)}}
               @mask="9999.999.999"
               @maskPlaceholder="____.___.___"
+              @disabled={{not @kbo}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
           @labelFor="nis"
-          @errorMessage={{@coreData.error.nis.validation}}
+          @errorMessage={{@nis.error.localId.validation}}
         >
           <:label>NIS code</:label>
           <:content as |hasError|>
@@ -110,14 +112,15 @@
               @width="block"
               @id="nis"
               @error={{hasError}}
-              @value={{@coreData.nis}}
-              @onUpdate={{fn (mut @coreData.nis)}}
+              @value={{@nis.localId}}
+              @onUpdate={{fn (mut @nis.localId)}}
+              @disabled={{not @nis}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
           @labelFor="ovo"
-          @errorMessage={{@coreData.error.ovo.validation}}
+          @errorMessage={{@ovo.error.localId.validation}}
         >
           <:label>OVO nummer</:label>
           <:content as |hasError|>
@@ -125,8 +128,9 @@
               @width="block"
               @id="ovo"
               @error={{hasError}}
-              @value={{@coreData.ovo}}
-              @onUpdate={{fn (mut @coreData.ovo)}}
+              @value={{@ovo.localId}}
+              @onUpdate={{fn (mut @ovo.localId)}}
+              @disabled={{not @ovo}}
             ></TrimInput>
           </:content>
         </Item>

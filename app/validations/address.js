@@ -1,4 +1,7 @@
-import { validatePresence } from 'ember-changeset-validations/validators';
+import {
+  validatePresence,
+  validateFormat,
+} from 'ember-changeset-validations/validators';
 import { validateConditionally } from '../validators/validate-conditionally';
 
 export function getAddressValidations(isAlwaysRequired = false) {
@@ -22,14 +25,20 @@ export function getAddressValidations(isAlwaysRequired = false) {
         : ['street', 'postcode', 'municipality', 'province', 'country'],
     }),
     // TODO: Add format check
-    postcode: validatePresence({
-      presence: true,
-      ignoreBlank: true,
-      message: REQUIRED_MESSAGE,
-      on: isAlwaysRequired
-        ? null
-        : ['street', 'number', 'municipality', 'province', 'country'],
-    }),
+    postcode: [
+      validatePresence({
+        presence: true,
+        ignoreBlank: true,
+        message: REQUIRED_MESSAGE,
+        on: isAlwaysRequired
+          ? null
+          : ['street', 'number', 'municipality', 'province', 'country'],
+      }),
+      validateFormat({
+        regex: /^[0-9]{4}$/,
+        message: 'Postcode moet bestaan uit 4 cijfers',
+      }),
+    ],
     municipality: validatePresence({
       presence: true,
       ignoreBlank: true,
@@ -58,7 +67,7 @@ export function getAddressValidations(isAlwaysRequired = false) {
 
       function (changes, content) {
         return isCountryBelgium(changes, content);
-      }
+      },
     );
   }
 
