@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from '../../models/contact-point';
-import EmberObject from '@ember/object';
 import { ID_NAME } from '../../models/identifier';
 
 export default class CoreDataOverviewRoute extends Route {

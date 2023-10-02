@@ -2,11 +2,12 @@
   <div class="au-o-box au-o-flow au-o-flow--large">
     <PageHeader>
       <:title>Kerngegevens</:title>
-      <:subtitle>{{this.currentSession.fullName}} ({{this.currentSession.groupClassificationLabel}})</:subtitle>
+      <:subtitle>{{this.currentSession.fullName}}
+        ({{this.currentSession.groupClassificationLabel}})</:subtitle>
       <:action>
         {{! Secured area }}
         <AuLink
-          @route="contact-data.core-data-edit"
+          @route="core-data.edit"
           @skin="button-secondary"
           @icon="pencil"
           @iconAlignment="left"

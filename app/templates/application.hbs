@@ -1,50 +1,30 @@
 {{page-title "Contactgegevens"}}
-
-<AuApp>
-  <AuMainHeader
-    @brandLink={{unless
-      this.session.isAuthenticated
-      "https://www.vlaanderen.be/nl"
-    }}
-    @homeRoute="index"
-  >
-    <li class="au-c-list-horizontal__item">
-      <AuLinkExternal
-        href="https://abb-vlaanderen.gitbook.io/handleiding-loket/veelgestelde-vragen"
-        @skin="secondary"
-      >
-        <AuIcon @icon="question-circle" @alignment="left" />
-        Help
-      </AuLinkExternal>
-    </li>
-    <li class="au-c-list-horizontal__item">
-      {{#if this.session.isAuthenticated}}
-        <AuDropdown
-          @title="{{this.currentSession.user.voornaam}} {{this.currentSession.user.achternaam}} - {{this.currentSession.groupClassification.label}} {{this.currentSession.group.naam}}"
-          @buttonLabel="Account settings"
-          @alignment="right"
-          role="menu"
-        >
-          <AuLink @route="auth.switch" @icon="switch" role="menuitem">
-            Wissel van bestuurseenheid
-          </AuLink>
-          <h1>Hallo</h1>
-
-          <AuLink @route="auth.logout" @icon="logout" role="menuitem">
-            Afmelden
-          </AuLink>
-        </AuDropdown>
-      {{else}}
-        <LoginButton @isCompact={{true}} />
-      {{/if}}
-    </li>
-  </AuMainHeader>
-
-  <AuBodyContainer>
+<AuMainContainer as |m|>
+  <m.sidebar>
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <AuHeading
+          @skin="4"
+          class="au-u-margin-tiny"
+        >Contactgegevens</AuHeading>
+        <nav>
+          <ul class="au-c-list-navigation">
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink @route="core-data">
+                Kerngegevens
+              </AuNavigationLink>
+            </li>
+            <li class="au-c-list-navigation__item">
+              <AuNavigationLink @route="sites">
+                Vestigingen
+              </AuNavigationLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </m.sidebar>
+  <m.content>
     {{outlet}}
-  </AuBodyContainer>
-</AuApp>
-
-<AuModalContainer />
-<EpmModalContainer />
-<AuToaster />
+  </m.content>
+</AuMainContainer>
