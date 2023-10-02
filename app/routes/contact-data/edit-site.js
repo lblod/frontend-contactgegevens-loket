@@ -25,13 +25,12 @@ export default class ContactDataEditSiteRoute extends Route {
     }
   }
 
-  async model() {
-    let siteId = this.paramsFor('contact-data.edit-site').id;
+  async model(params) {
     let administrativeUnit = await this.store.findRecord(
       'administrative-unit',
       this.currentSession.group.id,
     );
-    let site = await this.store.findRecord('site', siteId);
+    let site = await this.store.findRecord('site', params.id);
     let contacts = await site.contacts;
     let contact = findPrimaryContact(contacts);
     if (!contact) {
@@ -42,10 +41,8 @@ export default class ContactDataEditSiteRoute extends Route {
     if (!secondaryContact) {
       secondaryContact = createSecondaryContact(this.store);
     }
-    console.log('administrativeUnit', administrativeUnit.serialize());
     return {
       site,
-      siteId,
       contact,
       secondaryContact,
       administrativeUnit,
