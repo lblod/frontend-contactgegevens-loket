@@ -90,6 +90,7 @@
         >
           <:label>KBO nummer</:label>
           <:content as |hasError|>
+          {{!-- Careful! Regex of validation checks the UNMASKED value which will be saved to the database! --}}
             <TrimInput
               @width="block"
               @id="kbo"
@@ -98,6 +99,7 @@
               @onUpdate={{fn (mut @kbo.localId)}}
               @mask="9999.999.999"
               @maskPlaceholder="____.___.___"
+              @maskOptions={{hash autoUnmask=true}}
               @disabled={{not @kbo}}
             ></TrimInput>
           </:content>
@@ -130,6 +132,9 @@
               @error={{hasError}}
               @value={{@ovo.localId}}
               @onUpdate={{fn (mut @ovo.localId)}}
+              @mask="OVO999999"
+              @maskPlaceholder="OVO______"
+              @maskOptions="{{hash autoUnmask=true}}"
               @disabled={{not @ovo}}
             ></TrimInput>
           </:content>

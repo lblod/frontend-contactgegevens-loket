@@ -12,10 +12,12 @@ const kboValidations = {
       ignoreBlank: true,
       message: REQUIRED_MESSAGE,
     }),
+    // The input mask on the control lets the user type 0123.899.899 but will return the value 0123899899
+    // This is why we check for the regex without dots!
     validateFormat({
-      regex: /^[01][0-9]{3}\.[0-9]{3}\.[0-9]{3}$/,
+      regex: /^[0-1][0-9]{9}$/,
       message:
-        'KBO nummer moet formaat hebben ####.###.###. E.g. 01238.905.678.',
+        'KBO nummer moet formaat hebben ####.###.###. E.g. 0123.905.678. Het eerste getal mag enkel 0 of 1 zijn.',
     }),
   ],
 };

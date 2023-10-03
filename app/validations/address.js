@@ -4,7 +4,7 @@ import {
 } from 'ember-changeset-validations/validators';
 import { validateConditionally } from '../validators/validate-conditionally';
 
-export function getAddressValidations(isAlwaysRequired = false) {
+export default function getAddressValidations(isAlwaysRequired = false) {
   const REQUIRED_MESSAGE = 'Vul het volledige adres in';
   let isProvinceRequired = isAlwaysRequired; // Omg what is this?
   let addressValidation = {
