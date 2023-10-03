@@ -18,7 +18,6 @@ Router.map(function () {
   this.route('test');
 
   this.route('core-data', { path: '/kerngegevens' }, function () {
-    this.route('view', { path: '/bekijk' });
     this.route('edit', { path: '/bewerk' });
   });
   this.route('sites', { path: '/vestigingen' }, function () {

@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { ID_NAME } from '../../models/identifier';
 import { CONTACT_TYPE } from '../../models/contact-point';
 import { createValidatedChangeset } from '../../utils/changeset';
-import { Changeset } from 'ember-changeset';
+// import { Changeset } from 'ember-changeset'; // not used ?
 import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
 import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
 import {
@@ -11,7 +11,7 @@ import {
   ovoValidations,
 } from 'frontend-contactgegevens-loket/validations/core-data';
 import contactValidations from 'frontend-contactgegevens-loket/validations/contact';
-import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
+// import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point'; // not used ?
 
 import { findStructuredIdentifierByIdName, findContactByType } from './util';
 
