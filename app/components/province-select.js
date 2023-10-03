@@ -15,7 +15,7 @@ export default class ProvinceSelectComponent extends Component {
     let provinces = [];
     if (
       this.args.selectedMunicipality &&
-      this.args.selectedMunicipality.length
+      this.args.selectedMunicipality.length // SelectedMunicipality may not be 0
     ) {
       if (
         this.previousMunicipality &&
@@ -38,6 +38,10 @@ export default class ProvinceSelectComponent extends Component {
           },
         },
       });
+      if (provinces.length !== 1)
+        console.warn(
+          `Normally a municipality may only be associated with one and only one province. But got a list of ${provinces.lengh} provinces? Something is wrong...`,
+        );
     } else {
       provinces = await this.store.query('administrative-unit', {
         filter: {

@@ -1,15 +1,17 @@
-<PowerSelect
-  @allowClear={{true}}
-  @loadingMessage="Aan het laden..."
-  @noMatchesMessage="Geen resultaten"
-  @onChange={{@onChange}}
-  @search={{perform this.searchCountriesTask}}
-  @searchEnabled={{true}}
-  @searchField="label"
-  @searchMessage="Typ om te zoeken"
-  @selected={{@selected}}
-  @triggerId={{@id}}
-  as |country|
->
-  {{country}}
-</PowerSelect>
+<div class={{if @error "ember-power-select--error"}}>
+  <PowerSelect
+    @allowClear={{true}}
+    @searchEnabled={{true}}
+    @loadingMessage="Aan het laden..."
+    @noMatchesMessage="Geen resultaten"
+    @searchMessage="Typ om te zoeken"
+    @onChange={{@onChange}}
+    @options={{this.countryNames}}
+    @renderInPlace={{false}}
+    @selected={{@selected}}
+    @triggerId={{@id}}
+    as |country|
+  >
+    {{country}}
+  </PowerSelect>
+</div>

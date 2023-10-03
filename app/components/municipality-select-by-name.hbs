@@ -5,10 +5,10 @@
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten"
     @searchMessage="Typ om te zoeken"
-    @options={{this.loadMunicipalitiesTask.value}}
+    @onChange={{@onChange}}
+    @options={{this.municipalities.value}}
     @renderInPlace={{false}}
     @selected={{@selected}}
-    @onChange={{@onChange}}
     @triggerId={{@id}}
     as |municipality|
   >
