@@ -25,7 +25,6 @@ export default class AddressSearchComponent extends Component {
 
   constructor() {
     super(...arguments);
-
     this.detectInitialInputMode();
   }
 

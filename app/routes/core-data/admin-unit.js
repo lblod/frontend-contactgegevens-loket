@@ -1,16 +1,19 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { CONTACT_TYPE } from '../../models/contact-point';
-import { ID_NAME } from '../../models/identifier';
+import { CONTACT_TYPE } from 'frontend-contactgegevens-loket/models/contact-point';
+import { ID_NAME } from 'frontend-contactgegevens-loket/models/identifier';
 import { findStructuredIdentifierByIdName, findContactByType } from './util';
-import adminUnitValidations from '../../validations/administrative-unit';
-import getAddressValidations from '../../validations/address';
-import { kboValidations, ovoValidations } from '../../validations/core-data';
+import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
+import getAddressValidations from 'frontend-contactgegevens-loket/validations/address';
+import {
+  kboValidations,
+  ovoValidations,
+} from 'frontend-contactgegevens-loket/validations/core-data';
 import {
   primaryContactValidations,
   secondaryContactValidations,
-} from '../../validations/contact';
-import { createValidatedChangeset } from '../../utils/changeset';
+} from 'frontend-contactgegevens-loket/validations/contact';
+import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
 
 export default class AdminUnitRoute extends Route {
   @service store;

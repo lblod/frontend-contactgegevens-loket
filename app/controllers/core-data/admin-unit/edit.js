@@ -7,14 +7,18 @@ import { action } from '@ember/object';
 export default class CoreDataAdminUnitEditController extends Controller {
   @service router;
   @service currentSession;
-  @task
-  *save(event) {
-    event.preventDefault();
 
+  get formValid() {
+    return Object.values(this.model).some((changeSetOrNull) => {
+      if (changeSetOrNull === null || !changeSetOrNull.error) return false;
+      return Object.values(changeSetOrNull.error).length > 0;
+    });
+  }
+
+  save = task(async (event) => {
+    event.preventDefault();
     const {
       adminUnit,
-      primarySite,
-      organizationStatus,
       address,
       primaryContact,
       secondaryContact,
@@ -23,23 +27,40 @@ export default class CoreDataAdminUnitEditController extends Controller {
       nis,
     } = this.model;
 
-    console.log({ kbo, localId: kbo.localId });
-
-    const functionCalls = [
+    const validateCalls = [
       adminUnit.validate(),
       address.validate(),
       kbo ? kbo.validate() : null,
       ovo ? ovo.validate() : null,
       nis ? nis.validate() : null,
-      primaryContact ? primaryContact.validate() : null,
+      primaryContact.validate(),
       secondaryContact ? secondaryContact.validate() : null,
     ].filter((item) => item !== null);
-    yield Promise.all(functionCalls);
-  }
+    await Promise.all(validateCalls);
+
+    if (!this.formValid) return;
+
+    //Save the models
+
+    //Todo: Error handling
+    const saveCalls = [
+      adminUnit.save(),
+      address.save(),
+      kbo ? kbo.save() : null,
+      ovo ? ovo.save() : null,
+      nis ? nis.save() : null,
+      primaryContact.save(),
+      secondaryContact ? secondaryContact.save() : null,
+    ].filter((item) => item !== null);
+    const results = await Promise.allSettled(saveCalls);
+    console.log(results);
+
+    this.router.transitionTo('core-data.admin-unit.index');
+  });
 
   @action
   cancel(event) {
     event.preventDefault();
-    this.router.transitionTo('contact-data.contact-data.index');
+    this.router.transitionTo('core-data.admin-unit.index');
   }
 }
