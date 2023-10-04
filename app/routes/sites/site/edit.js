@@ -1,16 +1,17 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-// import { getSiteValidations } from 'frontend-contactgegevens-loket/validations/sites';
-// import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
-// import contactValidations from 'frontend-contactgegevens-loket/validations/contact-point';
-// import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
-// import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
+import { getSiteValidations } from 'frontend-contactgegevens-loket/validations/sites';
+import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
+import contactValidations from 'frontend-contactgegevens-loket/validations/contact';
+import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point';
+import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
 import {
   createPrimaryContact,
   createSecondaryContact,
   findPrimaryContact,
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
+import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
 
 export default class ContactDataEditSiteRoute extends Route {
   @service currentSession;
@@ -26,14 +27,28 @@ export default class ContactDataEditSiteRoute extends Route {
   }
 
   async model() {
-    let administrativeUnit = await this.store.findRecord(
+    const administrativeUnitRecord = await this.store.findRecord(
       'administrative-unit',
       this.currentSession.group.id,
+      {
+        reload: true,
+        include: 'primary-site,primary-site.address,primary-site.contacts',
+      },
     );
 
-    let { site } = await this.modelFor('sites.site');
+    if (!administrativeUnitRecord) {
+      throw new Error(
+        `The user, derived from the currentSession service, should always be associated with at least one administrative unit (also called a 'group'). This administrative unit is not present.`,
+      );
+    }
 
-    let contacts = await site.contacts;
+    const primarySite = await administrativeUnitRecord.primarySite;
+
+    const { site } = await this.modelFor('sites.site');
+
+    const contacts = await site.contacts;
+
+    const address = await primarySite.get('address');
 
     let contact = findPrimaryContact(contacts);
 
@@ -47,11 +62,21 @@ export default class ContactDataEditSiteRoute extends Route {
       secondaryContact = createSecondaryContact(this.store);
     }
 
-    return {
-      site,
-      contact,
-      secondaryContact,
-      administrativeUnit,
+    const result = {
+      site: createValidatedChangeset(site, getSiteValidations(true)),
+      adminUnit: createValidatedChangeset(
+        administrativeUnitRecord,
+        adminUnitValidations,
+      ),
+      primarySite,
+      address: createValidatedChangeset(address, getAddressValidations(true)),
+      contact: createValidatedChangeset(contact, contactValidations),
+      secondaryContact: createValidatedChangeset(
+        secondaryContact,
+        secondaryContactValidations,
+      ),
     };
+
+    return result;
   }
 }
