@@ -6,41 +6,44 @@ import {
   findPrimaryContact,
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
+import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
+import getSiteValidations from 'frontend-contactgegevens-loket/validations/sites';
+import getAddressValidations from 'frontend-contactgegevens-loket/validations/address';
+import {
+  primaryContactValidations,
+  secondaryContactValidations,
+} from 'frontend-contactgegevens-loket/validations/contact';
 
 export default class ContactDataViewSiteRoute extends Route {
   @service store;
   @service currentSession;
 
   async model(params) {
-    let siteId = params.id;
-    let administrativeUnit = await this.store.findRecord(
-      'administrative-unit',
-      this.currentSession.group.id,
-    );
-    let site = await this.store.findRecord('site', siteId, {
+    const siteId = params.id;
+    const site = await this.store.findRecord('site', siteId, {
       reload: true,
-      include: ['address', 'contacts', 'site-type'].join(),
+      include: 'address,contacts,site-type',
     });
+    // const siteType = await site.siteType.label;
+    const contacts = await site.contacts;
+    const address = await site.address;
+    const primaryContact =
+      findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
+    const secondaryContact =
+      findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
 
-    let contacts = await site.contacts;
-
-    let contact = findPrimaryContact(contacts);
-
-    if (!contact) {
-      contact = createPrimaryContact(this.store);
-    }
-
-    let secondaryContact = findSecondaryContact(contacts);
-
-    if (!secondaryContact) {
-      secondaryContact = createSecondaryContact(this.store);
-    }
     return {
       site,
+      address: createValidatedChangeset(address, getAddressValidations(true)),
       siteId,
-      contact,
-      secondaryContact,
-      administrativeUnit,
+      primaryContact: createValidatedChangeset(
+        primaryContact,
+        primaryContactValidations,
+      ),
+      secondaryContact: createValidatedChangeset(
+        secondaryContact,
+        secondaryContactValidations,
+      ),
     };
   }
 }

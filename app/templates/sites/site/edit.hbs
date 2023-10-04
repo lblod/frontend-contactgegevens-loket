@@ -98,15 +98,19 @@
 
         {{! Contactgegevens }}
 
-        <Site::ContactEditCard
-          {{!-- @address={{@model.site.address}} --}}
-          @primaryContact={{this.model.contact.telephone}}
-          @secondaryContact={{this.model.secondaryContact.telephone}}
-          @website={{this.model.contact.website}}
-          @email={{this.model.contact.email}}
+        <ContactDataEditCard
+          @address={{@model.address}}
+          @isAddressSearchEnabledInitially={{if
+            (or (not @model.address.id) @model.address.addressRegisterUri)
+            true
+            false
+          }}
+          @primaryContact={{@model.primaryContact}}
+          @secondaryContact={{@model.secondaryContact}}
         >
           <:title>Contactgegevens</:title>
-        </Site::ContactEditCard>
+
+        </ContactDataEditCard>
       </div>
     </form>
   </div>
