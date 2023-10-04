@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { ID_NAME } from '../../models/identifier';
-import { CONTACT_TYPE } from '../../models/contact-point';
-import { createValidatedChangeset } from '../../utils/changeset';
+import { ID_NAME } from 'frontend-contactgegevens-loket/models/identifier';
+import { CONTACT_TYPE } from 'frontend-contactgegevens-loket/models/contact-point';
+import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
 // import { Changeset } from 'ember-changeset'; // not used ?
 import { getAddressValidations } from 'frontend-contactgegevens-loket/validations/address';
 import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
@@ -13,7 +13,10 @@ import {
 import contactValidations from 'frontend-contactgegevens-loket/validations/contact';
 // import secondaryContactValidations from 'frontend-contactgegevens-loket/validations/secondary-contact-point'; // not used ?
 
-import { findStructuredIdentifierByIdName, findContactByType } from './util';
+import {
+  findStructuredIdentifierByIdName,
+  findContactByType,
+} from 'frontend-contactgegevens-loket/utils/util';
 
 export default class CoreDataEditRoute extends Route {
   @service store;

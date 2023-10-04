@@ -7,20 +7,17 @@ export default class ContactDataEditSiteController extends Controller {
 
   @dropTask
   *save(event) {
-    console.log('save function called'); // debug
-
     event.preventDefault();
+    yield console.log('save function called');
 
-    let { site, address, primaryContact, secondaryContact } = this.model;
-    console.log('this.model', this.model);
-    console.log('site', site);
-    console.log('address', address);
-    console.log('primaryContact', primaryContact);
-    console.log('secondaryContact', secondaryContact);
+    const { site, address, contact, secondaryContact } = this.model;
 
-    yield site.validate();
-    yield address.validate();
-    yield primaryContact.validate();
-    yield secondaryContact.validate();
+    const functionCalls = [
+      yield site.validate(),
+      yield address.validate(),
+      yield contact.validate(),
+      yield secondaryContact ? secondaryContact.validate() : null,
+    ];
+    yield Promise.all(functionCalls);
   }
 }

@@ -2,9 +2,12 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from '../../models/contact-point';
 import { ID_NAME } from '../../models/identifier';
-import { findStructuredIdentifierByIdName, findContactByType } from './util';
+import {
+  findStructuredIdentifierByIdName,
+  findContactByType,
+} from '../../utils/util';
 
-export default class CoreDataOverviewRoute extends Route {
+export default class CoreDataIndexRoute extends Route {
   @service store;
   @service currentSession;
 

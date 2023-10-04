@@ -34,82 +34,80 @@
     </PageHeader>
 
     {{! Kerngegevens }}
-    {{#let (changeset @model this.validate) as |changesetObj|}}
 
-      <form
-        id="edit-site-form"
-        aria-label="Edit site"
-        {{on "submit" (perform this.save)}}
-      >
-        <div class="au-o-flow au-o-flow--large">
-          <EditCard>
-            <:title>Kerngegevens</:title>
-            <:card as |Card|>
-              <Card.Columns>
-                <:left as |Item|>
-                  <Item
-                    @labelFor="site-type"
-                    @required={{true}}
-                    @errorMessage={{changesetObj.site.error.siteType.validation}}
-                  >
-                    <:label>Type vestiging</:label>
-                    <:content as |hasError|>
-                      <SiteTypeSelect
-                        @selected={{changesetObj.site.siteType}}
-                        @onChange={{fn (mut changesetObj.site.siteType)}}
-                        @administrativeUnitClassification={{changesetObj.site.siteType.id}}
-                        @id="site-type"
-                        @error={{hasError}}
-                      />
-                    </:content>
-                  </Item>
-                </:left>
-                <:right as |Item|>
-                  <Item @errorMessage={{this.isNoPrimarySiteErrorMessage}}>
-                    <:label>Primair correspondentieadres</:label>
-                    <:content>
-                      <ul class="au-c-list-inline">
-                        <li class="au-c-list-inline__item">
-                          <AuControlRadio
-                            @label="Ja"
-                            @name="is-primary-site"
-                            @value={{this.isPrimarySite}}
-                            @identifier="primary-site-true"
-                            @onChange={{this.updateIsPrimarySite true}}
-                            checked={{this.isPrimarySite}}
-                          />
-                        </li>
-                        <li class="au-c-list-inline__item">
-                          <AuControlRadio
-                            @label="Nee"
-                            @name="is-primary-site"
-                            @value={{this.isPrimarySite}}
-                            @identifier="primary-site-false"
-                            @onChange={{this.updateIsPrimarySite false}}
-                            checked={{not this.isPrimarySite}}
-                          />
-                        </li>
-                      </ul>
-                    </:content>
-                  </Item>
-                </:right>
-              </Card.Columns>
-            </:card>
-          </EditCard>
+    <form
+      id="edit-site-form"
+      aria-label="Edit site"
+      {{on "submit" (perform this.save)}}
+    >
+      <div class="au-o-flow au-o-flow--large">
+        <EditCard>
+          <:title>Kerngegevens</:title>
+          <:card as |Card|>
+            <Card.Columns>
+              <:left as |Item|>
+                <Item
+                  @labelFor="site-type"
+                  @required={{true}}
+                  @errorMessage={{this.model.site.error.siteType.validation}}
+                >
+                  <:label>Type vestiging</:label>
+                  <:content as |hasError|>
+                    <SiteTypeSelect
+                      @selected={{this.model.site.siteType}}
+                      @onChange={{fn (mut this.model.site.siteType)}}
+                      @administrativeUnitClassification={{this.model.site.siteType.id}}
+                      @id="site-type"
+                      @error={{hasError}}
+                    />
+                  </:content>
+                </Item>
+              </:left>
+              <:right as |Item|>
+                <Item @errorMessage={{this.isNoPrimarySiteErrorMessage}}>
+                  <:label>Primair correspondentieadres</:label>
+                  <:content>
+                    <ul class="au-c-list-inline">
+                      <li class="au-c-list-inline__item">
+                        <AuControlRadio
+                          @label="Ja"
+                          @name="is-primary-site"
+                          @value={{this.isPrimarySite}}
+                          @identifier="primary-site-true"
+                          @onChange={{this.updateIsPrimarySite true}}
+                          checked={{this.isPrimarySite}}
+                        />
+                      </li>
+                      <li class="au-c-list-inline__item">
+                        <AuControlRadio
+                          @label="Nee"
+                          @name="is-primary-site"
+                          @value={{this.isPrimarySite}}
+                          @identifier="primary-site-false"
+                          @onChange={{this.updateIsPrimarySite false}}
+                          checked={{not this.isPrimarySite}}
+                        />
+                      </li>
+                    </ul>
+                  </:content>
+                </Item>
+              </:right>
+            </Card.Columns>
+          </:card>
+        </EditCard>
 
-          {{! Contactgegevens }}
+        {{! Contactgegevens }}
 
-          <Site::ContactEditCard
-            @address={{changesetObj.site.address}}
-            @primaryContact={{changesetObj.primaryContact.telephone}}
-            @secondaryContact={{changesetObj.secondaryContact.telephone}}
-            @website={{changesetObj.primaryContact.website}}
-            @email={{changesetObj.primaryContact.email}}
-          >
-            <:title>Contactgegevens</:title>
-          </Site::ContactEditCard>
-        </div>
-      </form>
-    {{/let}}
+        <Site::ContactEditCard
+          {{!-- @address={{@model.site.address}} --}}
+          @primaryContact={{this.model.contact.telephone}}
+          @secondaryContact={{this.model.secondaryContact.telephone}}
+          @website={{this.model.contact.website}}
+          @email={{this.model.contact.email}}
+        >
+          <:title>Contactgegevens</:title>
+        </Site::ContactEditCard>
+      </div>
+    </form>
   </div>
 </div>
