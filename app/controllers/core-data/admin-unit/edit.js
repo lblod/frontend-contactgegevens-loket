@@ -4,12 +4,13 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class ContactDataCoreDataEditController extends Controller {
+export default class CoreDataAdminUnitEditController extends Controller {
   @service router;
   @service currentSession;
   @task
   *save(event) {
     event.preventDefault();
+
     const {
       adminUnit,
       primarySite,
@@ -21,6 +22,9 @@ export default class ContactDataCoreDataEditController extends Controller {
       ovo,
       nis,
     } = this.model;
+
+    console.log({ kbo, localId: kbo.localId });
+
     const functionCalls = [
       adminUnit.validate(),
       address.validate(),
@@ -36,6 +40,6 @@ export default class ContactDataCoreDataEditController extends Controller {
   @action
   cancel(event) {
     event.preventDefault();
-    this.router.transitionTo('contact-data.core-data-overview');
+    this.router.transitionTo('contact-data.contact-data.index');
   }
 }
