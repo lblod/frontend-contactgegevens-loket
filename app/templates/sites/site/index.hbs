@@ -47,9 +47,9 @@
     <Site::ContactDataCard
       @address={{@model.site.address}}
       @province={{@model.site.address}}
-      @primaryContact={{@model.contact}}
+      @primaryContact={{@model.primaryContact}}
       @secondaryContact={{@model.secondaryContact}}
-      @website={{@model.contact.website}}
+      @website={{@model.primaryContact.website}}
     >
       <:title>Contactgegevens</:title>
     </Site::ContactDataCard>
