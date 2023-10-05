@@ -52,9 +52,7 @@ export default class CoreDataAdminUnitEditController extends Controller {
       primaryContact.save(),
       secondaryContact ? secondaryContact.save() : null,
     ].filter((item) => item !== null);
-    const results = await Promise.allSettled(saveCalls);
-    console.log(results);
-
+    await Promise.allSettled(saveCalls);
     this.router.transitionTo('core-data.admin-unit.index');
   });
 

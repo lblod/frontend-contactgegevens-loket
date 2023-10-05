@@ -49,11 +49,7 @@
       </CoreDataEditCard>
       <ContactDataEditCard
         @address={{@model.address}}
-        @isAddressSearchEnabledInitially={{if
-          (or (not @model.address.id) @model.address.addressRegisterUri)
-          true
-          false
-        }}
+        @isAddressSearchEnabledInitially={{true}}
         @primaryContact={{@model.primaryContact}}
         @secondaryContact={{@model.secondaryContact}}
       >

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 
-export default class AdressenregisterBusnumberSelectorComponent extends Component {
+export default class AddressRegisterBusNumberSelectorComponent extends Component {
   get placeholder() {
     return this.args.disabled ? '/' : '';
   }

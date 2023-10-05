@@ -22,7 +22,7 @@ export default class MunicipalitySelectByNameComponent extends Component {
           },
           sort: 'name',
           page: {
-            size: 400, // There are 300 municipalities in belgium. But this is a very sloppy network call
+            size: 400,
           },
         });
       } else {
@@ -35,7 +35,7 @@ export default class MunicipalitySelectByNameComponent extends Component {
           },
           sort: 'name',
           page: {
-            size: 400,
+            size: 400, // There are 300 municipalities in belgium. We'll get a lot of data at once.
           },
         });
       }

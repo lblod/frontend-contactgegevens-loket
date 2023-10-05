@@ -3,12 +3,11 @@
   <:card as |Card|>
     <Card.Columns>
       <:left as |Item|>
-        {{!-- <AddressSearch
+        <AddressSearch
           @address={{@address}}
           @itemComponent={{Item}}
           @isSearchEnabledInitially={{@isAddressSearchEnabledInitially}}
           @required={{true}}
-          @error={{@address.isInvalid}}
           @onChange={{this.automaticAddressSearchChanged}}
         >
           <:manualAddressInputBeforeButton>
@@ -97,10 +96,10 @@
                 <:label>Gemeente</:label>
                 <:content as |hasError|>
                   <MunicipalitySelectByName
+                    @id="site-address-municipality"
                     @selected={{@address.municipality}}
                     @selectedProvince={{@address.province}}
                     @onChange={{fn (mut @address.municipality)}}
-                    @id="site-address-municipality"
                     @error={{hasError}}
                   />
                 </:content>
@@ -123,8 +122,6 @@
                 </:content>
               </Item>
             {{/if}}
-          </:manualAddressInput>
-          <:commonInput>
             {{#if this.isCountryBelgium}}
               <Item
                 @labelFor="site-address-province"
@@ -134,126 +131,19 @@
                 <:label>Provincie</:label>
                 <:content as |hasError|>
                   <ProvinceSelect
+                    @id="site-address-province"
                     @selected={{@address.province}}
                     @selectedMunicipality={{@address.municipality}}
                     @onChange={{fn (mut @address.province)}}
-                    @id="site-address-province"
                     @error={{hasError}}
                   />
                 </:content>
               </Item>
             {{/if}}
+          </:manualAddressInput>
+          <:commonInput>
           </:commonInput>
-        </AddressSearch> --}}
-        <Item
-            @labelFor="site-address-country"
-            @required={{true}}
-            @errorMessage={{@address.error.country.validation}}
-          >
-              <:label>Land</:label>
-              <:content as |hasError|>
-                <CountrySelect
-                  @selected={{@address.country}}
-                  @onChange={{this.updateCountry}}
-                  @id="site-address-country"
-                  @error={{hasError}}
-                />
-              </:content>
-            </Item>
-            <Item
-              @labelFor="site-address-street-name"
-              @required={{true}}
-              @errorMessage={{@address.error.street.validation}}
-            >
-              <:label>Straat</:label>
-              <:content as |hasError|>
-                <TrimInput
-                  @width="block"
-                  @value={{@address.street}}
-                  @onUpdate={{fn (mut @address.street)}}
-                  @error={{hasError}}
-                  @id="site-address-street-name"
-                />
-              </:content>
-            </Item>
-            <Item
-              @labelFor="site-address-house-number"
-              @required={{true}}
-              @errorMessage={{@address.error.number.validation}}
-            >
-              <:label>Huisnummer</:label>
-              <:content as |hasError|>
-                <TrimInput
-                  @width="block"
-                  @value={{@address.number}}
-                  @onUpdate={{fn (mut @address.number)}}
-                  @error={{hasError}}
-                  @id="site-address-house-number"
-                />
-              </:content>
-            </Item>
-            <Item @labelFor="site-address-bus-number">
-              <:label>Busnummer</:label>
-              <:content>
-                <TrimInput
-                  @width="block"
-                  @value={{@address.boxNumber}}
-                  @onUpdate={{fn (mut @address.boxNumber)}}
-                  @id="site-address-bus-number"
-                />
-              </:content>
-            </Item>
-            <Item
-              @labelFor="site-address-postal-code"
-              @required={{true}}
-              @errorMessage={{@address.error.postcode.validation}}
-            >
-              <:label>Postcode</:label>
-              <:content as |hasError|>
-                <TrimInput
-                  @width="block"
-                  @value={{@address.postcode}}
-                  @onUpdate={{fn (mut @address.postcode)}}
-                  @error={{hasError}}
-                  id="site-address-postal-code"
-                />
-              </:content>
-            </Item>
-            {{#if this.isCountryBelgium}}
-              <Item
-                @labelFor="site-address-municipality"
-                @required={{true}}
-                @errorMessage={{@address.error.municipality.validation}}
-              >
-                <:label>Gemeente</:label>
-                <:content as |hasError|>
-                  <MunicipalitySelectByName
-                    @selected={{@address.municipality}}
-                    @selectedProvince={{@address.province}}
-                    @onChange={{fn (mut @address.municipality)}}
-                    @id="site-address-municipality"
-                    @error={{hasError}}
-                  />
-                </:content>
-              </Item>
-            {{else}}
-              <Item
-                @labelFor="site-address-municipality"
-                @required={{true}}
-                @errorMessage={{@address.error.municipality.validation}}
-              >
-                <:label>Gemeente</:label>
-                <:content as |hasError|>
-                  <TrimInput
-                    @width="block"
-                    @value={{@address.municipality}}
-                    @onUpdate={{fn (mut @address.municipality)}}
-                    @error={{hasError}}
-                    id="site-address-municipality"
-                  />
-                </:content>
-              </Item>
-            {{/if}}
+        </AddressSearch>
       </:left>
       <:right as |Item|>
         <Item
