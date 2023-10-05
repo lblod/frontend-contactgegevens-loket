@@ -7,7 +7,7 @@ import {
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
 import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
-import getSiteValidations from 'frontend-contactgegevens-loket/validations/sites';
+import siteValidations from 'frontend-contactgegevens-loket/validations/sites';
 import getAddressValidations from 'frontend-contactgegevens-loket/validations/address';
 import {
   primaryContactValidations,
@@ -24,7 +24,6 @@ export default class ContactDataViewSiteRoute extends Route {
       reload: true,
       include: 'address,contacts,site-type',
     });
-    // const siteType = await site.siteType.label;
     const contacts = await site.contacts;
     const address = await site.address;
     const primaryContact =
@@ -33,7 +32,7 @@ export default class ContactDataViewSiteRoute extends Route {
       findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
 
     return {
-      site,
+      site: createValidatedChangeset(site, siteValidations),
       address: createValidatedChangeset(address, getAddressValidations(true)),
       siteId,
       primaryContact: createValidatedChangeset(

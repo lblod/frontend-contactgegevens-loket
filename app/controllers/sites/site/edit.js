@@ -10,9 +10,10 @@ export default class ContactDataEditSiteController extends Controller {
     event.preventDefault();
     yield console.log('save function called');
 
-    const { address, primaryContact, secondaryContact } = this.model;
+    const { site, address, primaryContact, secondaryContact } = this.model;
 
     const functionCalls = [
+      yield site.validate(),
       yield address.validate(),
       yield primaryContact.validate(),
       yield secondaryContact ? secondaryContact.validate() : null,
