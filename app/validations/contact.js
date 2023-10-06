@@ -8,8 +8,7 @@ export const primaryContactValidations = {
   telephone: [
     validateFormat({
       allowBlank: true,
-      regex:
-        /^(((\+|00)32[ ]?(?:\(0\)[ ]?)?)|0){1}(4(60|[789]\d)\/?(\s?\d{2}\.?){2}(\s?\d{2})|(\d\/?\s?\d{3}|\d{2}\/?\s?\d{2})(\.?\s?\d{2}){2})$/,
+      regex: /^\+?[0-9]{7,10}$/,
       message: 'Ongeldig telefoonnummer formaat',
     }),
     validatePresence({
@@ -30,8 +29,7 @@ export const primaryContactValidations = {
 export const secondaryContactValidations = {
   telephone: validateFormat({
     allowBlank: true,
-    regex:
-      /^(((\+|00)32[ ]?(?:\(0\)[ ]?)?)|0){1}(4(60|[789]\d)\/?(\s?\d{2}\.?){2}(\s?\d{2})|(\d\/?\s?\d{3}|\d{2}\/?\s?\d{2})(\.?\s?\d{2}){2})$/,
+    regex: /^\+?[0-9]{7,10}$/,
     message: 'Ongeldig telefoonnummer formaat',
   }),
 };
