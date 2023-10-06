@@ -1,0 +1,25 @@
+<SidebarContainer>
+  <:sidebar>
+    <div class="au-c-sidebar">
+      <ul class="au-c-list-navigation">
+        <li class="au-c-list-navigation__item">
+          <AuNavigationNestedLink
+            @route="core-data.admin-unit"
+          >
+            Kerngegevens
+          </AuNavigationNestedLink>
+        </li>
+        <li class="au-c-list-navigation__item">
+          <AuNavigationNestedLink
+            @route="sites"
+          >
+            Vestigingen
+          </AuNavigationNestedLink>
+        </li>
+      </ul>
+    </div>
+  </:sidebar>
+  <:content>
+    {{yield}}
+  </:content>
+</SidebarContainer>
