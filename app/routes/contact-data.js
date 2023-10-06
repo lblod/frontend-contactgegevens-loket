@@ -4,6 +4,6 @@ import { inject as service } from '@ember/service';
 export default class ContactDataRoute extends Route {
   @service session;
   beforeModel(transition) {
-    this.session.requireAuthentication(transition, 'mock-login');
+    this.session.requireAuthentication(transition, 'login');
   }
 }
