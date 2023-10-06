@@ -22,6 +22,7 @@ export const primaryContactValidations = {
   email: validateFormat({
     allowBlank: true,
     type: 'email',
+    regex: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
     message: 'Geef een geldig e-mailadres in',
   }),
 };
