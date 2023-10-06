@@ -8,7 +8,6 @@ export default class ContactDataEditSiteController extends Controller {
   @dropTask
   *save(event) {
     event.preventDefault();
-    yield console.log('save function called');
 
     const { site, address, primaryContact, secondaryContact } = this.model;
 

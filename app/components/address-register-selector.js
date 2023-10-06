@@ -19,7 +19,6 @@ export default class AddressRegisterSelectorComponent extends Component {
   // DVE: Address register setup is one time and has been moved to application route.
   constructor() {
     super(...arguments);
-    console.log('contstructing an addressRegisterSelector');
     if (this.args.initialAddress) {
       // Derive address string from address parameter upon construction
       // Careful! address arg is not completely the same type as the address data structure we get back from addressRegister

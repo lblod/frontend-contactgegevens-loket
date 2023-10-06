@@ -95,7 +95,6 @@ export default class AddressSearchComponent extends Component {
 
   @action
   handleBusNumberChange(addressSuggestion) {
-    console.log('handleBusNumberChange', addressSuggestion);
     this.args.address.boxNumber = addressSuggestion.busNumber;
   }
 
