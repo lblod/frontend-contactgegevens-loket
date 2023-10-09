@@ -10,22 +10,11 @@ export default class ContactDataEditSiteController extends Controller {
   save = task(async (event) => {
     event.preventDefault();
     const { site, address, primaryContact, secondaryContact } = this.model;
-    address.fullAddress = combineFullAddress(address);
 
-    const validateCalls = [
-      site.validate(),
-      address.validate(),
-      primaryContact.validate(),
-      secondaryContact ? secondaryContact.validate() : null,
-    ];
-
-    const saveCalls = [
-      site.save(),
-      address.save(),
-      primaryContact.save(),
-      secondaryContact ? secondaryContact.save() : null,
-    ];
-    await Promise.all(validateCalls);
+    site.validate();
+    address.validate();
+    primaryContact.validate();
+    if (secondaryContact) secondaryContact.validate();
 
     if (
       address.isValid &&
@@ -33,7 +22,16 @@ export default class ContactDataEditSiteController extends Controller {
       site.isValid &&
       secondaryContact.isValid
     ) {
+      address.fullAddress = combineFullAddress(address);
+
+      const saveCalls = [
+        site.save(),
+        address.save(),
+        primaryContact.save(),
+        secondaryContact ? secondaryContact.save() : null,
+      ];
       await Promise.allSettled(saveCalls);
+      //Error check
       this.router.transitionTo('sites.site.index');
     }
   });
