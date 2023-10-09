@@ -7,7 +7,7 @@ export default class IndexRoute extends Route {
   beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
     if (this.session.isAuthenticated) {
-      this.router.transitionTo('core-data.admin-unit');
+      this.router.transitionTo('sites');
     }
   }
 }
