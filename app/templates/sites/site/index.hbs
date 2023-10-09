@@ -43,13 +43,12 @@
         </Card.Columns>
       </:card>
     </DataCard>
-
     <Site::ContactDataCard
-      @address={{@model.site.address}}
-      @province={{@model.site.address}}
-      @primaryContact={{@model.primaryContact}}
-      @secondaryContact={{@model.secondaryContact}}
-      @website={{@model.primaryContact.website}}
+      @address={{this.model.site.address}}
+      @province={{this.model.site.address}}
+      @primaryContact={{this.model.primaryContact}}
+      @secondaryContact={{this.model.secondaryContact}}
+      @website={{this.model.primaryContact.website}}
     >
       <:title>Contactgegevens</:title>
     </Site::ContactDataCard>
