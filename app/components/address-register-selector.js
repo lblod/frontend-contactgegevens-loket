@@ -1,8 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import { task, timeout, perform } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
@@ -23,13 +22,12 @@ export default class AddressRegisterSelectorComponent extends Component {
     // Careful! address arg is not completely the same type as the address data structure we get back from addressRegister
     // this.args.address -> Address model instance
     // address suggestion -> 'AddressSuggestion' type defined above
-    console.log('args.address.number', this.args.address.number);
     const suggestion = addressInstanceToAddressSuggestion(this.args.address);
+    console.log('initComponentAfterArgs address register', suggestion);
     // Start the selectSuggestion async task to start checking if this address has bus numbers available
     // but only if the address is in belgium
-    if (this.args.address.country === 'België') {
-      this.selectSuggestion.perform(suggestion);
-    }
+
+    this.selectSuggestion.perform(suggestion);
     return suggestion;
   });
 
@@ -46,7 +44,10 @@ export default class AddressRegisterSelectorComponent extends Component {
 
   selectSuggestion = task(async (selectedAddressSuggestion) => {
     console.log('Performing selectSuggestion task', selectedAddressSuggestion);
+    // Guards
     if (!selectedAddressSuggestion) return;
+    if (this.args.address.country !== 'België') return;
+
     /**@type {[AddressSuggestion]} */
     const adressesFromRegister = await this.addressRegister.findAll(
       selectedAddressSuggestion,
@@ -56,12 +57,14 @@ export default class AddressRegisterSelectorComponent extends Component {
     });
     // If we get nothing back we send nothing.
     // This may conceal an error!
-    if (!adressesFromRegister) {
+    if (!adressesFromRegister || adressesFromRegister.length === 0) {
       console.warn(
-        `Did not receive address suggestions for search string "${selectedAddressSuggestion}"`,
+        `Did not receive address suggestions for`,
+        selectedAddressSuggestion,
       );
       this.args.onChange([]);
       this.options = [];
+
       return;
     }
     this.args.onChange(adressesFromRegister);
@@ -88,15 +91,11 @@ function addressInstanceToAddressSuggestion(addressInstance) {
     uri: addressInstance.id,
     addressRegisterId: addressInstance.addressRegisterUri,
     busNumber: addressInstance.boxNumber,
-    fullAddress: fullAddressFromAddressInstance(addressInstance),
+    fullAddress: combineFullAddress(addressInstance),
     street: addressInstance.street,
     housenumber: addressInstance.number,
     zipCode: addressInstance.postcode,
     municipality: addressInstance.municipality,
     country: addressInstance.country,
   };
-}
-
-function fullAddressFromAddressInstance(addressInstance) {
-  return `${addressInstance.street} ${addressInstance.number}, ${addressInstance.postcode} ${addressInstance.municipality}`;
 }

@@ -8,7 +8,20 @@ import { tracked } from '@glimmer/tracking';
 export default class ProvinceSelectComponent extends Component {
   @service store;
 
+  prevSelectedMunicipality = null;
+  prevProvinces = null;
+
   loadProvincesTask = task(async () => {
+    // Short circuit in case the reference but not the value has changed
+    // The short circuit prevents infinite cycling between province select and municipality select
+    if (this.args.selectedMunicipality === this.prevSelectedMunicipality) {
+      console.log(
+        'short circuit loadProvincesTask',
+        this.args.selectedMunicipality,
+        this.prevSelectedMunicipality,
+      );
+      return this.prevProvinces;
+    }
     console.log('Loadprovinces task');
     const provinces = await (async () => {
       // Municipality is selected, get only the province we need
@@ -23,12 +36,12 @@ export default class ProvinceSelectComponent extends Component {
             },
           },
         });
-        // Sanit check
+        // Sanity check
         if (result.length !== 1)
           console.warn(
             `Normally a municipality may only be associated with one and only one province. But got a list of ${provinces.lengh} provinces? Something is wrong...`,
           );
-        return result.map((item) => item.name);
+        return result;
       }
       // If not municipality selected get ALL provinces
       return await this.store.query('administrative-unit', {
@@ -40,10 +53,15 @@ export default class ProvinceSelectComponent extends Component {
         sort: 'name',
       });
     })();
+    const result = provinces.map((item) => item.name);
+    this.prevProvinces = result;
+    this.prevSelectedMunicipality = this.args.selectedMunicipality;
     // From the provinces get their names and make them options
     return provinces.map((item) => item.name);
   });
 
+  // Please note. When an attribute of the address changes (e.g. street) this change tracker fires as well for some reason
+  // The shortcut prevents the task from reloading and causing an infinite loop.
   provinces = trackedTask(this, this.loadProvincesTask, () => [
     this.args.selectedMunicipality,
   ]);

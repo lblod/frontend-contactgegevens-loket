@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 
 export default class CoreDataAdminUnitEditController extends Controller {
   @service router;
@@ -27,16 +28,15 @@ export default class CoreDataAdminUnitEditController extends Controller {
       nis,
     } = this.model;
 
-    const validateCalls = [
-      adminUnit.validate(),
-      address.validate(),
-      kbo ? kbo.validate() : null,
-      ovo ? ovo.validate() : null,
-      nis ? nis.validate() : null,
-      primaryContact.validate(),
-      secondaryContact ? secondaryContact.validate() : null,
-    ].filter((item) => item !== null);
-    await Promise.all(validateCalls);
+    // !Important. Update full address string before saving
+    address.fullAddress = combineFullAddress(address);
+    adminUnit.validate();
+    address.validate();
+    if (kbo) kbo.validate();
+    if (ovo) ovo.validate();
+    if (nis) nis.validate();
+    primaryContact.validate();
+    if (secondaryContact) secondaryContact.validate();
 
     if (!this.formValid) return;
 
@@ -52,8 +52,8 @@ export default class CoreDataAdminUnitEditController extends Controller {
       primaryContact.save(),
       secondaryContact ? secondaryContact.save() : null,
     ].filter((item) => item !== null);
-    await Promise.allSettled(saveCalls);
-
+    const resultOfSave = await Promise.allSettled(saveCalls);
+    console.log('Stuff saved', resultOfSave);
     this.router.transitionTo('core-data.admin-unit.index');
   });
 

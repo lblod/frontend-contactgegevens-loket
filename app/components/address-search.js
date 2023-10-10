@@ -3,16 +3,35 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
+import { task } from 'ember-concurrency';
+import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 
 export default class AddressSearchComponent extends Component {
   @service addressRegister;
   @service store;
 
+  initComponentAfterArgs = task(async () => {
+    if (!this.args.address)
+      throw new Error(
+        'address search component does not have access to a valid address argument when initializing.',
+      );
+    const suggestion = addressInstanceToAddressSuggestion(this.args.address);
+    console.log('initComponentAfterArgs address search', suggestion);
+    return suggestion;
+  });
+
+  trackedInitComponentAfterArgs = trackedTask(
+    this,
+    this.initComponentAfterArgs,
+    () => [this.args.address],
+  );
+
   /** @type {boolean} */
   @tracked isAddressSearchMode = true;
 
   /** @type {null | AddressSuggestion} */
-  @tracked selectedAddressSuggestion = null; // Null means never loaded
+  @tracked selectedAddressSuggestion = this.trackedInitComponentAfterArgs.value;
 
   /** @type {[AddressSuggestion] | null} */
   @tracked addressSuggestionsWithBusNumber = null; // Null means never loaded
@@ -55,7 +74,9 @@ export default class AddressSearchComponent extends Component {
    */
   @action
   async handleAddressChange(addressSuggestions) {
-    // Reset
+    const lastBusNumber = this.selectedAddressSuggestion
+      ? this.selectedAddressSuggestion.busNumber
+      : this.args.address.boxNumber;
     this.selectedAddressSuggestion = null;
     this.addressSuggestionsWithBusNumber = [];
     // If we received suggestions, at least one
@@ -92,8 +113,17 @@ export default class AddressSearchComponent extends Component {
         this.addressSuggestionsWithBusNumber,
       );
 
-      //By default we set the first one as selected
-      this.selectedAddressSuggestion = addressSuggestions[0]; // This returns a an object of type AddressSuggestion
+      //By default we set the first one as selected, unless the busNumber was set before
+      this.selectedAddressSuggestion = lastBusNumber
+        ? this.addressSuggestionsWithBusNumber.find(
+            (suggestion) => suggestion.busNumber === lastBusNumber,
+          ) ?? this.addressSuggestionsWithBusNumber[0]
+        : this.addressSuggestionsWithBusNumber[0];
+      console.log(
+        'updating address arg',
+        lastBusNumber,
+        this.selectedAddressSuggestion,
+      );
       this.updateAddressAttributes(this.selectedAddressSuggestion); // Write the data of the selection to the address model which will populate the manual input controls, except province
       // By definition the suggestion does not have the correct province information. We should get it fresh. But do a sanity check first
       if (!this.selectedAddressSuggestion.municipality) {
@@ -131,7 +161,10 @@ export default class AddressSearchComponent extends Component {
   @action
   handleBusNumberChange(addressSuggestion) {
     this.selectedAddressSuggestion = addressSuggestion;
-    this.args.address.set('boxNumber', addressSuggestion.busNumber);
+    this.args.address.set(
+      'boxNumber',
+      addressSuggestion ? addressSuggestion.busNumber : null,
+    );
   }
 
   // Unneccasary type check?
@@ -169,4 +202,18 @@ export default class AddressSearchComponent extends Component {
       addressRegisterUri: null,
     });
   }
+}
+
+function addressInstanceToAddressSuggestion(addressInstance) {
+  return {
+    uri: addressInstance.id,
+    addressRegisterId: addressInstance.addressRegisterUri,
+    busNumber: addressInstance.boxNumber,
+    fullAddress: combineFullAddress(addressInstance),
+    street: addressInstance.street,
+    housenumber: addressInstance.number,
+    zipCode: addressInstance.postcode,
+    municipality: addressInstance.municipality,
+    country: addressInstance.country,
+  };
 }

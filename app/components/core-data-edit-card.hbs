@@ -11,7 +11,7 @@
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @id="name"
+              @id={{concat @id "-name"}}
               @error={{hasError}}
               @value={{@adminUnit.name}}
               @onUpdate={{fn (mut @adminUnit.name)}}
@@ -34,7 +34,8 @@
                 @selected={{@adminUnit.classification.label}}
                 @error={{hasError}}
                 @disabled={{false}}
-                id="adminType" as |adminType|>
+                id={{concat @id "-adminType"}}
+                as |adminType|>
                   {{adminType}}
               </PowerSelect>
             </div>
@@ -80,7 +81,8 @@
                   @selected={{@adminUnit.organizationStatus.label}}
                   @error={{hasError}}
                   @disabled={{false}}
-                  id="status" as |status|>
+                  id={{concat @id "-status"}}
+                  as |status|>
                     {{status}}
               </PowerSelect>
             </div>
@@ -95,7 +97,7 @@
           {{!-- Careful! Regex of validation checks the UNMASKED value which will be saved to the database! --}}
             <TrimInput
               @width="block"
-              @id="kbo"
+              @id={{concat @id "-kbo"}}
               @error={{hasError}}
               @value={{@kbo.localId}}
               @onUpdate={{fn (mut @kbo.localId)}}
@@ -114,7 +116,7 @@
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @id="nis"
+              @id={{concat @id "-nis"}}
               @error={{hasError}}
               @value={{@nis.localId}}
               @onUpdate={{fn (mut @nis.localId)}}
@@ -130,7 +132,7 @@
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @id="ovo"
+              @id={{concat @id "-ovo"}}
               @error={{hasError}}
               @value={{@ovo.localId}}
               @onUpdate={{fn (mut @ovo.localId)}}

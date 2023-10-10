@@ -12,6 +12,7 @@
           @id="{{id}}-address-search"
           @address={{@address}}
           @onChange={{this.handleAddressChange}}
+          @noAddressFoundHook={{this.handleNoAddressFound}}
           @error={{errorMessage}}
         />
         {{#if errorMessage}}
@@ -36,9 +37,11 @@
           @options={{this.addressSuggestionsWithBusNumber}}
           @onChange={{this.handleBusNumberChange}}
           @selected={{this.selectedAddressSuggestion}}
-          {{!-- @disabled={{this.hasNoBusNumbers}} --}}
+          @disabled={{this.hasNoBusNumbers}}
           @renderInPlace={{false}}
           @searchEnabled={{true}}
+          @allowClear={{true}}
+          @searchField="busNumber"
           @loadingMessage="Aan het laden..."
         as |addressSuggestion|
         >
