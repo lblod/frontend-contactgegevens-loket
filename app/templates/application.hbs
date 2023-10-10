@@ -1,30 +1,9 @@
 {{page-title "Contactgegevens"}}
-<AuMainContainer as |m|>
-  <m.sidebar>
-    <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <AuHeading
-          @skin="4"
-          class="au-u-margin-tiny"
-        >Contactgegevens</AuHeading>
-        <nav>
-          <ul class="au-c-list-navigation">
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink @route="core-data.admin-unit.index">
-                Kerngegevens
-              </AuNavigationLink>
-            </li>
-            <li class="au-c-list-navigation__item">
-              <AuNavigationLink @route="sites">
-                Vestigingen
-              </AuNavigationLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
+<AuApp>
+  <AppHeader />
+  <main id="main" class="au-c-main-container">
+    <div class="au-c-main-container__content au-c-main-container__content--scroll" id="content" tabindex="-1">
+      {{outlet}}
     </div>
-  </m.sidebar>
-  <m.content>
-    {{outlet}}
-  </m.content>
-</AuMainContainer>
+  </main>
+</AuApp>

@@ -150,6 +150,7 @@
       </:left>
       <:right as |Item|>
         <Item
+          @required={{true}}
           @labelFor="site-contact-phone-number"
           @errorMessage={{@primaryContact.error.telephone.validation}}
         >

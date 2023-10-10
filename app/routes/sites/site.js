@@ -26,6 +26,7 @@ export default class ContactDataViewSiteRoute extends Route {
     });
     const contacts = await site.contacts;
     const address = await site.address;
+
     const primaryContact =
       findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
     const secondaryContact =

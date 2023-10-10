@@ -8,14 +8,11 @@ export default class ContactDataEditCard extends Component {
 
   @action
   updateCountry(value) {
-    console.log('Update country', value);
     this.args.address.country = value;
     this.args.address.municipality = null;
     this.args.address.province = null;
   }
 
   @action
-  automaticAddressSearchChanged(value) {
-    console.log('Automatic address search changed', value);
-  }
+  automaticAddressSearchChanged(value) {}
 }

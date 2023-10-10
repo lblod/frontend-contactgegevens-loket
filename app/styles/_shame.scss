@@ -76,3 +76,18 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
 .au-u-flex--flex-end {
   align-items: flex-end;
 }
+
+// Tweak breadcrumb list: improve responsive behaviour
+.au-c-list-horizontal--breadcrumbs {
+  @include au-font-size($au-base);
+
+  @include mq($until:small) {
+    .au-c-list-horizontal__item {
+      display: none;
+    }
+
+    .au-c-list-horizontal__item:first-child {
+      display: block;
+    }
+  }
+}

@@ -1,3 +1,4 @@
+{{breadcrumb "Bewerk"}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
 
@@ -67,28 +68,16 @@
                 <Item @errorMessage={{this.isNoPrimarySiteErrorMessage}}>
                   <:label>Primair correspondentieadres</:label>
                   <:content>
-                    <ul class="au-c-list-inline">
-                      <li class="au-c-list-inline__item">
-                        <AuControlRadio
-                          @label="Ja"
-                          @name="is-primary-site"
-                          @value={{this.isPrimarySite}}
-                          @identifier="primary-site-true"
-                          @onChange={{this.updateIsPrimarySite true}}
-                          checked={{this.isPrimarySite}}
-                        />
-                      </li>
-                      <li class="au-c-list-inline__item">
-                        <AuControlRadio
-                          @label="Nee"
-                          @name="is-primary-site"
-                          @value={{this.isPrimarySite}}
-                          @identifier="primary-site-false"
-                          @onChange={{this.updateIsPrimarySite false}}
-                          checked={{not this.isPrimarySite}}
-                        />
-                      </li>
-                    </ul>
+                    <AuRadioGroup
+                      @name="is-primary-site"
+                      @alignment="inline"
+                      @onChange={{fn (mut this.model.site.isPrimarySite)}}
+                      @selected={{this.model.site.isPrimarySite}}
+                      as |Group|
+                    >
+                      <Group.Radio @value="Ja">Ja</Group.Radio>
+                      <Group.Radio @value="Nee">Nee</Group.Radio>
+                    </AuRadioGroup>
                   </:content>
                 </Item>
               </:right>

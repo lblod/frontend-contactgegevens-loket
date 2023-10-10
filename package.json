@@ -85,6 +85,7 @@
   "dependencies": {
     "@lblod/ember-address-search": "^0.1.0",
     "@lblod/ember-mock-login": "^0.7.0",
+    "ember-breadcrumb-trail": "^0.2.0",
     "ember-changeset": "^4.1.2",
     "ember-changeset-validations": "^4.1.1",
     "ember-cli-sass": "^11.0.1",
