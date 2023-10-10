@@ -10,7 +10,7 @@
       <:content as |errorMessage|>
         <AddressRegisterSelector
           @id="{{id}}-address-search"
-          @initialAddress={{@address}}
+          @address={{@address}}
           @onChange={{this.handleAddressChange}}
           @error={{errorMessage}}
         />
@@ -31,14 +31,19 @@
     >
       <:label>Busnummer</:label>
       <:content>
-        <AddressRegisterBusNumberSelector
+        <PowerSelect
           @id="{{id}}-address-search-bus-select"
-          @address={{@address}}
           @options={{this.addressSuggestionsWithBusNumber}}
           @onChange={{this.handleBusNumberChange}}
-          @selected={{@address.boxNumber}}
-          @disabled={{this.disableBusNumberSelect}}
-        />
+          @selected={{this.selectedAddressSuggestion}}
+          {{!-- @disabled={{this.hasNoBusNumbers}} --}}
+          @renderInPlace={{false}}
+          @searchEnabled={{true}}
+          @loadingMessage="Aan het laden..."
+        as |addressSuggestion|
+        >
+          {{addressSuggestion.busNumber}}
+        </PowerSelect>
           <AuHelpText>
             Staat het correcte busnummer niet in de lijst?
             <AuLinkExternal href="mailto:{{config 'contactEmail'}}">Mail ons</AuLinkExternal>

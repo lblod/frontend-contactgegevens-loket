@@ -33,6 +33,7 @@
                 @searchEnabled={{false}}
                 @selected={{@adminUnit.classification.label}}
                 @error={{hasError}}
+                @disabled={{false}}
                 id="adminType" as |adminType|>
                   {{adminType}}
               </PowerSelect>
@@ -78,6 +79,7 @@
                   @searchEnabled={{false}}
                   @selected={{@adminUnit.organizationStatus.label}}
                   @error={{hasError}}
+                  @disabled={{false}}
                   id="status" as |status|>
                     {{status}}
               </PowerSelect>

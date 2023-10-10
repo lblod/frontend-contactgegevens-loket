@@ -23,6 +23,7 @@
                   @onChange={{this.updateCountry}}
                   @id="site-address-country"
                   @error={{hasError}}
+                  @disabled={{false}}
                 />
               </:content>
             </Item>
@@ -101,6 +102,7 @@
                     @selectedProvince={{@address.province}}
                     @onChange={{fn (mut @address.municipality)}}
                     @error={{hasError}}
+                    @disabled={{false}}
                   />
                 </:content>
               </Item>
@@ -134,6 +136,7 @@
                     @id="site-address-province"
                     @selected={{@address.province}}
                     @selectedMunicipality={{@address.municipality}}
+                    @disabled={{false}}
                     @onChange={{fn (mut @address.province)}}
                     @error={{hasError}}
                   />

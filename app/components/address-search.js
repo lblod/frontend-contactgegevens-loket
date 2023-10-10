@@ -12,13 +12,23 @@ export default class AddressSearchComponent extends Component {
   @tracked isAddressSearchMode = true;
 
   /** @type {null | AddressSuggestion} */
-  @tracked selectedAddressSuggestion = null;
+  @tracked selectedAddressSuggestion = null; // Null means never loaded
 
-  /** @type {[AddressSuggestion]} */
-  @tracked addressSuggestionsWithBusNumber = [];
+  /** @type {[AddressSuggestion] | null} */
+  @tracked addressSuggestionsWithBusNumber = null; // Null means never loaded
 
-  get disableBusNumberSelect() {
-    return this.addressSuggestionsWithBusNumber.length <= 1;
+  get hasNoBusNumbers() {
+    return (
+      this.addressSuggestionsWithBusNumber === null ||
+      this.addressSuggestionsWithBusNumber.length === 0
+    );
+  }
+
+  get busNumberActive() {
+    if (!this.addressSuggestionsWithBusNumber.length) return false;
+    return this.addressSuggestionsWithBusNumber.every(
+      (suggestion) => suggestion.busNumber,
+    );
   }
 
   get isManualInputMode() {
@@ -28,7 +38,6 @@ export default class AddressSearchComponent extends Component {
   constructor() {
     super(...arguments);
     this.detectInitialInputMode();
-    // The constructor of the addressRegisterSelector component will construct a full name
   }
 
   @action
@@ -48,16 +57,41 @@ export default class AddressSearchComponent extends Component {
   async handleAddressChange(addressSuggestions) {
     // Reset
     this.selectedAddressSuggestion = null;
-    // If we received suggestions
+    this.addressSuggestionsWithBusNumber = [];
+    // If we received suggestions, at least one
     if (addressSuggestions && addressSuggestions.length) {
-      // If we receive more than one suggestion it is assumed we have different bus numbers
-      this.addressHasBusNumber = addressSuggestions.length > 1;
+      const justBusNumbers = new Set(
+        addressSuggestions.map((suggestion) => suggestion.busNumber),
+      );
+      // If we receive more than one suggestion we sort them by bus number. toSorted create a new instance
+      this.addressSuggestionsWithBusNumber = addressSuggestions
+        .reduce((acc, curr) => {
+          // Only keep addresses with unique bus numbers
+          if (justBusNumbers.has(curr.busNumber)) {
+            acc.push(curr);
+            justBusNumbers.delete(curr.busNumber);
+          }
+          return acc;
+        }, [])
+        .sort((a, b) => {
+          const aa = parseInt(a.busNumber);
+          const bb = parseInt(b.busNumber);
+          if (isNaN(aa) && !isNaN(b)) {
+            // a is string and b is not push to front
+            return 1;
+          } else if (!isNaN(aa) && isNaN(bb)) {
+            // b is a string and a is not, push to back
+            return -1;
+          } else {
+            // When both are integers, normal sort
+            return aa < bb ? -1 : 1;
+          }
+        });
+      console.log(
+        'addressSuggestionsWithBusNumber',
+        this.addressSuggestionsWithBusNumber,
+      );
 
-      this.addressSuggestionsWithBusNumber = this.addressHasBusNumber
-        ? addressSuggestions.toSorted((a, b) =>
-            a.busNumber < b.busNumber ?? true ? -1 : 1,
-          )
-        : [];
       //By default we set the first one as selected
       this.selectedAddressSuggestion = addressSuggestions[0]; // This returns a an object of type AddressSuggestion
       this.updateAddressAttributes(this.selectedAddressSuggestion); // Write the data of the selection to the address model which will populate the manual input controls, except province
@@ -68,6 +102,7 @@ export default class AddressSearchComponent extends Component {
         );
         return;
       }
+      // Update the province as well.
       this.args.address.province = await this.getProvinceFromMunicipality(
         this.selectedAddressSuggestion.municipality,
       );
@@ -95,8 +130,8 @@ export default class AddressSearchComponent extends Component {
 
   @action
   handleBusNumberChange(addressSuggestion) {
-    console.log('handleBusNumberChange', addressSuggestion);
-    this.args.address.boxNumber = addressSuggestion.busNumber;
+    this.selectedAddressSuggestion = addressSuggestion;
+    this.args.address.set('boxNumber', addressSuggestion.busNumber);
   }
 
   // Unneccasary type check?
@@ -118,6 +153,7 @@ export default class AddressSearchComponent extends Component {
       province: null,
       country: addressSuggestion.country,
       addressRegisterUri: addressSuggestion.uri,
+      fullAddress: addressSuggestion.fullAddress,
     });
   }
   resetAddressAttributes() {

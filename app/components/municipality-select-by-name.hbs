@@ -2,14 +2,15 @@
   <PowerSelect
     @allowClear={{true}}
     @searchEnabled={{true}}
+    @renderInPlace={{false}}
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten"
     @searchMessage="Typ om te zoeken"
     @onChange={{@onChange}}
     @options={{this.municipalities.value}}
-    @renderInPlace={{false}}
     @selected={{@selected}}
     @triggerId={{@id}}
+    @disabled={{@disabled}}
     as |municipality|
   >
     {{municipality}}

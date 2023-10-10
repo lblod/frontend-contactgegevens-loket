@@ -7,9 +7,3 @@ export function validateUrl() {
     message: 'Geef een geldig internetadres in',
   });
 }
-
-const theDefaultExport = {
-  lol: 'Derp',
-};
-
-export default theDefaultExport;

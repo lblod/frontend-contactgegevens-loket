@@ -9,7 +9,7 @@ export default class CoreDataAdminUnitEditController extends Controller {
   @service currentSession;
 
   get formValid() {
-    return Object.values(this.model).some((changeSetOrNull) => {
+    return !Object.values(this.model).some((changeSetOrNull) => {
       if (changeSetOrNull === null || !changeSetOrNull.error) return false;
       return Object.values(changeSetOrNull.error).length > 0;
     });
@@ -53,6 +53,7 @@ export default class CoreDataAdminUnitEditController extends Controller {
       secondaryContact ? secondaryContact.save() : null,
     ].filter((item) => item !== null);
     await Promise.allSettled(saveCalls);
+
     this.router.transitionTo('core-data.admin-unit.index');
   });
 

@@ -2,16 +2,14 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
-import { trackedTask } from 'ember-resources/util/ember-concurrency';
+import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 export default class ProvinceSelectComponent extends Component {
   @service store;
 
-  /** @type {[string]} */
-  @tracked options = [];
-
   loadProvincesTask = task(async () => {
+    console.log('Loadprovinces task');
     const provinces = await (async () => {
       // Municipality is selected, get only the province we need
       if (this.args.selectedMunicipality) {
@@ -30,7 +28,7 @@ export default class ProvinceSelectComponent extends Component {
           console.warn(
             `Normally a municipality may only be associated with one and only one province. But got a list of ${provinces.lengh} provinces? Something is wrong...`,
           );
-        return result;
+        return result.map((item) => item.name);
       }
       // If not municipality selected get ALL provinces
       return await this.store.query('administrative-unit', {
@@ -43,7 +41,7 @@ export default class ProvinceSelectComponent extends Component {
       });
     })();
     // From the provinces get their names and make them options
-    this.options = provinces.map((item) => item.name);
+    return provinces.map((item) => item.name);
   });
 
   provinces = trackedTask(this, this.loadProvincesTask, () => [

@@ -1,14 +1,16 @@
 <div class={{if @error "ember-power-select--error"}}>
   <PowerSelect
-    @allowClear={{(not @selectedMunicipality)}}
+    @allowClear={{true}}
+    @searchEnabled={{true}}
     @renderInPlace={{false}}
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten"
     @searchMessage="Typ om te zoeken"
+    @onChange={{@onChange}}
     @options={{this.provinces.value}}
     @selected={{@selected}}
-    @onChange={{@onChange}}
     @triggerId={{@id}}
+    @disabled={{@disabled}}
     as |province|
   >
     {{province}}
