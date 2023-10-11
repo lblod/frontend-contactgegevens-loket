@@ -39,10 +39,11 @@ let mockSiteTypes = [
 export default class SiteTypeSelectComponent extends Component {
   @service store;
   siteTypes;
+
   constructor(...args) {
     super(...args);
-
-    this.siteTypes = this.loadSiteTypesTask.perform();
+    // this.siteTypes = this.loadSiteTypesTask.perform();
+    this.siteTypes = this.store.findAll('site-type');
   }
   // get isWorshipAdministrativeUnit() {
   //   return this.isWorshipService || this.isCentralWorshipService;

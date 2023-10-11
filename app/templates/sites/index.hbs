@@ -3,6 +3,16 @@
   <:title>Vestigingen</:title>
   <:subtitle>{{this.currentSession.fullName}}
     ({{this.currentSession.groupClassificationLabel}})</:subtitle>
+  <:action>
+    <AuLink
+      @route="sites.new"
+      @skin="button"
+      @icon="plus"
+      @iconAlignment="left"
+    >
+      Nieuw
+    </AuLink>
+  </:action>
 </PageHeader>
 
 <AuDataTable @content={{@model.sites}} @noDataMessage="Geen vestigingen" as |t|>
