@@ -4,7 +4,7 @@
     <Card.Columns>
       <:left as |Item|>
         <Item
-          @labelFor="name"
+          @labelFor={{concat @id "-name"}}
           @errorMessage={{@adminUnit.error.name.validation}}
         >
           <:label>Naam</:label>
@@ -15,11 +15,12 @@
               @error={{hasError}}
               @value={{@adminUnit.name}}
               @onUpdate={{fn (mut @adminUnit.name)}}
+              @disabled={{contains @disabledIds "name"}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
-          @labelFor="adminType"
+          @labelFor={{concat @id "-adminType"}}
           @errorMessage={{@adminUnit.error.classification}}
         >
           <:label>Type bestuur</:label>
@@ -33,7 +34,7 @@
                 @searchEnabled={{false}}
                 @selected={{@adminUnit.classification.label}}
                 @error={{hasError}}
-                @disabled={{false}}
+                @disabled={{contains @disabledIds "adminType"}}
                 id={{concat @id "-adminType"}}
                 as |adminType|>
                   {{adminType}}
@@ -56,7 +57,9 @@
                   @searchEnabled={{false}}
                   @selected={{@coreData.region}}
                   @error={{hasError}}
-                  id="region" as |region|>
+                  @disabled={{contains @disabledIds "region"}}
+                  id={{concat @id "-region"}}
+                  as |region|>
                   {{region}}
               </PowerSelect> --}}
               TODO when model data is expanded
@@ -66,7 +69,7 @@
       </:left>
       <:right as |Item|>
         <Item
-          @labelFor="status"
+          @labelFor={{concat @id "-status"}}
           @errorMessage={{@adminUnit.error.organizationStatus.validation}}
         >
           <:label>Status</:label>
@@ -80,7 +83,7 @@
                   @searchEnabled={{false}}
                   @selected={{@adminUnit.organizationStatus.label}}
                   @error={{hasError}}
-                  @disabled={{false}}
+                  @disabled={{contains @disabledIds "status"}}
                   id={{concat @id "-status"}}
                   as |status|>
                     {{status}}
@@ -89,12 +92,12 @@
           </:content>
         </Item>
         <Item
-          @labelFor="kbo"
+          @labelFor={{concat @id "-kbo"}}
           @errorMessage={{@kbo.error.localId.validation}}
         >
           <:label>KBO nummer</:label>
           <:content as |hasError|>
-          {{!-- Careful! Regex of validation checks the UNMASKED value which will be saved to the database! --}}
+          {{!-- Careful! Regex of validation checks the UNMASKED value which will be saved to the database! Which is intentional. --}}
             <TrimInput
               @width="block"
               @id={{concat @id "-kbo"}}
@@ -104,12 +107,12 @@
               @mask="9999.999.999"
               @maskPlaceholder="____.___.___"
               @maskOptions={{hash autoUnmask=true}}
-              @disabled={{not @kbo}}
+              @disabled={{or (not @kbo) (contains @disabledIds "kbo")}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
-          @labelFor="nis"
+          @labelFor={{concat @id "-nis"}}
           @errorMessage={{@nis.error.localId.validation}}
         >
           <:label>NIS code</:label>
@@ -120,12 +123,12 @@
               @error={{hasError}}
               @value={{@nis.localId}}
               @onUpdate={{fn (mut @nis.localId)}}
-              @disabled={{not @nis}}
+              @disabled={{or (not @nis) (contains @disabledIds "nis")}}
             ></TrimInput>
           </:content>
         </Item>
         <Item
-          @labelFor="ovo"
+          @labelFor={{concat @id "-ovo"}}
           @errorMessage={{@ovo.error.localId.validation}}
         >
           <:label>OVO nummer</:label>
@@ -139,7 +142,7 @@
               @mask="OVO999999"
               @maskPlaceholder="OVO______"
               @maskOptions="{{hash autoUnmask=true}}"
-              @disabled={{not @ovo}}
+              @disabled={{or (not @ovo) (contains @disabledIds "ovo")}}
             ></TrimInput>
           </:content>
         </Item>

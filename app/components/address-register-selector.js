@@ -43,7 +43,6 @@ export default class AddressRegisterSelectorComponent extends Component {
   @tracked options = [];
 
   selectSuggestion = task(async (selectedAddressSuggestion) => {
-    console.log('Performing selectSuggestion task', selectedAddressSuggestion);
     // Guards
     if (!selectedAddressSuggestion) return;
     if (this.args.address.country !== 'België') return;
@@ -90,7 +89,7 @@ function addressInstanceToAddressSuggestion(addressInstance) {
   return {
     uri: addressInstance.id,
     addressRegisterId: addressInstance.addressRegisterUri,
-    busNumber: addressInstance.boxNumber,
+    busNumber: addressInstance.boxNumber ?? null,
     fullAddress: combineFullAddress(addressInstance),
     street: addressInstance.street,
     housenumber: addressInstance.number,

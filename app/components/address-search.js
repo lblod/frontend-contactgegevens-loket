@@ -17,7 +17,6 @@ export default class AddressSearchComponent extends Component {
         'address search component does not have access to a valid address argument when initializing.',
       );
     const suggestion = addressInstanceToAddressSuggestion(this.args.address);
-    console.log('initComponentAfterArgs address search', suggestion);
     return suggestion;
   });
 
@@ -74,9 +73,10 @@ export default class AddressSearchComponent extends Component {
    */
   @action
   async handleAddressChange(addressSuggestions) {
-    const lastBusNumber = this.selectedAddressSuggestion
-      ? this.selectedAddressSuggestion.busNumber
-      : this.args.address.boxNumber;
+    if (!this.selectedAddressSuggestion) {
+      this.selectedAddressSuggestion = this.trackedInitComponentAfterArgs.value;
+    }
+    const lastBusNumber = this.selectedAddressSuggestion.busNumber;
     this.selectedAddressSuggestion = null;
     this.addressSuggestionsWithBusNumber = [];
     // If we received suggestions, at least one
@@ -108,22 +108,13 @@ export default class AddressSearchComponent extends Component {
             return aa < bb ? -1 : 1;
           }
         });
-      console.log(
-        'addressSuggestionsWithBusNumber',
-        this.addressSuggestionsWithBusNumber,
-      );
 
-      //By default we set the first one as selected, unless the busNumber was set before
-      this.selectedAddressSuggestion = lastBusNumber
-        ? this.addressSuggestionsWithBusNumber.find(
-            (suggestion) => suggestion.busNumber === lastBusNumber,
-          ) ?? this.addressSuggestionsWithBusNumber[0]
-        : this.addressSuggestionsWithBusNumber[0];
-      console.log(
-        'updating address arg',
-        lastBusNumber,
-        this.selectedAddressSuggestion,
-      );
+      // We set the last selected value, including null which is a valid value
+      // The fallback, which is unexpected, is just the first result of the suggestions
+      this.selectedAddressSuggestion =
+        this.addressSuggestionsWithBusNumber.find(
+          (suggestion) => suggestion.busNumber === lastBusNumber,
+        ) ?? addressSuggestions[0];
       this.updateAddressAttributes(this.selectedAddressSuggestion); // Write the data of the selection to the address model which will populate the manual input controls, except province
       // By definition the suggestion does not have the correct province information. We should get it fresh. But do a sanity check first
       if (!this.selectedAddressSuggestion.municipality) {
@@ -208,7 +199,7 @@ function addressInstanceToAddressSuggestion(addressInstance) {
   return {
     uri: addressInstance.id,
     addressRegisterId: addressInstance.addressRegisterUri,
-    busNumber: addressInstance.boxNumber,
+    busNumber: addressInstance.boxNumber ?? null,
     fullAddress: combineFullAddress(addressInstance),
     street: addressInstance.street,
     housenumber: addressInstance.number,

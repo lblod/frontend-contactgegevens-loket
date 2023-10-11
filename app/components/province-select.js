@@ -15,11 +15,6 @@ export default class ProvinceSelectComponent extends Component {
     // Short circuit in case the reference but not the value has changed
     // The short circuit prevents infinite cycling between province select and municipality select
     if (this.args.selectedMunicipality === this.prevSelectedMunicipality) {
-      console.log(
-        'short circuit loadProvincesTask',
-        this.args.selectedMunicipality,
-        this.prevSelectedMunicipality,
-      );
       return this.prevProvinces;
     }
     console.log('Loadprovinces task');

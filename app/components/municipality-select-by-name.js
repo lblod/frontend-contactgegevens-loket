@@ -14,14 +14,8 @@ export default class MunicipalitySelectByNameComponent extends Component {
     // Short circuit in case the reference but not the value has changed
     // The short circuit prevents infinite cycling between province select and municipality select
     if (this.args.selectedProvince === this.prevSelectedProvince) {
-      console.log(
-        'short circuit loadMunicipalities task',
-        this.args.selectedProvince,
-        this.prevSelectedProvince,
-      );
       return this.prevMunicipalities;
     }
-    console.log('Loadmunicipalities task');
     const municipalities = await (async () => {
       // If a province is selected, load the municipalities in it
       if (this.args.selectedProvince) {

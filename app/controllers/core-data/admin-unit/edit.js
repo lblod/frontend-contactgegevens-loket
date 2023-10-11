@@ -42,7 +42,7 @@ export default class CoreDataAdminUnitEditController extends Controller {
 
     //Save the models
 
-    //Todo: Error handling
+    //Todo: Error handling when saving goes wrong
     const saveCalls = [
       adminUnit.save(),
       address.save(),
@@ -53,13 +53,30 @@ export default class CoreDataAdminUnitEditController extends Controller {
       secondaryContact ? secondaryContact.save() : null,
     ].filter((item) => item !== null);
     const resultOfSave = await Promise.allSettled(saveCalls);
-    console.log('Stuff saved', resultOfSave);
     this.router.transitionTo('core-data.admin-unit.index');
   });
 
   @action
   cancel(event) {
     event.preventDefault();
+    const {
+      adminUnit,
+      address,
+      primaryContact,
+      secondaryContact,
+      kbo,
+      ovo,
+      nis,
+    } = this.model;
+    // Revert to previous
+    adminUnit.rollbackAttributes();
+    address.rollbackAttributes();
+    if (kbo) kbo.rollbackAttributes();
+    if (ovo) ovo.rollbackAttributes();
+    if (nis) nis.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    if (secondaryContact) secondaryContact.rollbackAttributes();
+    // Go back to overview
     this.router.transitionTo('core-data.admin-unit.index');
   }
 }

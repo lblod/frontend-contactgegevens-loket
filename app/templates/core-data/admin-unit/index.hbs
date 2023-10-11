@@ -55,7 +55,7 @@
               <:label>KBO nummer</:label>
               <:content>{{if
                   @model.kbo
-                  @model.kbo.localId
+                  (kboFormat @model.kbo.localId)
                   "Niet ingegesteld"
                 }}</:content>
             </Item>

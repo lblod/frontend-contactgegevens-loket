@@ -39,13 +39,16 @@
           @selected={{this.selectedAddressSuggestion}}
           @disabled={{this.hasNoBusNumbers}}
           @renderInPlace={{false}}
-          @searchEnabled={{true}}
+          @searchEnabled={{false}}
           @allowClear={{true}}
-          @searchField="busNumber"
           @loadingMessage="Aan het laden..."
         as |addressSuggestion|
         >
+          {{#if addressSuggestion.busNumber}}
           {{addressSuggestion.busNumber}}
+          {{else}}
+          Geen busnummer
+          {{/if}}
         </PowerSelect>
           <AuHelpText>
             Staat het correcte busnummer niet in de lijst?

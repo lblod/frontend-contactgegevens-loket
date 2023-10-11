@@ -24,7 +24,6 @@ export default function getAddressValidations(isAlwaysRequired = false) {
         ? null
         : ['street', 'postcode', 'municipality', 'province', 'country'],
     }),
-    // TODO: Add format check
     postcode: [
       validatePresence({
         presence: true,

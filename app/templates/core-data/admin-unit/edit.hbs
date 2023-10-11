@@ -46,6 +46,8 @@
         @ovo={{@model.ovo}}
         @nis={{@model.nis}}
         @id="corecoredataedit"
+        {{!-- This may change over time. For now everything is disabled --}}
+        @disabledIds={{array "name" "adminType" "status" "kbo" "nis" "ovo"}}
       >
         <:title>Bestuurseenheid</:title>
       </CoreDataEditCard>
