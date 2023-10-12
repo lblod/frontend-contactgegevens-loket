@@ -24,7 +24,6 @@ export default class ContactDataViewSiteRoute extends Route {
       findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
     const secondaryContact =
       findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
-    console.log('site.siteType', site.siteType.id);
     return {
       site,
       address,

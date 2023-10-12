@@ -1,5 +1,7 @@
+{{breadcrumb "Nieuw"}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
+
     <PageHeader>
       <:title>Voeg vestiging toe</:title>
       <:action>
@@ -20,6 +22,7 @@
         </AuButtonGroup>
       </:action>
     </PageHeader>
+
     <form id="new-vestiging-form" {{on "submit" this.createSite}}>
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
@@ -48,28 +51,16 @@
                 <Item>
                   <:label>Primair correspondentieadres</:label>
                   <:content>
-                    <ul class="au-c-list-inline">
-                      <li class="au-c-list-inline__item">
-                        <AuControlRadio
-                          @label="Ja"
-                          @name="is-primary-site"
-                          @value={{this.isPrimarySite}}
-                          @identifier="site-true"
-                          @onChange={{fn (mut this.isPrimarySite) true}}
-                          checked={{this.isPrimarySite}}
-                        />
-                      </li>
-                      <li class="au-c-list-inline__item">
-                        <AuControlRadio
-                          @label="Nee"
-                          @name="is-primary-site"
-                          @value={{this.isPrimarySite}}
-                          @identifier="site-false"
-                          @onChange={{fn (mut this.isPrimarySite) false}}
-                          checked={{not this.isPrimarySite}}
-                        />
-                      </li>
-                    </ul>
+                    <AuRadioGroup
+                      @name="is-primary-site"
+                      @alignment="inline"
+                      @onChange={{fn (mut this.isPrimarySite)}}
+                      @selected={{this.isPrimarySite}}
+                      as |Group|
+                    >
+                      <Group.Radio @value="Ja">Ja</Group.Radio>
+                      <Group.Radio @value="Nee">Nee</Group.Radio>
+                    </AuRadioGroup>
                   </:content>
                 </Item>
               </:right>

@@ -20,7 +20,7 @@ export default class CreateSitesNewController extends Controller {
     await address.save();
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
-
+    console.log('Primary site', this.isPrimarySite);
     await site.save();
     let nonPrimarySites = await adminUnit.sites;
 
