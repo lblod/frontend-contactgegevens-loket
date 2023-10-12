@@ -22,7 +22,6 @@ export default class CreateSitesNewRoute extends Route {
   @action
   async model() {
     const address = this.store.createRecord('address');
-    console.log('Dit is vanuit je route: ');
     address.country = 'België';
     return {
       adminUnit: this.currentSession.group,

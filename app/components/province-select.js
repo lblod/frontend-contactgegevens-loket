@@ -17,7 +17,6 @@ export default class ProvinceSelectComponent extends Component {
     if (this.args.selectedMunicipality === this.prevSelectedMunicipality) {
       return this.prevProvinces;
     }
-    console.log('Loadprovinces task');
     const provinces = await (async () => {
       // Municipality is selected, get only the province we need
       if (this.args.selectedMunicipality) {
