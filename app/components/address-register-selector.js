@@ -23,7 +23,6 @@ export default class AddressRegisterSelectorComponent extends Component {
     // this.args.address -> Address model instance
     // address suggestion -> 'AddressSuggestion' type defined above
     const suggestion = addressInstanceToAddressSuggestion(this.args.address);
-    console.log('initComponentAfterArgs address register', suggestion);
     // Start the selectSuggestion async task to start checking if this address has bus numbers available
     // but only if the address is in belgium
 
