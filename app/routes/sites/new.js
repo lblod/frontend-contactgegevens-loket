@@ -6,14 +6,6 @@ import {
   createPrimaryContact,
   createSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
-import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
-import getAddressValidations from 'frontend-contactgegevens-loket/validations/address';
-import getSiteValidations from 'frontend-contactgegevens-loket/validations/sites';
-
-import {
-  primaryContactValidations,
-  secondaryContactValidations,
-} from 'frontend-contactgegevens-loket/validations/contact';
 
 export default class CreateSitesNewRoute extends Route {
   @service store;
@@ -30,7 +22,7 @@ export default class CreateSitesNewRoute extends Route {
   @action
   async model() {
     const address = this.store.createRecord('address');
-
+    console.log('Dit is vanuit je route: ');
     address.country = 'België';
     return {
       adminUnit: this.currentSession.group,

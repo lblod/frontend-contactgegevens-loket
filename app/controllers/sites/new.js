@@ -12,11 +12,8 @@ export default class CreateSitesNewController extends Controller {
   @action
   async createSite(event) {
     event.preventDefault();
-    let { address, primaryContact, secondaryContact, site, adminUnit } =
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
-
-    site.address = address;
-
     address.fullAddress = combineFullAddress(address);
     await primaryContact.save();
     await secondaryContact.save();
@@ -41,7 +38,6 @@ export default class CreateSitesNewController extends Controller {
     const sites = await adminUnit.get('sites');
     sites.push(site);
     adminUnit.save();
-
     this.router.transitionTo('sites.index');
   }
 
