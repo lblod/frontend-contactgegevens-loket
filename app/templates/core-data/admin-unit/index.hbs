@@ -5,17 +5,7 @@
       <:subtitle>{{this.currentSession.fullName}}
         ({{this.currentSession.groupClassificationLabel}})</:subtitle>
       <:action>
-        {{! Secured area }}
-        <AuLink
-          @route="core-data.admin-unit.edit"
-          @skin="button-secondary"
-          @icon="pencil"
-          @iconAlignment="left"
-          {{!No model required, core data screens get their admin unit from the current session}}
-        >
-          Bewerk
-        </AuLink>
-        {{! End of secured area }}
+        <ReportWrongData />
       </:action>
     </PageHeader>
     <DataCard>
@@ -29,8 +19,7 @@
             </Item>
             <Item>
               <:label>Type bestuur</:label>
-              <:content
-              >{{@model.adminUnit.classification.label}}</:content>
+              <:content>{{@model.adminUnit.classification.label}}</:content>
             </Item>
             <Item>
               <:label>Stadstitel</:label>
@@ -38,6 +27,14 @@
             </Item>
             <Item>
               <:label>Regio</:label>
+              <:content>TODO when model data is expanded</:content>
+            </Item>
+            <Item>
+              <:label>Geplande einddatum</:label>
+              <:content>TODO when model data is expanded</:content>
+            </Item>
+            <Item>
+              <:label>Doel</:label>
               <:content>TODO when model data is expanded</:content>
             </Item>
           </:left>
@@ -79,16 +76,6 @@
         </Card.Columns>
       </:card>
     </DataCard>
-
-    <Site::ContactDataCard
-      @address={{@model.address}}
-      @primaryContact={{@model.primaryContact}}
-      @secondaryContact={{@model.secondaryContact}}
-    >
-      <:title>
-        Primaire contactgegevens
-      </:title>
-    </Site::ContactDataCard>
 
   </div>
 </div>

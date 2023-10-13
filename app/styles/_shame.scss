@@ -13,7 +13,13 @@
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
-
+.helptext {
+  display: flex;
+  flex-direction: column;
+}
+.linkexternal {
+  justify-content: right;
+}
 .data-table-pagination-right {
   display: flex;
   gap: $au-unit-tiny;
