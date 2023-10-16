@@ -20,6 +20,10 @@
 .linkexternal {
   justify-content: right;
 }
+.activeStatus {
+  background-color: green;
+  color: white;
+}
 .data-table-pagination-right {
   display: flex;
   gap: $au-unit-tiny;

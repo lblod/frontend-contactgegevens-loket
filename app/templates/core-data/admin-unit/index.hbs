@@ -22,16 +22,12 @@
               <:content>{{@model.adminUnit.classification.label}}</:content>
             </Item>
             <Item>
-              <:label>Stadstitel</:label>
-              <:content>TODO when model data is expanded</:content>
-            </Item>
-            <Item>
               <:label>Regio</:label>
-              <:content>TODO when model data is expanded</:content>
+              <:content>{{this.currentSession.group.primarySite.address.municipality}}</:content>
             </Item>
             <Item>
               <:label>Geplande einddatum</:label>
-              <:content>TODO when model data is expanded</:content>
+              <:content>{{this.currentSession.group.expectedEndDate}}</:content>
             </Item>
             <Item>
               <:label>Doel</:label>
@@ -57,15 +53,7 @@
                 }}</:content>
             </Item>
             <Item>
-              <:label>NIS code</:label>
-              <:content>{{if
-                  @model.nis
-                  @model.nis.localId
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
-            <Item>
-              <:label>OVO-nummer</:label>
+              <:label>SharePoint identificator</:label>
               <:content>{{if
                   @model.ovo
                   @model.ovo.localId
