@@ -20,20 +20,20 @@ export default class CreateSitesNewController extends Controller {
     await address.save();
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
-    console.log('Primary site', this.isPrimarySite);
     await site.save();
+
     let nonPrimarySites = await adminUnit.sites;
 
     if (this.isPrimarySite) {
       let previousPrimarySite = await adminUnit.primarySite;
 
       if (previousPrimarySite) {
-        nonPrimarySites = [previousPrimarySite];
+        nonPrimarySites.push(previousPrimarySite);
       }
 
       adminUnit.primarySite = site;
     } else {
-      nonPrimarySites = [site];
+      nonPrimarySites.push(site);
     }
     const sites = await adminUnit.get('sites');
     sites.push(site);
