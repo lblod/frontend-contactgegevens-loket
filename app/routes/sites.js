@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { sort } from '@ember/object/computed';
 
 export default class ContactDataSitesOverviewRoute extends Route {
   @service store;
