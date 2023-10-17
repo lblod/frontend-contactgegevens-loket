@@ -19,47 +19,149 @@
             </Item>
             <Item>
               <:label>Type bestuur</:label>
-              <:content>{{@model.adminUnit.classification.label}}</:content>
+              <:content>
+                {{@model.adminUnit.classification.label}}
+              </:content>
             </Item>
-            <Item>
-              <:label>Regio</:label>
-              <:content>{{this.currentSession.group.primarySite.address.municipality}}</:content>
-            </Item>
-            <Item>
-              <:label>Geplande einddatum</:label>
-              <:content>{{this.currentSession.group.expectedEndDate}}</:content>
-            </Item>
-            <Item>
-              <:label>Doel</:label>
-              <:content>TODO when model data is expanded</:content>
-            </Item>
+
+            {{#if this.isMunicipality}}
+              <Item>
+                <:label>Stadstitel</:label>
+                <:content>
+                  {{#if @model.isCity}}
+                    Ja
+                  {{else}}
+                    Nee
+                  {{/if}}
+                </:content>
+              </Item>
+            {{/if}}
+
+            {{#if this.isWorshipService}}
+              <Item>
+                <:label>Soort eredienst</:label>
+                <:content
+                >{{@model.adminUnit.recognizedWorshipType.label}}</:content>
+              </Item>
+            {{/if}}
+            {{#if @model.adminUnit.denomination}}
+              <Item>
+                <:label>Strekking</:label>
+                <:content>{{@model.adminUnit.denomination}}</:content>
+              </Item>
+            {{/if}}
+            {{#if
+              (eq
+                @model.adminUnit.constructor.modelName
+                "worship-service"
+              )
+            }}
+              <Item>
+                <:label>Grensoverschrijdend</:label>
+                <:content>
+                  {{@model.adminUnit.crossBorderNominal}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if
+              (and
+                @model.adminUnit.scope.locatedWithin
+                this.isMunicipality
+              )
+            }}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.adminUnit.scope.locatedWithin.label}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if this.isIGS}}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.igsRegio.label}}
+                </:content>
+              </Item>
+              <Item>
+                <:label>Geplande einddatum</:label>
+                <:content>
+                  {{@model.adminUnit.expectedEndDate}}
+                  {{#if this.expiredExpectedEndDate}}
+                    <AuPill @skin="error">De geplande einddatum is overschreden</AuPill>
+                  {{/if}}
+                </:content>
+              </Item>
+              <Item>
+                <:label>Doel</:label>
+                <:content>
+                  {{@model.adminUnit.purpose}}
+                </:content>
+              </Item>
+            {{/if}}
           </:left>
           <:right as |Item|>
             <Item>
               <:label>Status</:label>
               <:content>
                 <OrganizationStatus
-                  @id="Derp"
-                  @label={{@model.organizationStatus.label}}
+                  @id={{@model.adminUnit.organizationStatus.id}}
+                  @label={{@model.adminUnit.organizationStatus.label}}
                 />
               </:content>
             </Item>
-            <Item>
-              <:label>KBO nummer</:label>
-              <:content>{{if
-                  @model.kbo
-                  (kboFormat @model.kbo.localId)
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
-            <Item>
-              <:label>SharePoint identificator</:label>
-              <:content>{{if
-                  @model.ovo
-                  @model.ovo.localId
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
+            {{#if @model.resultedFrom}}
+              <Item>
+                <:content>
+                  <AuHelpText @skin="tertiary" class="au-u-margin-top-none">
+                    Gewijzigd op
+                    {{date-format @model.resultedFrom.firstObject.date}}
+                  </AuHelpText>
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if this.kboIdentifier.structuredIdentifier.localId}}
+              <Item>
+                <:label>{{this.kboIdentifier.idName}}</:label>
+                <:content>
+                  {{kbo-format this.kboIdentifier.structuredIdentifier.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if this.sharepointIdentifier.structuredIdentifier.localId}}
+              <Item>
+                <:label>{{this.sharepointIdentifier.idName}}</:label>
+                <:content>
+                  <AuLinkExternal
+                    href="{{this.sharePointLinkBase}}{{this.sharepointIdentifier.structuredIdentifier.localId}}"
+                  >
+                    {{this.sharepointIdentifier.structuredIdentifier.localId}}
+                    (externe link)
+                  </AuLinkExternal>
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if
+              (and
+                @model.adminUnit.scope.exactMatch
+                (or this.isMunicipality this.isProvince)
+              )
+            }}
+              <Item>
+                <:label>NIS</:label>
+                <:content>
+                  {{@model.adminUnit.scope.exactMatch.notation}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if this.ovoIdentifier.structuredIdentifier.localId}}
+              <Item>
+                <:label>{{this.ovoIdentifier.idName}}</:label>
+                <:content>
+                  {{this.ovoIdentifier.structuredIdentifier.localId}}
+                </:content>
+              </Item>
+            {{/if}}
           </:right>
         </Card.Columns>
       </:card>
