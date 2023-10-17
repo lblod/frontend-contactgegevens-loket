@@ -17,6 +17,7 @@ export default class ContactDataViewSiteRoute extends Route {
       reload: true,
       include: 'address,contacts,site-type',
     });
+    const primarySite = await this.currentSession.group.get('primarySite');
     const contacts = await site.contacts;
     const address = await site.address;
 
@@ -27,6 +28,7 @@ export default class ContactDataViewSiteRoute extends Route {
     return {
       site,
       address,
+      primarySite,
       siteId,
       primaryContact,
       secondaryContact,

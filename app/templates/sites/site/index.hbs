@@ -31,11 +31,7 @@
           <:right as |Item|>
             <Item>
               <:label>Primair correspondentieadres</:label>
-              <:content>{{if
-                  (eq @model.site.id @model.site.primarySite.id)
-                  "Ja"
-                  "Nee"
-                }}
+              <:content>{{this.getIsPrimarySite @model.site @model.primarySite}}
               </:content>
             </Item>
           </:right>
