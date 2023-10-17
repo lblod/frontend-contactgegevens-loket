@@ -26,7 +26,6 @@ export default class CreateSitesNewController extends Controller {
 
     if (this.isPrimarySite) {
       let previousPrimarySite = await adminUnit.primarySite;
-
       if (previousPrimarySite) {
         nonPrimarySites.push(previousPrimarySite);
       }
@@ -35,7 +34,6 @@ export default class CreateSitesNewController extends Controller {
     } else {
       nonPrimarySites.push(site);
     }
-
     adminUnit.save();
     this.router.transitionTo('sites.index');
   }
