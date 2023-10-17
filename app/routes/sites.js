@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { sort } from '@ember/object/computed';
 
 export default class ContactDataSitesOverviewRoute extends Route {
   @service store;
@@ -12,7 +11,7 @@ export default class ContactDataSitesOverviewRoute extends Route {
     const primarySite = await this.currentSession.group.get('primarySite');
 
     return {
-      sites,
+      sites: [...sites, primarySite],
       primarySiteId: primarySite.id,
     };
   }

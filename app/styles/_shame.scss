@@ -13,7 +13,17 @@
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
-
+.helptext {
+  display: flex;
+  flex-direction: column;
+}
+.linkexternal {
+  justify-content: right;
+}
+.activeStatus {
+  background-color: #009E47;
+  color: white;
+}
 .data-table-pagination-right {
   display: flex;
   gap: $au-unit-tiny;

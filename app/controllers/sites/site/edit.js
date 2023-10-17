@@ -8,7 +8,6 @@ export default class ContactDataEditSiteController extends Controller {
   @service router;
 
   save = task(async (event) => {
-    console.log('ik geraak in de controllaaaaa');
     event.preventDefault();
     const { site, address, primaryContact, secondaryContact } = this.model;
 

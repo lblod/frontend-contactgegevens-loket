@@ -14,7 +14,6 @@
     </AuLink>
   </:action>
 </PageHeader>
-
 <AuDataTable @content={{@model.sites}} @noDataMessage="Geen vestigingen" as |t|>
   <t.content as |c|>
     <c.header>
@@ -24,7 +23,6 @@
       <th>&nbsp;</th>
     </c.header>
     <c.body as |site|>
-
       <td>
         {{#if (eq site.id @model.primarySiteId)}}
           <AuIcon @icon="check" @size="default" @alignment="left" />
@@ -43,7 +41,6 @@
           Bewerk
         </AuLink>
       </td>
-
     </c.body>
   </t.content>
 </AuDataTable>
