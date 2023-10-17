@@ -11,29 +11,14 @@ export default class ContactDataEditSiteController extends Controller {
     event.preventDefault();
     const { site, address, primaryContact, secondaryContact } = this.model;
 
-    site.validate();
-    address.validate();
-    primaryContact.validate();
-    if (secondaryContact) secondaryContact.validate();
+    address.fullAddress = combineFullAddress(address);
 
-    if (
-      address.isValid &&
-      primaryContact.isValid &&
-      site.isValid &&
-      secondaryContact.isValid
-    ) {
-      address.fullAddress = combineFullAddress(address);
+    site.save();
+    address.save();
+    primaryContact.save();
+    secondaryContact ? secondaryContact.save() : null;
 
-      const saveCalls = [
-        site.save(),
-        address.save(),
-        primaryContact.save(),
-        secondaryContact ? secondaryContact.save() : null,
-      ];
-      await Promise.allSettled(saveCalls);
-      //Error check
-      this.router.transitionTo('sites.site.index');
-    }
+    this.router.transitionTo('sites.site.index');
   });
 
   @action
