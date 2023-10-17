@@ -26,7 +26,6 @@ export default class CreateSitesNewController extends Controller {
 
     if (this.isPrimarySite) {
       let previousPrimarySite = await adminUnit.primarySite;
-
       if (previousPrimarySite) {
         nonPrimarySites.push(previousPrimarySite);
       }
