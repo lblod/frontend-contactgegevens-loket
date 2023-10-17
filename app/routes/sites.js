@@ -11,7 +11,7 @@ export default class ContactDataSitesOverviewRoute extends Route {
     const primarySite = await this.currentSession.group.get('primarySite');
 
     return {
-      sites,
+      sites: [...sites, primarySite],
       primarySiteId: primarySite.id,
     };
   }
