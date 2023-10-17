@@ -9,6 +9,7 @@ export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
   @tracked isPrimarySite = false;
+
   @action
   async createSite(event) {
     event.preventDefault();
@@ -21,20 +22,10 @@ export default class CreateSitesNewController extends Controller {
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
     await site.save();
-
-    let nonPrimarySites = await adminUnit.sites;
-
     if (this.isPrimarySite) {
-      let previousPrimarySite = await adminUnit.primarySite;
-      if (previousPrimarySite) {
-        nonPrimarySites.push(previousPrimarySite);
-      }
-
       adminUnit.primarySite = site;
-    } else {
-      nonPrimarySites.push(site);
+      await adminUnit.save();
     }
-    adminUnit.save();
     this.router.transitionTo('sites.index');
   }
 
