@@ -33,8 +33,9 @@ export default class CreateSitesNewController extends Controller {
 
       adminUnit.primarySite = site;
     } else {
-      nonPrimarySites.push(site);
+      nonPrimarySites.push(site); 
     }
+
     const sites = await adminUnit.get('sites');
     sites.push(site);
     adminUnit.save();

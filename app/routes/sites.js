@@ -7,9 +7,12 @@ export default class ContactDataSitesOverviewRoute extends Route {
 
   async model() {
     // TODO: Not every site seems to get an address? Why?
-    const sites = await this.currentSession.group.get('sites', {
-      include: ['address', 'siteType', 'primarySite'],
-    });
-    return { sites };
+    let sites = await this.currentSession.group.get('sites');
+    const primarySite = await this.currentSession.group.get('primarySite');
+
+    return {
+      sites,
+      primarySiteId: primarySite.id,
+    };
   }
 }

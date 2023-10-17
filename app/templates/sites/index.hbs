@@ -10,26 +10,32 @@
       @icon="plus"
       @iconAlignment="left"
     >
-      Nieuw
+      Nieuwe vestiging toevoegen
     </AuLink>
   </:action>
 </PageHeader>
 <AuDataTable @content={{@model.sites}} @noDataMessage="Geen vestigingen" as |t|>
   <t.content as |c|>
     <c.header>
+      <th class="au-c-data-table__header-title"></th>
       <th class="au-c-data-table__header-title">Locatie</th>
       <th class="au-c-data-table__header-title">Type vestiging</th>
-      <th class="au-c-data-table__header-title">Primair correspondentieadres</th>
       <th>&nbsp;</th>
     </c.header>
     <c.body as |site|>
+      <td>
+        {{#if (eq site.id @model.primarySiteId)}}
+          <AuIcon @icon="check" @size="default" @alignment="left" />
+        {{else}}
+
+        {{/if}}
+      </td>
       <td>
         <AuLink @model={{site.id}} @route="sites.site.index">
           {{site.address.fullAddress}}
         </AuLink>
       </td>
       <td>{{site.siteType.label}}</td>
-      <td>{{if (eq site.id @model.primarySite.id) "Ja" "Neen"}}</td>
       <td>
         <AuLink @model={{site.id}} @route="sites.site.edit">
           Bewerk
