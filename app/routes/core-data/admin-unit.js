@@ -19,6 +19,18 @@ import {
   CLASSIFICATION_CODE,
 } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 
+/**
+ * Just a little function which throws a readable error when a record is falsy.
+ * Used for defensive programming and sanity checks in the code in case we get unfinded when we're not supposed to
+ * May help inducate issues in the backend
+ */
+function assertModel(record, source, modelName) {
+  if (!record)
+    throw new Error(
+      `${source} did not have an associated ${modelName}. Did not get ${modelName} from database;`,
+    );
+}
+
 export default class AdminUnitRoute extends Route {
   @service store;
   @service currentSession;
@@ -34,10 +46,11 @@ export default class AdminUnitRoute extends Route {
       },
     );
 
-    if (!administrativeUnitRecord)
-      throw new Error(
-        `The user, derived from the currentSession service, should always be associated with at least one administrative unit (also called a 'group'). This administrative unit is not present.`,
-      );
+    assertModel(
+      administrativeUnitRecord,
+      'Current session',
+      'administrative-unit',
+    );
 
     const organizationStatus =
       await administrativeUnitRecord.get('organizationStatus');
@@ -47,14 +60,9 @@ export default class AdminUnitRoute extends Route {
     const address = await primarySite.get('address');
 
     // Sanity checks
-    if (!primarySite)
-      throw new Error(
-        'Administrative unit should always have one primary site. Did not get primary site.',
-      );
-    if (!address)
-      throw new Error(
-        'Primary site should always have one address. Did not get address',
-      );
+    assertModel(classification, 'admin-unit', 'classification');
+    assertModel(primarySite, 'admin-unit', 'primary-site');
+    assertModel(address, 'admin-unit', 'address');
 
     const contacts = await primarySite.get('contacts');
     const primaryContact = findContactByType(contacts, CONTACT_TYPE.PRIMARY);
@@ -101,6 +109,7 @@ export default class AdminUnitRoute extends Route {
             );
           const municipalityAdminUnit = municipalityAdminUnits[0];
           const scope = await municipalityAdminUnit.scope;
+          assertModel(scope, 'admin-unit of municipaluty', 'scope');
           return (await scope.locatedWithin).label;
         })()
       : null;
@@ -110,6 +119,7 @@ export default class AdminUnitRoute extends Route {
         administrativeUnitRecord,
         adminUnitValidations,
       ),
+      classification,
       primarySite,
       organizationStatus,
       address: createValidatedChangeset(address, getAddressValidations(true)),

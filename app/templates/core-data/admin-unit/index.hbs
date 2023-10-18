@@ -30,18 +30,22 @@
             <Item>
               <:label>Type bestuur</:label>
               <:content
-              >{{@model.adminUnit.classification.label}}</:content>
+              >{{@model.classification.label}}</:content>
             </Item>
+            {{#if this.isMunicipality}}
             <Item>
               <:label>Stadstitel</:label>
               <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
             </Item>
+            {{/if}}
+            {{#if @model.region}}
             <Item>
               <:label>Regio</:label>
               <:content>
-                {{if @model.region @model.region "Niet geässocieerd met een regio"}}
+                {{@model.region}}
               </:content>
             </Item>
+            {{/if}}
           </:left>
           <:right as |Item|>
             <Item>
