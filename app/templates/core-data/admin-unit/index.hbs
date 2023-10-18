@@ -35,12 +35,12 @@
                 </:content>
               </Item>
             {{/if}}
-              <Item>
-                <:label>Verwachte einddatum</:label>
-                <:content>
-                  {{@model.adminUnit.expectedEndDate}}
-                </:content>
-              </Item>
+            <Item>
+              <:label>Verwachte einddatum</:label>
+              <:content>
+                {{@model.adminUnit.expectedEndDate}}
+              </:content>
+            </Item>
             <Item>
               <:label>Doel</:label>
               <:content>
@@ -85,27 +85,6 @@
                     {{this.sharepointIdentifier.structuredIdentifier.localId}}
                     (externe link)
                   </AuLinkExternal>
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if
-              (and
-                @model.adminUnit.scope.exactMatch
-                (or this.isMunicipality this.isProvince)
-              )
-            }}
-              <Item>
-                <:label>NIS</:label>
-                <:content>
-                  {{@model.adminUnit.scope.exactMatch.notation}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if this.ovoIdentifier.structuredIdentifier.localId}}
-              <Item>
-                <:label>{{this.ovoIdentifier.idName}}</:label>
-                <:content>
-                  {{this.ovoIdentifier.structuredIdentifier.localId}}
                 </:content>
               </Item>
             {{/if}}
