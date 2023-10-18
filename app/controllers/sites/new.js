@@ -4,7 +4,6 @@ import { combineFullAddress } from 'frontend-contactgegevens-loket/models/addres
 import { setEmptyStringsToNull } from 'frontend-contactgegevens-loket/utils/empty-string-to-null';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { pushObject } from '@ember/array';
 
 export default class CreateSitesNewController extends Controller {
   @service router;
@@ -22,10 +21,10 @@ export default class CreateSitesNewController extends Controller {
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
     await site.save();
-    let nonPrimarySites = await adminUnit.sites;
+    const nonPrimarySites = await adminUnit.sites;
 
     if (this.isPrimarySite) {
-      let previousPrimarySite = await adminUnit.primarySite;
+      const previousPrimarySite = await adminUnit.primarySite;
 
       if (previousPrimarySite) {
         nonPrimarySites.push(previousPrimarySite);

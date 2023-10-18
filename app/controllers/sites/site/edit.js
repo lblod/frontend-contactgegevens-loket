@@ -7,9 +7,10 @@ import { tracked } from '@glimmer/tracking';
 export default class ContactDataEditSiteController extends Controller {
   @service router;
   @tracked isPrimarySite;
-  // get isPrimarySite() {
-  //   return this.model.site.id === this.model.primarySite.id ? 'Ja' : 'Neen';
-  // }
+
+  get isPrimarySiteValue() {
+    return this.model.site.id === this.model.primarySite.id ? true : false;
+  }
 
   save = task(async (event) => {
     event.preventDefault();
@@ -18,23 +19,42 @@ export default class ContactDataEditSiteController extends Controller {
 
     address.fullAddress = combineFullAddress(address);
 
-    site.save();
-    address.save();
-    primaryContact.save();
-    secondaryContact ? secondaryContact.save() : null;
-    let nonPrimarySites = await adminUnit.sites;
+    await site.save();
+    await address.save();
+    await primaryContact.save();
+    if (secondaryContact) await secondaryContact.save();
 
+    const nonPrimarySites = await adminUnit.sites;
+    const previousPrimarySite = await adminUnit.primarySite;
+    console.log('nonPrimarySites.length before saving', nonPrimarySites.length);
+    console.log('this.isPrimarySite', this.isPrimarySite);
+
+    // we select yes for the primary site
     if (this.isPrimarySite) {
-      let previousPrimarySite = await adminUnit.primarySite;
+      // if there is a previous primary site
       if (previousPrimarySite) {
-        nonPrimarySites.push(previousPrimarySite);
-      }
+        console.log(
+          'previousPrimarySite.address',
+          previousPrimarySite.address.get('fullAddress'),
+        );
+        console.log(
+          'new primary site address:',
+          site.address.get('fullAddress'),
+        );
+        // check if the previous primary site is in the nonPrimarySites array, if not , add it
+        if (!nonPrimarySites.includes(previousPrimarySite)) {
+          nonPrimarySites.push(previousPrimarySite);
+        }
+        console.log('nonPrimarySites.length', nonPrimarySites.length);
 
-      adminUnit.primarySite = site;
+        adminUnit.primarySite = site; // set the new primary site
+      }
     } else {
-      nonPrimarySites.push(site);
+      if (!nonPrimarySites.includes(site)) {
+        nonPrimarySites.push(site);
+      }
     }
-    adminUnit.save();
+    await adminUnit.save();
 
     this.router.transitionTo('sites.site.index');
   });

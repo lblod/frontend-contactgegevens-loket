@@ -6,7 +6,6 @@ import {
   findPrimaryContact,
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
-
 export default class ContactDataViewSiteRoute extends Route {
   @service store;
   @service currentSession;
@@ -17,7 +16,14 @@ export default class ContactDataViewSiteRoute extends Route {
       reload: true,
       include: 'address,contacts,site-type',
     });
-    const adminUnit = await this.currentSession.group;
+    const adminUnit = await this.store.findRecord(
+      'administrative-unit',
+      this.currentSession.group.id,
+      {
+        reload: true,
+      },
+    );
+
     const contacts = await site.contacts;
     const address = await site.address;
     const primarySite = await this.currentSession.group.get('primarySite');
