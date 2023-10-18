@@ -1,5 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
+/** @type { Record<string,string> } */
 export const CLASSIFICATION_CODE = {
   MUNICIPALITY: '5ab0e9b8a3b2ca7c5e000001',
   PROVINCE: '5ab0e9b8a3b2ca7c5e000000',
@@ -16,6 +17,7 @@ export const CLASSIFICATION_CODE = {
     '4b8450cf-a326-4c66-9e63-b4ec10acc7f6',
 };
 
+/** @type { Record<string,{id:string,label:string}> } */
 export const CLASSIFICATION = {
   MUNICIPALITY: {
     id: '5ab0e9b8a3b2ca7c5e000001',
@@ -67,22 +69,30 @@ export const CLASSIFICATION = {
   },
 };
 
+/** @type { string[] } */
+export const IGS_CLASSIFICATION_CODES = [
+  CLASSIFICATION_CODE.PROJECTVERENIGING,
+  CLASSIFICATION_CODE.DIENSTVERLENENDE_VERENIGING,
+  CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING,
+  CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME,
+];
+
+/** @type { string[] } */
+export const AGB_ABP_CLASSIFICATION_CODES = [
+  CLASSIFICATION_CODE.PROJECTVERENIGING,
+  CLASSIFICATION_CODE.DIENSTVERLENENDE_VERENIGING,
+  CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING,
+  CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME,
+];
+
 export default class AdministrativeUnitClassificationCodeModel extends Model {
   @attr label;
 
   get isAgbOrApb() {
-    return (
-      this.id === CLASSIFICATION_CODE.AGB || this.id === CLASSIFICATION_CODE.APB
-    );
+    return IGS_CLASSIFICATION_CODES.includes(this.id);
   }
 
   get isIgs() {
-    return (
-      this.id === CLASSIFICATION_CODE.PROJECTVERENIGING ||
-      this.id === CLASSIFICATION_CODE.DIENSTVERLENENDE_VERENIGING ||
-      this.id === CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING ||
-      this.id ===
-        CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME
-    );
+    return AGB_ABP_CLASSIFICATION_CODES.includes(this.id);
   }
 }

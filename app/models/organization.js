@@ -5,6 +5,7 @@ export default class OrganizationModel extends Model {
   @attr alternativeName;
   @attr('date') expectedEndDate;
   @attr purpose;
+  @attr('boolean', { defaultValue: false }) isCity;
 
   @belongsTo('site', {
     inverse: null,
