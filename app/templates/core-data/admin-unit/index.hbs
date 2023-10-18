@@ -34,11 +34,13 @@
             </Item>
             <Item>
               <:label>Stadstitel</:label>
-              <:content>TODO when model data is expanded</:content>
+              <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
             </Item>
             <Item>
               <:label>Regio</:label>
-              <:content>TODO when model data is expanded</:content>
+              <:content>
+                {{if @model.region @model.region "Niet geässocieerd met een regio"}}
+              </:content>
             </Item>
           </:left>
           <:right as |Item|>

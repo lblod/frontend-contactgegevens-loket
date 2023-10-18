@@ -14,6 +14,10 @@ import {
   secondaryContactValidations,
 } from 'frontend-contactgegevens-loket/validations/contact';
 import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
+import {
+  IGS_CLASSIFICATION_CODES,
+  CLASSIFICATION_CODE,
+} from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 
 export default class AdminUnitRoute extends Route {
   @service store;
@@ -26,7 +30,7 @@ export default class AdminUnitRoute extends Route {
       {
         reload: true,
         include:
-          'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status',
+          'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status,classification',
       },
     );
 
@@ -37,9 +41,21 @@ export default class AdminUnitRoute extends Route {
 
     const organizationStatus =
       await administrativeUnitRecord.get('organizationStatus');
+    const classification = await administrativeUnitRecord.classification;
     const primarySite = await administrativeUnitRecord.primarySite;
     const identifiers = await administrativeUnitRecord.identifiers;
     const address = await primarySite.get('address');
+
+    // Sanity checks
+    if (!primarySite)
+      throw new Error(
+        'Administrative unit should always have one primary site. Did not get primary site.',
+      );
+    if (!address)
+      throw new Error(
+        'Primary site should always have one address. Did not get address',
+      );
+
     const contacts = await primarySite.get('contacts');
     const primaryContact = findContactByType(contacts, CONTACT_TYPE.PRIMARY);
     const secondaryContact = findContactByType(
@@ -59,14 +75,35 @@ export default class AdminUnitRoute extends Route {
       ID_NAME.NIS,
     );
 
-    if (!primarySite)
-      throw new Error(
-        'Administrative unit should always have one primary site. Did not get primary site.',
-      );
-    if (!address)
-      throw new Error(
-        'Primary site should always have one address. Did not get address',
-      );
+    const isIgs = IGS_CLASSIFICATION_CODES.includes(classification.id);
+    const region = isIgs
+      ? await (async () => {
+          const municipality = address.municipality;
+          const municipalityAdminUnits = await this.store.query(
+            'administrative-unit',
+            {
+              filter: {
+                ':exact:name': municipality,
+                classification: {
+                  ':id:': CLASSIFICATION_CODE.MUNICIPALITY,
+                },
+              },
+            },
+          );
+          // Sanity checks
+          if (municipalityAdminUnits.length === 0)
+            throw new Error(
+              `Impossible: Admin unit associated with municipality ${municipality} not found.`,
+            );
+          if (municipalityAdminUnits.length > 1)
+            throw new Error(
+              `Impossible: Multiple admin units associated with municipality ${municipality} found.`,
+            );
+          const municipalityAdminUnit = municipalityAdminUnits[0];
+          const scope = await municipalityAdminUnit.scope;
+          return (await scope.locatedWithin).label;
+        })()
+      : null;
 
     const result = {
       adminUnit: createValidatedChangeset(
@@ -89,6 +126,7 @@ export default class AdminUnitRoute extends Route {
       kbo: kbo ? createValidatedChangeset(kbo, kboValidations) : null,
       ovo: ovo ? createValidatedChangeset(ovo, ovoValidations) : null,
       nis: nis ?? null,
+      region,
     };
     return result;
   }
