@@ -7,4 +7,10 @@ export default class AdministrativeUnitModel extends OrganizationModel {
     async: true,
   })
   classification;
+
+  @belongsTo('location', { async: true, inverse: null })
+  scope;
+
+  @belongsTo('location', { async: true, inverse: null })
+  locatedWithin;
 }
