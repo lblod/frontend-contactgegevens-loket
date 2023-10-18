@@ -20,7 +20,7 @@ export default class ContactDataViewSiteRoute extends Route {
     const adminUnit = await this.currentSession.group;
     const contacts = await site.contacts;
     const address = await site.address;
-
+    const primarySite = await this.currentSession.group.get('primarySite');
     const primaryContact =
       findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
     const secondaryContact =
@@ -32,6 +32,7 @@ export default class ContactDataViewSiteRoute extends Route {
       primaryContact,
       secondaryContact,
       adminUnit,
+      primarySite,
     };
   }
 }
