@@ -22,23 +22,22 @@ export default class CreateSitesNewController extends Controller {
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
     await site.save();
-
     let nonPrimarySites = await adminUnit.sites;
 
     if (this.isPrimarySite) {
       let previousPrimarySite = await adminUnit.primarySite;
 
       if (previousPrimarySite) {
-        nonPrimarySites.pushObject(previousPrimarySite);
+        nonPrimarySites.push(previousPrimarySite);
       }
 
       adminUnit.primarySite = site;
     } else {
-      nonPrimarySites.pushObject(site);
+      nonPrimarySites.push(site);
     }
 
     await adminUnit.save();
-    this.router.transitionTo('sites');
+    this.router.transitionTo('sites.index');
   }
 
   reset() {
