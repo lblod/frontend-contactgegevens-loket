@@ -21,8 +21,8 @@ import {
 
 /**
  * Just a little function which throws a readable error when a record is falsy.
- * Used for defensive programming and sanity checks in the code in case we get unfinded when we're not supposed to
- * May help inducate issues in the backend
+ * Used for defensive programming and sanity checks in the code in case we get undefined when we're not supposed to
+ * May help indicate issues in the backend
  */
 function assertModel(record, source, modelName) {
   if (!record)
@@ -53,13 +53,14 @@ export default class AdminUnitRoute extends Route {
     );
 
     const organizationStatus =
-      await administrativeUnitRecord.get('organizationStatus');
+      await administrativeUnitRecord.organizationStatus;
     const classification = await administrativeUnitRecord.classification;
     const primarySite = await administrativeUnitRecord.primarySite;
     const identifiers = await administrativeUnitRecord.identifiers;
     const address = await primarySite.get('address');
 
     // Sanity checks
+    assertModel(organizationStatus, 'admin-unit', 'organization-status');
     assertModel(classification, 'admin-unit', 'classification');
     assertModel(primarySite, 'admin-unit', 'primary-site');
     assertModel(address, 'admin-unit', 'address');
@@ -109,7 +110,7 @@ export default class AdminUnitRoute extends Route {
             );
           const municipalityAdminUnit = municipalityAdminUnits[0];
           const scope = await municipalityAdminUnit.scope;
-          assertModel(scope, 'admin-unit of municipaluty', 'scope');
+          assertModel(scope, 'admin-unit of municipality', 'scope');
           return (await scope.locatedWithin).label;
         })()
       : null;

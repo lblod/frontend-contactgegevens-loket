@@ -1,5 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
+/** @type { Record<string,string> } */
 export const CLASSIFICATION_CODE = {
   MUNICIPALITY: '5ab0e9b8a3b2ca7c5e000001',
   PROVINCE: '5ab0e9b8a3b2ca7c5e000000',
@@ -16,6 +17,7 @@ export const CLASSIFICATION_CODE = {
     '4b8450cf-a326-4c66-9e63-b4ec10acc7f6',
 };
 
+/** @type { Record<string,{id:string,label:string}> } */
 export const CLASSIFICATION = {
   MUNICIPALITY: {
     id: '5ab0e9b8a3b2ca7c5e000001',
