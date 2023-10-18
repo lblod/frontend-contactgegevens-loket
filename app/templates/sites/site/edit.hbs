@@ -75,8 +75,8 @@
                       @selected={{this.isPrimarySite}}
                       as |Group|
                     >
-                      <Group.Radio @value="Ja">Ja</Group.Radio>
-                      <Group.Radio @value="Neen">Neen</Group.Radio>
+                      <Group.Radio @value={{true}}>Ja</Group.Radio>
+                      <Group.Radio @value={{false}}>Neen</Group.Radio>
                     </AuRadioGroup>
                   </:content>
                 </Item>
