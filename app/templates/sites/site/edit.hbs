@@ -71,12 +71,12 @@
                     <AuRadioGroup
                       @name="is-primary-site"
                       @alignment="inline"
-                      @onChange={{fn (mut this.isPrimarySite)}}
-                      @selected={{this.isPrimarySiteValue}}
+                      @onChange={{fn (mut this.selectedPrimaryStatus)}}
+                      @selected={{this.currentIsPrimary}}
                       as |Group|
                     >
-                      <Group.Radio @value={{true}}>Ja</Group.Radio>
-                      <Group.Radio @value={{false}}>Neen</Group.Radio>
+                      <Group.Radio @value={{true}}>Ja&nbsp;</Group.Radio>
+                      <Group.Radio @value={{false}}>Neen&nbsp;</Group.Radio>
                     </AuRadioGroup>
                   </:content>
                 </Item>
