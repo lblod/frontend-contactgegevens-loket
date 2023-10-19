@@ -21,7 +21,7 @@
   justify-content: right;
 }
 .activeStatus {
-  background-color: #009E47;
+  background-color: #009e47;
   color: white;
 }
 .data-table-pagination-right {
@@ -91,7 +91,7 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
 .au-c-list-horizontal--breadcrumbs {
   @include au-font-size($au-base);
 
-  @include mq($until:small) {
+  @include mq($until: small) {
     .au-c-list-horizontal__item {
       display: none;
     }
@@ -100,4 +100,8 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
       display: block;
     }
   }
+}
+
+#vote-star-filled {
+  color: var(--au-blue-700);
 }
