@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
 
 export default class ContactDataSitesOverviewRoute extends Route {
   @service store;
@@ -9,9 +10,10 @@ export default class ContactDataSitesOverviewRoute extends Route {
     // TODO: Not every site seems to get an address? Why?
     let sites = await this.currentSession.group.get('sites');
     let primarySite = await this.currentSession.group.get('primarySite');
-    console.log('Route word aangeroepen');
+    const allSites = A([...sites, primarySite]);
+    console.log('allSites', allSites);
     return {
-      sites: [...sites, primarySite],
+      allSites,
       primarySiteId: primarySite.id,
     };
   }

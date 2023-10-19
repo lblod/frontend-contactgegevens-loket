@@ -14,7 +14,7 @@
     </AuLink>
   </:action>
 </PageHeader>
-<AuDataTable @content={{@model.sites}} @noDataMessage="Geen vestigingen" as |t|>
+<AuDataTable @content={{@model.allSites}} @noDataMessage="Geen vestigingen" as |t|>
   <t.content as |c|>
     <c.header>
       <th class="au-c-data-table__header-title"></th>
