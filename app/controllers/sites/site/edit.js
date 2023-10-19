@@ -25,49 +25,16 @@ export default class ContactDataEditSiteController extends Controller {
       this.model;
 
     let nonPrimarySites = await adminUnit.sites;
-    assert(nonPrimarySites, 'Should always get a list of non primary sites.');
-    const currentPrimarySite = await adminUnit.primarySite;
-    assert(
-      currentPrimarySite,
-      'An admin-unit should always have a primary site',
-    );
-    if (this.currentIsPrimary && !this.selectedPrimaryStatus)
-      throw new Error(
-        'User is never allow to change from primary to non primary when the current site is primary.',
-      );
-
-    console.log(nonPrimarySites);
-
-    // User selects yes for primary site, Change from non primary to primary
-    if (!this.currentIsPrimary && this.selectedPrimaryStatus) {
-      adminUnit.primarySite = site;
-      // Remove the site from the list of nonPrimarySites
-      nonPrimarySites.removeObject(site);
-    }
-
-    const nonPrimarySites = await adminUnit.sites;
     const previousPrimarySite = await adminUnit.primarySite;
-    console.log('nonPrimarySites.length before saving', nonPrimarySites.length);
-    console.log('this.isPrimarySite', this.isPrimarySite);
-
     // we select yes for the primary site
-    if (this.isPrimarySite) {
+    if (this.selectedPrimaryStatus) {
       // if there is a previous primary site
       if (previousPrimarySite) {
-        console.log(
-          'previousPrimarySite.address',
-          previousPrimarySite.address.get('fullAddress'),
-        );
-        console.log(
-          'new primary site address:',
-          site.address.get('fullAddress'),
-        );
         // check if the previous primary site is in the nonPrimarySites array, if not , add it
-        if (!nonPrimarySites.includes(previousPrimarySite)) {
-          nonPrimarySites.push(previousPrimarySite);
-        }
-        console.log('nonPrimarySites.length', nonPrimarySites.length);
-
+        nonPrimarySites.push(previousPrimarySite);
+        adminUnit.sites = nonPrimarySites.filter((nonPrimarySite) => {
+          return nonPrimarySite.id !== site.id;
+        });
         adminUnit.primarySite = site; // set the new primary site
       }
     } else {
