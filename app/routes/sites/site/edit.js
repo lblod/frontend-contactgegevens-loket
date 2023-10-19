@@ -1,9 +1,16 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import {
+  createPrimaryContact,
+  createSecondaryContact,
+  findPrimaryContact,
+  findSecondaryContact,
+} from 'frontend-contactgegevens-loket/models/contact-point';
 
 export default class ContactDataEditSiteRoute extends Route {
   @service currentSession;
   @service router;
+  @service store;
 
   beforeModel() {
     if (!this.currentSession.canEdit) {
@@ -14,6 +21,35 @@ export default class ContactDataEditSiteRoute extends Route {
   }
 
   async model() {
-    return await this.modelFor('sites.site');
+    const params = this.paramsFor('sites.site');
+    const siteId = params.id;
+    const site = await this.store.findRecord('site', siteId, {
+      reload: true,
+      include: 'address,contacts,site-type',
+    });
+    const adminUnit = await this.store.findRecord(
+      'administrative-unit',
+      this.currentSession.group.id,
+      {
+        reload: true,
+      },
+    );
+
+    const contacts = await site.contacts;
+    const address = await site.address;
+    const primarySite = await this.currentSession.group.get('primarySite');
+    const primaryContact =
+      findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
+    const secondaryContact =
+      findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
+    return {
+      site,
+      address,
+      siteId,
+      primaryContact,
+      secondaryContact,
+      adminUnit,
+      primarySite,
+    };
   }
 }

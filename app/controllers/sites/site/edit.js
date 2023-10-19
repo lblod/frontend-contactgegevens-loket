@@ -51,8 +51,8 @@ export default class ContactDataEditSiteController extends Controller {
     await primaryContact.save();
     if (secondaryContact) await secondaryContact.save();
     await adminUnit.save();
-
-    this.router.transitionTo('sites.site.index');
+    console.log(site);
+    this.router.replaceWith('sites.site', site.id);
   });
 
   @action
