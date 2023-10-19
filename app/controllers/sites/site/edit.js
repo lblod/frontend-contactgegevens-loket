@@ -24,24 +24,28 @@ export default class ContactDataEditSiteController extends Controller {
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
 
-    let nonPrimarySites = await adminUnit.sites;
-    const previousPrimarySite = await adminUnit.primarySite;
-    // we select yes for the primary site
-    if (this.selectedPrimaryStatus) {
-      // if there is a previous primary site
-      if (previousPrimarySite) {
-        // check if the previous primary site is in the nonPrimarySites array, if not , add it
-        nonPrimarySites.push(previousPrimarySite);
-        adminUnit.sites = nonPrimarySites.filter((nonPrimarySite) => {
-          return nonPrimarySite.id !== site.id;
-        });
-        adminUnit.primarySite = site; // set the new primary site
-      }
-    } else {
-      if (!nonPrimarySites.includes(site)) {
-        nonPrimarySites.push(site);
-      }
+    const nonPrimarySites = await adminUnit.sites;
+    const currentPrimarySite = await adminUnit.primarySite;
+    // Sanity checks
+    assert(nonPrimarySites, 'Adminunit needs nonprimarysites');
+    assert(currentPrimarySite, 'Adminunit must always have a primary site');
+    if (this.currentIsPrimary && !this.selectedPrimaryStatus)
+      throw new Error(
+        'Cannot turn a primary site into a non primary. This would lead to the primary site being null.',
+      );
+
+    // Change relationships
+
+    // we select yes for the primary site, non primary -> primary
+    if (!this.currentIsPrimary && this.selectedPrimaryStatus) {
+      nonPrimarySites.push(currentPrimarySite);
+      adminUnit.sites = nonPrimarySites.filter((nonPrimarySite) => {
+        return nonPrimarySite.id !== site.id;
+      });
+      adminUnit.primarySite = site;
     }
+
+    // Save the models.
     await site.save();
     await address.save();
     await primaryContact.save();

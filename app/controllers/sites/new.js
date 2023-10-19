@@ -36,7 +36,7 @@ export default class CreateSitesNewController extends Controller {
     }
 
     await adminUnit.save();
-    this.router.transitionTo('sites.index');
+    this.router.transitionTo('sites.index'); // Model does not reload?
   }
 
   reset() {
