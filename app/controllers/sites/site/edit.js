@@ -26,6 +26,30 @@ export default class ContactDataEditSiteController extends Controller {
 
     let nonPrimarySites = await adminUnit.sites;
     const previousPrimarySite = await adminUnit.primarySite;
+    assert(nonPrimarySites, 'Should always get a list of non primary sites.');
+    const currentPrimarySite = await adminUnit.primarySite;
+    assert(
+      currentPrimarySite,
+      'An admin-unit should always have a primary site',
+    );
+    // if (this.currentIsPrimary && !this.selectedPrimaryStatus)
+    //   throw new Error(
+    //     'User is never allow to change from primary to non primary when the current site is primary.',
+    //   );
+
+    // console.log(nonPrimarySites);
+
+    // // User selects yes for primary site, Change from non primary to primary
+    // if (!this.currentIsPrimary && this.selectedPrimaryStatus) {
+    //   adminUnit.primarySite = site;
+    //   // Remove the site from the list of nonPrimarySites
+    //   console.log('nonPrimarySites', nonPrimarySites);
+    //   nonPrimarySites = nonPrimarySites.filter((item) => item !== site);
+    // }
+
+    console.log('nonPrimarySites.length before saving', nonPrimarySites.length);
+    console.log('this.selectedPrimaryStatus', this.selectedPrimaryStatus);
+
     // we select yes for the primary site
     if (this.selectedPrimaryStatus) {
       // if there is a previous primary site
