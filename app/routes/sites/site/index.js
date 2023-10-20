@@ -13,7 +13,6 @@ export default class ContactDataViewSiteRoute extends Route {
 
   async model() {
     const params = this.paramsFor('sites.site');
-    console.log(params);
     const siteId = params.id;
     const site = await this.store.findRecord('site', siteId, {
       reload: true,
