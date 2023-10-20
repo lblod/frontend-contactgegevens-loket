@@ -1,0 +1,110 @@
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box au-o-flow au-o-flow--large">
+    <PageHeader>
+      <:title>Kerngegevens</:title>
+      <:subtitle>{{this.currentSession.fullName}}
+        ({{this.currentSession.groupClassificationLabel}})</:subtitle>
+      <:action>
+        <ReportWrongData />
+      </:action>
+    </PageHeader>
+    <DataCard>
+      <:title>Bestuurseenheid</:title>
+      <:card as |Card|>
+        <Card.Columns>
+          <:left as |Item|>
+            <Item>
+              <:label>Naam</:label>
+              <:content>{{@model.adminUnit.name}}</:content>
+            </Item>
+            <Item>
+              <:label>Type bestuur</:label>
+              <:content>{{@model.classification.label}}</:content>
+            </Item>
+            {{#if this.isMunicipality}}
+              <Item>
+                <:label>Stadstitel</:label>
+                <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
+              </Item>
+            {{/if}}
+            {{#if @model.region}}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.region}}
+                </:content>
+              </Item>
+            {{/if}}
+            <Item>
+              <:label>Verwachte einddatum</:label>
+              <:content>
+                {{@model.adminUnit.expectedEndDate}}
+              </:content>
+            </Item>
+            <Item>
+              <:label>Doel</:label>
+              <:content>
+
+              </:content>
+            </Item>
+          </:left>
+          <:right as |Item|>
+            <Item>
+              <:label>Status</:label>
+              <:content>
+                <OrganizationStatus
+                  @label={{@model.organizationStatus.label}}
+                />
+              </:content>
+            </Item>
+            {{#if @model.resultedFrom}}
+              <Item>
+                <:content>
+                  <AuHelpText @skin="tertiary" class="au-u-margin-top-none">
+                    Gewijzigd op
+                    {{date-format @model.resultedFrom.firstObject.date}}
+                  </AuHelpText>
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.kbo}}
+              <Item>
+                <:label>KBO nummer</:label>
+                <:content>
+                  {{kbo-format @model.kbo.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.ovo}}
+              <Item>
+                <:label>OVO nummer</:label>
+                <:content>
+                  {{@model.ovo.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.nis}}
+              <Item>
+                <:label>NIS</:label>
+                <:content>
+                  {{@model.nis.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.sharepoiint}}
+              <Item>
+                <:label>Sharepoint referentie
+                </:label>
+                <:content>
+
+                  {{@model.sharepoint.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+          </:right>
+        </Card.Columns>
+      </:card>
+    </DataCard>
+
+  </div>
+</div>

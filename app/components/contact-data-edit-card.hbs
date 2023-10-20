@@ -1,0 +1,233 @@
+<EditCard @containsRequiredFields={{true}}>
+  <:title>{{yield to="title"}}</:title>
+  <:card as |Card|>
+    <Card.Columns>
+      <:left as |Item|>
+        <AddressSearch
+          @address={{@address}}
+          @itemComponent={{Item}}
+          @isSearchEnabledInitially={{@isAddressSearchEnabledInitially}}
+          @required={{true}}
+          @onChange={{this.automaticAddressSearchChanged}}
+          @id={{concat @id "-address"}}
+        >
+          <:manualAddressInputBeforeButton>
+            <Item
+              @labelFor={{concat @id "-country"}}
+              @required={{true}}
+              @errorMessage={{@address.error.country.validation}}
+            >
+              <:label>Land</:label>
+              <:content as |hasError|>
+                <CountrySelect
+                  @selected={{@address.country}}
+                  @onChange={{this.updateCountry}}
+                  @error={{hasError}}
+                  @disabled={{false}}
+                  @id={{concat @id "-country"}}
+                />
+              </:content>
+            </Item>
+            <Item
+              @labelFor={{concat @id "-street"}}
+              @required={{true}}
+              @errorMessage={{@address.error.street.validation}}
+            >
+              <:label>Straat</:label>
+              <:content as |hasError|>
+                <TrimInput
+                  @width="block"
+                  @value={{@address.street}}
+                  @onUpdate={{fn (mut @address.street)}}
+                  @error={{hasError}}
+                  @id={{concat @id "-street"}}
+                />
+              </:content>
+            </Item>
+          </:manualAddressInputBeforeButton>
+          <:manualAddressInput>
+            <Item
+              @labelFor={{concat @id "-number"}}
+              @required={{true}}
+              @errorMessage={{@address.error.number.validation}}
+            >
+              <:label>Huisnummer</:label>
+              <:content as |hasError|>
+                <TrimInput
+                  @width="block"
+                  @value={{@address.number}}
+                  @onUpdate={{fn (mut @address.number)}}
+                  @error={{hasError}}
+                  @id={{concat @id "-number"}}
+                />
+              </:content>
+            </Item>
+            <Item @labelFor={{concat @id "-box"}}>
+              <:label>Busnummer</:label>
+              <:content>
+                <TrimInput
+                  @width="block"
+                  @value={{@address.boxNumber}}
+                  @onUpdate={{fn (mut @address.boxNumber)}}
+                  @id={{concat @id "-box"}}
+                />
+              </:content>
+            </Item>
+            <Item
+              @labelFor={{concat @id "-postalcode"}}
+              @required={{true}}
+              @errorMessage={{@address.error.postcode.validation}}
+            >
+              <:label>Postcode</:label>
+              <:content as |hasError|>
+                <TrimInput
+                  @width="block"
+                  @value={{@address.postcode}}
+                  @onUpdate={{fn (mut @address.postcode)}}
+                  @error={{hasError}}
+                  id={{concat @id "-postalcode"}}
+                />
+              </:content>
+            </Item>
+            {{#if this.isCountryBelgium}}
+              <Item
+                @labelFor={{concat @id "-municipality"}}
+                @required={{true}}
+                @errorMessage={{@address.error.municipality.validation}}
+              >
+                <:label>Gemeente</:label>
+                <:content as |hasError|>
+                  <MunicipalitySelectByName
+                    @selected={{@address.municipality}}
+                    @selectedProvince={{@address.province}}
+                    @onChange={{fn (mut @address.municipality)}}
+                    @error={{hasError}}
+                    @disabled={{false}}
+                    @id={{concat @id "-municipality"}}
+                  />
+                </:content>
+              </Item>
+            {{else}}
+              <Item
+                @labelFor={{concat @id "-municipality"}}
+                @required={{true}}
+                @errorMessage={{@address.error.municipality.validation}}
+              >
+                <:label>Gemeente</:label>
+                <:content as |hasError|>
+                  <TrimInput
+                    @width="block"
+                    @value={{@address.municipality}}
+                    @onUpdate={{fn (mut @address.municipality)}}
+                    @error={{hasError}}
+                    id={{concat @id "-municipality"}}
+                  />
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if this.isCountryBelgium}}
+              <Item
+                @labelFor={{concat @id "-province"}}
+                @required={{true}}
+                @errorMessage={{@address.error.province.validation}}
+              >
+                <:label>Provincie</:label>
+                <:content as |hasError|>
+                  <ProvinceSelect
+                    @selected={{@address.province}}
+                    @selectedMunicipality={{@address.municipality}}
+                    @disabled={{@address.municipality}}
+                    @onChange={{fn (mut @address.province)}}
+                    @error={{hasError}}
+                    @id={{concat @id "-province"}}
+                  />
+                </:content>
+              </Item>
+            {{/if}}
+          </:manualAddressInput>
+          <:commonInput>
+          </:commonInput>
+        </AddressSearch>
+      </:left>
+      <:right as |Item|>
+        <Item
+          @required={{true}}
+          @labelFor={{concat @id "-telPrimary"}}
+          @errorMessage={{@primaryContact.error.telephone.validation}}
+        >
+          <:label>Primair telefoonnummer</:label>
+          <:content as |hasError|>
+            <TrimInput
+              @width="block"
+              @value={{@primaryContact.telephone}}
+              @onUpdate={{fn (mut @primaryContact.telephone)}}
+              @error={{hasError}}
+              @id={{concat @id "-telPrimary"}}
+              type="tel"
+            />
+          </:content>
+          <:helpText>
+            {{help-text "phone-number"}}
+          </:helpText>
+        </Item>
+
+        <Item
+          @labelFor={{concat @id "-telSecondary"}}
+          @errorMessage={{@secondaryContact.error.telephone.validation}}
+        >
+          <:label>Secundair telefoonnummer</:label>
+          <:content as |hasError|>
+            <TrimInput
+              @width="block"
+              @value={{@secondaryContact.telephone}}
+              @onUpdate={{fn (mut @secondaryContact.telephone)}}
+              @error={{hasError}}
+              @disabled={{not @secondaryContact}}
+              @id={{concat @id "-telSecondary"}}
+              type="tel"
+            />
+          </:content>
+          <:helpText>
+            {{help-text "phone-number"}}
+          </:helpText>
+        </Item>
+        <Item
+          @labelFor={{concat @id "-emailPrimary"}}
+          @errorMessage={{@primaryContact.error.email.validation}}
+        >
+          <:label>E-mail</:label>
+          <:content as |errorMessage|>
+            <TrimInput
+              @width="block"
+              @value={{@primaryContact.email}}
+              @onUpdate={{fn (mut @primaryContact.email)}}
+              @error={{errorMessage}}
+              @id={{concat @id "-emailPrimary"}}
+            />
+          </:content>
+          <:helpText>
+            {{help-text "email"}}
+          </:helpText>
+        </Item>
+        <Item
+          @labelFor={{concat @id "-webPrimary"}}
+          @errorMessage={{@primaryContact.error.website.validation}}
+        >
+          <:label>Website</:label>
+          <:content as |hasError|>
+            <TrimInput
+              @width="block"
+              @value={{@primaryContact.website}}
+              @onUpdate={{fn (mut @primaryContact.website)}}
+              @error={{hasError}}
+              @id={{concat @id "-webPrimary"}}
+            />
+          </:content>
+          <:helpText>
+            {{help-text "url"}}
+          </:helpText>
+        </Item>
+      </:right>
+    </Card.Columns>
+  </:card>
+</EditCard>

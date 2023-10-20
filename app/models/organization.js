@@ -5,6 +5,7 @@ export default class OrganizationModel extends Model {
   @attr alternativeName;
   @attr('date') expectedEndDate;
   @attr purpose;
+  @attr('boolean', { defaultValue: false }) isCity;
 
   @belongsTo('site', {
     inverse: null,
@@ -29,4 +30,16 @@ export default class OrganizationModel extends Model {
     async: true,
   })
   sites;
+
+  @hasMany('organization', {
+    inverse: 'isSubOrganizationOf',
+    async: true,
+  })
+  subOrganizations;
+
+  @belongsTo('organization', {
+    inverse: 'subOrganizations',
+    async: true,
+  })
+  isSubOrganizationOf;
 }

@@ -1,4 +1,4 @@
-<StaticPage>
+<StaticPage class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-layout au-o-region-large">
     <MockLogin as |login|>
       {{#if login.isLoading}}
@@ -13,7 +13,7 @@
             <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
             <input class="au-c-input au-c-input--block js-js-input-pattern-bound" id={{id}} placeholder="Aalst, Berchem, ..." value={{this.gemeente}} oninput={{perform this.updateSearch value='target.value'}}>
           {{/let}}
-        </p> 
+        </p>
         <ul>
           {{#each this.model as |account|}}
             <li>

@@ -90,6 +90,14 @@
 @import "ember-appuniversum/c-toolbar";
 @import "ember-appuniversum/c-toggle-switch";
 
+// Added by ABB
+@import "project/c-data-list";
+@import "project/c-document-status-pills";
+@import "project/c-sidebar-container";
+@import "project/c-status-label";
+@import "project/c-rdf-forms";
+@import "project/cards";
+
 // PLUGINS
 @import "ember-appuniversum/p-ember-power-select";
 @import "ember-appuniversum/p-duet-datepicker";
@@ -114,3 +122,5 @@
 
 // TEMPORARY HACKS AND QUICKFIXES
 @import 'shame';
+
+@import "ember-power-select";

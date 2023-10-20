@@ -18,4 +18,11 @@ export default class SiteModel extends Model {
     async: true,
   })
   siteType;
+
+  // Maybe await and get primary site if not loaded?
+  isPrimaryOf(adminUnit) {
+    if (!adminUnit.primarySite)
+      throw new Error('Admin unit primary site not loaded.');
+    return this.id === adminUnit.primarySite.id;
+  }
 }

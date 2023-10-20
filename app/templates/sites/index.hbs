@@ -1,0 +1,52 @@
+{{page-title "Vestigingen"}}
+<PageHeader class="au-o-box">
+  <:title>Vestigingen</:title>
+  <:subtitle>{{this.currentSession.fullName}}
+    ({{this.currentSession.groupClassificationLabel}})</:subtitle>
+  <:action>
+    <AuLink
+      @route="sites.new"
+      @skin="button"
+      @icon="plus"
+      @iconAlignment="left"
+    >
+      Nieuwe vestiging toevoegen
+    </AuLink>
+  </:action>
+</PageHeader>
+<AuDataTable
+  @content={{@model.allSites}}
+  @noDataMessage="Geen vestigingen"
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <th class="au-c-data-table__header-title"></th>
+      <th class="au-c-data-table__header-title">Locatie</th>
+      <th class="au-c-data-table__header-title">Type vestiging</th>
+      <th>&nbsp;</th>
+    </c.header>
+    <c.body as |site|>
+      <td>
+        {{#if (eq site.id @model.primarySiteId)}}
+          <AuIcon
+            id="primary-site-icon"
+            @icon="vote-star-filled"
+            @size="large"
+          />
+        {{/if}}
+      </td>
+      <td>
+        <AuLink @model={{site.id}} @route="sites.site.index">
+          {{site.address.fullAddress}}
+        </AuLink>
+      </td>
+      <td>{{site.siteType.label}}</td>
+      <td>
+        <AuLink @model={{site.id}} @route="sites.site.edit">
+          Bewerk
+        </AuLink>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

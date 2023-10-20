@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'history',
+    contactEmail: 'organisaties.abb@vlaanderen.be',
     EmberENV: {
       EXTEND_PROTOTYPES: false,
       FEATURES: {
@@ -18,6 +19,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+    appName: 'Contactgegevens',
+    contactEmail: 'contactgegevens.abb@vlaanderen.be',
+    environmentName: '{{ENVIRONMENT_NAME}}',
   };
 
   if (environment === 'development') {

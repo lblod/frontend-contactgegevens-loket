@@ -13,7 +13,17 @@
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
-
+.help-text {
+  display: flex;
+  flex-direction: column;
+}
+.link-external {
+  justify-content: right;
+}
+.active-status {
+  background-color: #009e47;
+  color: white;
+}
 .data-table-pagination-right {
   display: flex;
   gap: $au-unit-tiny;
@@ -25,8 +35,73 @@
 
   select {
     background-color: var(--au-white);
-    border: .1rem solid var(--au-gray-300);
+    border: 0.1rem solid var(--au-gray-300);
     border-radius: $au-radius;
     padding: $au-unit-tiny;
   }
+}
+
+// Custom ember power select component with pre-filled text in search
+
+$ember-power-select-border-color: #ccc !default;
+$ember-power-select-focus-border-color: #66afe9 !default;
+$ember-power-select-default-border: 1px solid $ember-power-select-border-color !default;
+$ember-power-select-search-field-border: $ember-power-select-default-border !default;
+$ember-power-select-search-input-border-radius: 3px !default;
+$ember-power-select-default-focus-border: 1px solid
+  $ember-power-select-focus-border-color !default;
+$ember-power-select-search-field-focus-border: $ember-power-select-default-focus-border !default;
+$ember-power-select-focus-box-shadow:
+  inset 0 1px 1px rgba(0, 0, 0, 0.075),
+  0 0 8px rgba(102, 175, 233, 0.6) !default;
+$ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
+
+.ember-power-select-movable-cursor {
+  border: $ember-power-select-search-field-border;
+  border-radius: $ember-power-select-search-input-border-radius;
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0 5px;
+  &:focus {
+    border: $ember-power-select-search-field-focus-border;
+    box-shadow: $ember-power-select-focus-box-shadow;
+    @if $ember-power-select-focus-outline {
+      outline: $ember-power-select-focus-outline;
+    }
+  }
+}
+
+// For data display
+
+.grid-container-two-column-fixed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.au-u-flex--flex-start {
+  align-items: flex-start;
+}
+
+.au-u-flex--flex-end {
+  align-items: flex-end;
+}
+
+// Tweak breadcrumb list: improve responsive behaviour
+.au-c-list-horizontal--breadcrumbs {
+  @include au-font-size($au-base);
+
+  @include mq($until: small) {
+    .au-c-list-horizontal__item {
+      display: none;
+    }
+
+    .au-c-list-horizontal__item:first-child {
+      display: block;
+    }
+  }
+}
+
+#primary-site-icon {
+  color: var(--au-blue-700);
 }
