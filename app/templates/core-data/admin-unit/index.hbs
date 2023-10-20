@@ -67,24 +67,42 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if this.kboIdentifier.structuredIdentifier.localId}}
+            {{#if @model.kbo}}
               <Item>
-                <:label>{{this.kboIdentifier.idName}}</:label>
+                <:label>KBO nummer</:label>
                 <:content>
-                  {{kbo-format this.kboIdentifier.structuredIdentifier.localId}}
+                  {{kbo-format @model.kbo.localId}}
                 </:content>
               </Item>
             {{/if}}
-            {{#if this.sharepointIdentifier.structuredIdentifier.localId}}
+            {{#if @model.ovo}}
               <Item>
-                <:label>{{this.sharepointIdentifier.idName}}</:label>
+                <:label>OVO nummer</:label>
                 <:content>
-                  <AuLinkExternal
+                  {{@model.ovo.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.nis}}
+              <Item>
+                <:label>NIS</:label>
+                <:content>
+                  {{@model.nis.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.sharepoiint}}
+              <Item>
+                <:label>Sharepoint referentie
+                </:label>
+                <:content>
+                  {{!-- <AuLinkExternal
                     href="{{this.sharePointLinkBase}}{{this.sharepointIdentifier.structuredIdentifier.localId}}"
                   >
                     {{this.sharepointIdentifier.structuredIdentifier.localId}}
                     (externe link)
-                  </AuLinkExternal>
+                  </AuLinkExternal> --}}
+                  {{@model.sharepoint.localId}}
                 </:content>
               </Item>
             {{/if}}

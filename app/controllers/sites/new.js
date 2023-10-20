@@ -1,16 +1,19 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
-import { setEmptyStringsToNull } from 'frontend-contactgegevens-loket/utils/empty-string-to-null';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 
 export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
   @tracked isPrimarySite = false;
-  @action
-  async createSite(event) {
+
+  get isLoading() {
+    return this.saveTask.isRunning || this.cancelTask.isRunning;
+  }
+
+  saveTask = task(async (event) => {
     event.preventDefault();
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
@@ -25,11 +28,9 @@ export default class CreateSitesNewController extends Controller {
 
     if (this.isPrimarySite) {
       const previousPrimarySite = await adminUnit.primarySite;
-
       if (previousPrimarySite) {
         nonPrimarySites.push(previousPrimarySite);
       }
-
       adminUnit.primarySite = site;
     } else {
       nonPrimarySites.push(site);
@@ -37,7 +38,26 @@ export default class CreateSitesNewController extends Controller {
 
     await adminUnit.save();
     this.router.transitionTo('sites.index'); // Model does not reload?
-  }
+  });
+
+  cancelTask = task(async (event) => {
+    event.preventDefault();
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    // Destroy the newly created models
+    address.deleteRecord();
+    await address.save();
+    primaryContact.deleteRecord();
+    await primaryContact.save();
+    secondaryContact.deleteRecord();
+    await secondaryContact.save();
+    site.deleteRecord();
+    await site.save();
+    // Roll back the changes to admin unit if any
+    adminUnit.rollback();
+
+    this.router.transitionTo('sites.index'); // Model does not reload?
+  });
 
   reset() {
     this.isPrimarySite = false;

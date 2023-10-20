@@ -2,15 +2,15 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 import { tracked } from '@glimmer/tracking';
-
+import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
 
 export default class ContactDataEditSiteController extends Controller {
   @service router;
+
   // Varies with user select
   @tracked selectedPrimaryStatus = this.currentIsPrimary;
 
@@ -19,7 +19,11 @@ export default class ContactDataEditSiteController extends Controller {
     return this.model.site.id === this.model.primarySite.id ? true : false;
   }
 
-  save = task(async (event) => {
+  get isLoading() {
+    return this.saveTask.isRunning || this.cancelTask.isRunning;
+  }
+
+  saveTask = task(async (event) => {
     event.preventDefault();
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
@@ -47,6 +51,7 @@ export default class ContactDataEditSiteController extends Controller {
 
     // Save the models.
     await site.save();
+    address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
     await primaryContact.save();
     if (secondaryContact) await secondaryContact.save();
@@ -58,6 +63,15 @@ export default class ContactDataEditSiteController extends Controller {
   @action
   cancel(event) {
     event.preventDefault();
+    const { site, address, primaryContact, secondaryContact, adminUnit } =
+      this.model;
+    // Undo any changes
+    site.rollback();
+    address.rollback();
+    primaryContact.rollback();
+    if (secondaryContact) secondaryContact.rollback();
+    adminUnit.rollback();
+    // Navigate away
     this.router.transitionTo('sites.site.index');
   }
 }
