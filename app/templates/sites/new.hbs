@@ -6,12 +6,18 @@
       <:title>Voeg vestiging toe</:title>
       <:action>
         <AuButtonGroup class="au-c-button-group--align-right">
-          <AuLink @route="sites.index" @skin="button-secondary">
-            Annuleer
-          </AuLink>
           <AuButton
-            @loading={{this.createSite.isRunning}}
-            @disabled={{this.createSite.isRunning}}
+            @loading={{this.isLoading}}
+            @disabled={{this.isLoading}}
+            @skin="button-secondary"
+            type="cancel"
+            form="new-vestiging-form"
+          >
+            Annuleer
+          </AuButton>
+          <AuButton
+            @loading={{this.isLoading}}
+            @disabled={{this.isLoading}}
             @icon="add"
             @iconAlignment="left"
             type="submit"
@@ -23,7 +29,11 @@
       </:action>
     </PageHeader>
 
-    <form id="new-vestiging-form" {{on "submit" this.createSite}}>
+    <form
+      id="new-vestiging-form"
+      {{on "submit" (perform this.saveTask)}}
+      {{on "cancel" (perform this.cancelTask)}}
+    >
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
           <:title>Kerngegevens</:title>
