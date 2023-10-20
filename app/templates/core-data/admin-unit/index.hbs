@@ -5,17 +5,7 @@
       <:subtitle>{{this.currentSession.fullName}}
         ({{this.currentSession.groupClassificationLabel}})</:subtitle>
       <:action>
-        {{! Secured area }}
-        <AuLink
-          @route="core-data.admin-unit.edit"
-          @skin="button-secondary"
-          @icon="pencil"
-          @iconAlignment="left"
-          {{!No model required, core data screens get their admin unit from the current session}}
-        >
-          Bewerk
-        </AuLink>
-        {{! End of secured area }}
+        <ReportWrongData />
       </:action>
     </PageHeader>
     <DataCard>
@@ -29,23 +19,34 @@
             </Item>
             <Item>
               <:label>Type bestuur</:label>
-              <:content
-              >{{@model.classification.label}}</:content>
+              <:content>{{@model.classification.label}}</:content>
             </Item>
             {{#if this.isMunicipality}}
-            <Item>
-              <:label>Stadstitel</:label>
-              <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
-            </Item>
+              <Item>
+                <:label>Stadstitel</:label>
+                <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
+              </Item>
             {{/if}}
             {{#if @model.region}}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.region}}
+                </:content>
+              </Item>
+            {{/if}}
             <Item>
-              <:label>Regio</:label>
+              <:label>Verwachte einddatum</:label>
               <:content>
-                {{@model.region}}
+                {{@model.adminUnit.expectedEndDate}}
               </:content>
             </Item>
-            {{/if}}
+            <Item>
+              <:label>Doel</:label>
+              <:content>
+
+              </:content>
+            </Item>
           </:left>
           <:right as |Item|>
             <Item>
@@ -56,44 +57,54 @@
                 />
               </:content>
             </Item>
-            <Item>
-              <:label>KBO nummer</:label>
-              <:content>{{if
-                  @model.kbo
-                  (kboFormat @model.kbo.localId)
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
-            <Item>
-              <:label>NIS code</:label>
-              <:content>{{if
-                  @model.nis
-                  @model.nis.localId
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
-            <Item>
-              <:label>OVO-nummer</:label>
-              <:content>{{if
-                  @model.ovo
-                  @model.ovo.localId
-                  "Niet ingegesteld"
-                }}</:content>
-            </Item>
+            {{#if @model.resultedFrom}}
+              <Item>
+                <:content>
+                  <AuHelpText @skin="tertiary" class="au-u-margin-top-none">
+                    Gewijzigd op
+                    {{date-format @model.resultedFrom.firstObject.date}}
+                  </AuHelpText>
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.kbo}}
+              <Item>
+                <:label>KBO nummer</:label>
+                <:content>
+                  {{kbo-format @model.kbo.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.ovo}}
+              <Item>
+                <:label>OVO nummer</:label>
+                <:content>
+                  {{@model.ovo.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.nis}}
+              <Item>
+                <:label>NIS</:label>
+                <:content>
+                  {{@model.nis.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.sharepoiint}}
+              <Item>
+                <:label>Sharepoint referentie
+                </:label>
+                <:content>
+
+                  {{@model.sharepoint.localId}}
+                </:content>
+              </Item>
+            {{/if}}
           </:right>
         </Card.Columns>
       </:card>
     </DataCard>
-
-    <Site::ContactDataCard
-      @address={{@model.address}}
-      @primaryContact={{@model.primaryContact}}
-      @secondaryContact={{@model.secondaryContact}}
-    >
-      <:title>
-        Primaire contactgegevens
-      </:title>
-    </Site::ContactDataCard>
 
   </div>
 </div>

@@ -1,3 +1,4 @@
+{{breadcrumb this.model.site.address.fullAddress route="sites.site.index" model=(params-for "sites.site" param="id")}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
     <PageHeader>
@@ -31,11 +32,7 @@
           <:right as |Item|>
             <Item>
               <:label>Primair correspondentieadres</:label>
-              <:content>{{if
-                  (eq @model.site.id @model.site.primarySite.id)
-                  "Ja"
-                  "Nee"
-                }}
+              <:content>{{this.isPrimarySite}}
               </:content>
             </Item>
           </:right>

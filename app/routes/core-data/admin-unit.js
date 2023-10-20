@@ -3,17 +3,6 @@ import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from 'frontend-contactgegevens-loket/models/contact-point';
 import { ID_NAME } from 'frontend-contactgegevens-loket/models/identifier';
 import { findStructuredIdentifierByIdName, findContactByType } from './util';
-import adminUnitValidations from 'frontend-contactgegevens-loket/validations/administrative-unit';
-import getAddressValidations from 'frontend-contactgegevens-loket/validations/address';
-import {
-  kboValidations,
-  ovoValidations,
-} from 'frontend-contactgegevens-loket/validations/core-data';
-import {
-  primaryContactValidations,
-  secondaryContactValidations,
-} from 'frontend-contactgegevens-loket/validations/contact';
-import { createValidatedChangeset } from 'frontend-contactgegevens-loket/utils/changeset';
 import {
   IGS_CLASSIFICATION_CODES,
   CLASSIFICATION_CODE,
@@ -24,7 +13,7 @@ import {
  * Used for defensive programming and sanity checks in the code in case we get undefined when we're not supposed to
  * May help indicate issues in the backend
  */
-function assertModel(record, source, modelName) {
+function assert(record, source, modelName) {
   if (!record)
     throw new Error(
       `${source} did not have an associated ${modelName}. Did not get ${modelName} from database;`,
@@ -36,7 +25,8 @@ export default class AdminUnitRoute extends Route {
   @service currentSession;
 
   async model() {
-    const administrativeUnitRecord = await this.store.findRecord(
+    // Re load the admin unit and make sure we get as moch data as possible right away
+    const adminUnit = await this.store.findRecord(
       'administrative-unit',
       this.currentSession.group.id,
       {
@@ -46,24 +36,19 @@ export default class AdminUnitRoute extends Route {
       },
     );
 
-    assertModel(
-      administrativeUnitRecord,
-      'Current session',
-      'administrative-unit',
-    );
+    assert(adminUnit, 'Current session', 'administrative-unit');
 
-    const organizationStatus =
-      await administrativeUnitRecord.organizationStatus;
-    const classification = await administrativeUnitRecord.classification;
-    const primarySite = await administrativeUnitRecord.primarySite;
-    const identifiers = await administrativeUnitRecord.identifiers;
+    const organizationStatus = await adminUnit.organizationStatus;
+    const classification = await adminUnit.classification;
+    const primarySite = await adminUnit.primarySite;
+    const identifiers = await adminUnit.identifiers;
     const address = await primarySite.get('address');
 
     // Sanity checks
-    assertModel(organizationStatus, 'admin-unit', 'organization-status');
-    assertModel(classification, 'admin-unit', 'classification');
-    assertModel(primarySite, 'admin-unit', 'primary-site');
-    assertModel(address, 'admin-unit', 'address');
+    assert(organizationStatus, 'admin-unit', 'organization-status');
+    assert(classification, 'admin-unit', 'classification');
+    assert(primarySite, 'admin-unit', 'primary-site');
+    assert(address, 'admin-unit', 'address');
 
     const contacts = await primarySite.get('contacts');
     const primaryContact = findContactByType(contacts, CONTACT_TYPE.PRIMARY);
@@ -82,6 +67,10 @@ export default class AdminUnitRoute extends Route {
     const nis = await findStructuredIdentifierByIdName(
       identifiers,
       ID_NAME.NIS,
+    );
+    const sharepoint = await findStructuredIdentifierByIdName(
+      identifiers,
+      ID_NAME.SHAREPOINT,
     );
 
     const isIgs = IGS_CLASSIFICATION_CODES.includes(classification.id);
@@ -110,34 +99,24 @@ export default class AdminUnitRoute extends Route {
             );
           const municipalityAdminUnit = municipalityAdminUnits[0];
           const scope = await municipalityAdminUnit.scope;
-          assertModel(scope, 'admin-unit of municipality', 'scope');
+          assert(scope, 'admin-unit of municipality', 'scope');
           return (await scope.locatedWithin).label;
         })()
       : null;
 
     const result = {
-      adminUnit: createValidatedChangeset(
-        administrativeUnitRecord,
-        adminUnitValidations,
-      ),
+      adminUnit,
       classification,
       primarySite,
       organizationStatus,
-      address: createValidatedChangeset(address, getAddressValidations(true)),
-      primaryContact: createValidatedChangeset(
-        primaryContact,
-        primaryContactValidations,
-      ),
-      secondaryContact: secondaryContact
-        ? createValidatedChangeset(
-            secondaryContact,
-            secondaryContactValidations,
-          )
-        : null,
-      kbo: kbo ? createValidatedChangeset(kbo, kboValidations) : null,
-      ovo: ovo ? createValidatedChangeset(ovo, ovoValidations) : null,
-      nis: nis ?? null,
-      region,
+      address,
+      primaryContact,
+      secondaryContact, // May be null
+      kbo, // May be null
+      ovo, // May be null
+      nis, // May be null
+      sharepoint, // May be null
+      region, // May be null
     };
     return result;
   }

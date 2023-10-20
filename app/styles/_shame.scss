@@ -13,7 +13,17 @@
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
-
+.help-text {
+  display: flex;
+  flex-direction: column;
+}
+.link-external {
+  justify-content: right;
+}
+.active-status {
+  background-color: #009e47;
+  color: white;
+}
 .data-table-pagination-right {
   display: flex;
   gap: $au-unit-tiny;
@@ -81,7 +91,7 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
 .au-c-list-horizontal--breadcrumbs {
   @include au-font-size($au-base);
 
-  @include mq($until:small) {
+  @include mq($until: small) {
     .au-c-list-horizontal__item {
       display: none;
     }
@@ -90,4 +100,8 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
       display: block;
     }
   }
+}
+
+#primary-site-icon {
+  color: var(--au-blue-700);
 }
