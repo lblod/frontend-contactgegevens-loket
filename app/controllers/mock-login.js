@@ -12,7 +12,7 @@ export default class MockLoginController extends Controller {
   queryParams = ['gemeente', 'page'];
   size = 10;
 
-  @tracked model; // Model is always tracked?
+  @tracked model;
   @tracked gemeente = '';
   @tracked page = 0;
 
@@ -38,7 +38,7 @@ export default class MockLoginController extends Controller {
     const user = await account.user;
     const group = (await user.groups)[0];
     const groupId = (await group).id;
-    //TODO: Make new version of mock-login
+    // TODO: Make new version of mock-login
     // await loginFunction(account.id, groupId); // Old code using old async tasks.
     await this.session.authenticate(
       'authenticator:mock-login',
