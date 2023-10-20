@@ -1,4 +1,8 @@
-{{breadcrumb this.model.site.address.fullAddress route="sites.site.index" model=(params-for "sites.site" param="id")}}
+{{breadcrumb
+  this.model.site.address.fullAddress
+  route="sites.site.index"
+  model=(params-for "sites.site" param="id")
+}}
 {{breadcrumb "Bewerk"}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
@@ -79,8 +83,8 @@
                       @selected={{this.currentIsPrimary}}
                       as |Group|
                     >
-                      <Group.Radio @value={{true}}>Ja&nbsp;</Group.Radio>
-                      <Group.Radio @value={{false}}>Neen&nbsp;</Group.Radio>
+                      <Group.Radio @value={{true}}>Ja</Group.Radio>
+                      <Group.Radio @value={{false}}>Neen</Group.Radio>
                     </AuRadioGroup>
                   </:content>
                 </Item>

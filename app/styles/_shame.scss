@@ -13,7 +13,7 @@
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
-.helptext {
+.help-text {
   display: flex;
   flex-direction: column;
 }
@@ -102,6 +102,6 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
   }
 }
 
-#vote-star-filled {
+#primary-site-icon {
   color: var(--au-blue-700);
 }

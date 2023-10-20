@@ -14,7 +14,11 @@
     </AuLink>
   </:action>
 </PageHeader>
-<AuDataTable @content={{@model.allSites}} @noDataMessage="Geen vestigingen" as |t|>
+<AuDataTable
+  @content={{@model.allSites}}
+  @noDataMessage="Geen vestigingen"
+  as |t|
+>
   <t.content as |c|>
     <c.header>
       <th class="au-c-data-table__header-title"></th>
@@ -25,7 +29,11 @@
     <c.body as |site|>
       <td>
         {{#if (eq site.id @model.primarySiteId)}}
-          <AuIcon id="vote-star-filled" @icon="vote-star-filled" @size="large" />
+          <AuIcon
+            id="primary-site-icon"
+            @icon="vote-star-filled"
+            @size="large"
+          />
         {{/if}}
       </td>
       <td>

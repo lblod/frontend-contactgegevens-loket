@@ -8,7 +8,4 @@ export default class CoreDataAdminUnitIndexController extends Controller {
   get isMunicipality() {
     return this.model.classification.id === CLASSIFICATION_CODE.MUNICIPALITY;
   }
-  get testDate() {
-    return new Date().toDateString();
-  }
 }
