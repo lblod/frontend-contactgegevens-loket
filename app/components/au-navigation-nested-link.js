@@ -37,6 +37,6 @@ export default class AuNavigationNestedLinkComponent extends Component {
   @action
   linkFocus() {
     // Focus content window
-    document.getElementById('container').focus();
+    document.getElementById('main').focus();
   }
 }

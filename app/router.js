@@ -21,7 +21,6 @@ Router.map(function () {
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
       this.route('index', { path: '/' });
-      this.route('edit', { path: '/bewerk' });
     });
   });
   this.route('sites', { path: '/vestigingen' }, function () {

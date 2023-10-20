@@ -12,7 +12,4 @@ export default class ContactDataEditCard extends Component {
     this.args.address.municipality = null;
     this.args.address.province = null;
   }
-
-  @action
-  automaticAddressSearchChanged(value) {}
 }
