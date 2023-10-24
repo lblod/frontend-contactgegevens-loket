@@ -64,8 +64,8 @@
                   <:content as |hasError|>
                     <SiteTypeSelect
                       @selected={{@model.site.siteType}}
+                      @administrativeUnitClassification={{this.model.adminUnit.classification}}
                       @onChange={{fn (mut @model.site.siteType)}}
-                      @administrativeUnitClassification={{@model.site.siteType.id}}
                       @id="site-type"
                       @error={{hasError}}
                     />
