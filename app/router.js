@@ -30,6 +30,8 @@ Router.map(function () {
     });
   });
 
+  this.route('andreo');
+
   this.route('route-not-found', {
     path: '/*wildcard',
   });

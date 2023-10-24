@@ -1,0 +1,20 @@
+{{page-title "andreo-test-form"}}
+
+{{! Begin Form }}
+{{!  RDF form example }}
+<RdfForm
+  @groupClass="au-o-grid__item"
+  @form={{@model.form}}
+  @graphs={{@model.graphs}}
+  @sourceNode={{@model.sourceNode}}
+  @formStore={{@model.formStore}}
+  @show={{false}}
+  @forceShowErrors={{false}}
+  @useNewListingLayout={{true}}
+/>
+
+<AuButton
+  @skin="primary"
+  type="button"
+  {{on "click" this.validateForm}}
+>Validate</AuButton>
