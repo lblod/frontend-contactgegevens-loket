@@ -49,13 +49,13 @@
 <http://example-concept-schemes/concepts/foo>
     a <http://www.w3.org/2004/02/skos/core#Concept>, <http://www.w3.org/2000/01/rdf-schema#Class>;
     <http://www.w3.org/2004/02/skos/core#inScheme> <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
-    <http://www.w3.org/2004/02/skos/core#prefLabel> "Hoofd"@en;
+    <http://www.w3.org/2004/02/skos/core#prefLabel> "Ja"@en;
     <http://purl.org/linked-data/cube#order> 1.
 
 <http://example-concept-schemes/concepts/bar>
     a <http://www.w3.org/2004/02/skos/core#Concept>, <http://www.w3.org/2000/01/rdf-schema#Class>;
     <http://www.w3.org/2004/02/skos/core#inScheme> <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
-    <http://www.w3.org/2004/02/skos/core#prefLabel> "Schouders"@en;
+    <http://www.w3.org/2004/02/skos/core#prefLabel> "Nee"@en;
     <http://purl.org/linked-data/cube#order> 2.
 
 <http://example-concept-schemes/concepts/baz>
