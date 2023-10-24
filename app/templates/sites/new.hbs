@@ -48,9 +48,9 @@
                   <:label>Type vestiging</:label>
                   <:content as |hasError|>
                     <SiteTypeSelect
-                      @selected={{this.model.site.siteType}}
-                      @onChange={{fn (mut this.model.site.siteType)}}
-                      @administrativeUnitClassification={{this.model.site.siteType.id}}
+                      @selected={{@model.site.siteType}}
+                      @administrativeUnitClassification={{this.model.adminUnit.classification}}
+                      @onChange={{fn (mut @model.site.siteType)}}
                       @id="site-type"
                       @error={{hasError}}
                     />
