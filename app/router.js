@@ -29,6 +29,9 @@ Router.map(function () {
       this.route('edit', { path: '/bewerk' });
     });
   });
+  this.route('esff', function () {
+    this.route('form-dennis');
+  });
 
   this.route('route-not-found', {
     path: '/*wildcard',

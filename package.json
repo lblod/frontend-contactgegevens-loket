@@ -33,6 +33,7 @@
     "@ember/test-helpers": "^3.2.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@lblod/ember-submission-form-fields": "^2.14.1",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.2.0",
     "ember-auto-import": "^2.6.3",
@@ -85,6 +86,7 @@
   "dependencies": {
     "@lblod/ember-address-search": "^0.1.0",
     "@lblod/ember-mock-login": "^0.7.0",
+    "@lblod/submission-form-helpers": "^2.3.0",
     "ember-breadcrumb-trail": "^0.2.0",
     "ember-cli-sass": "^11.0.1",
     "ember-promise-modals": "^4.0.0",
