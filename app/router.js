@@ -17,6 +17,7 @@ Router.map(function () {
     this.route('logout');
     this.route('switch');
   });
+  this.route('youssef');
 
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
