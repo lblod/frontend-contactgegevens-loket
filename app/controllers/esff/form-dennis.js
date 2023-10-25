@@ -9,6 +9,7 @@ import {
 const FIELD_PREDICATE_MAP = {
   attributeA: 'http://mu.semte.ch/vocabularies/ext/inputValueA',
   attributeB: 'http://mu.semte.ch/vocabularies/ext/inputValueB',
+  pokemon: 'http://mu.semte.ch/vocabularies/ext/pokemonValue',
 };
 
 function copyValuesFromTriplesToObject(triples, targetObject) {

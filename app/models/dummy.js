@@ -5,4 +5,6 @@ export default class DummyObject extends EmberObject {
   attributeA;
   /** @type { string }*/
   attributeB;
+  /** @type { any }*/
+  pokemon;
 }

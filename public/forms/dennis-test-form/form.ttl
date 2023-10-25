@@ -61,3 +61,17 @@ ext:inputFieldAttributeB a form:Field ;
     sh:group ext:mainPropertyGroup .
 
 ext:mainFg form:hasField ext:inputFieldAttributeB .
+
+##########################################################
+#  Pokémon combo box
+##########################################################
+
+ext:pokemonComboField a form:Field ;
+    sh:name "Pokemon multi select" ;
+    sh:order 222 ;
+    sh:path ext:pokemonValue ;
+    form:options """{"conceptScheme":"http://dennisvaneecke/concept-schemes/pokemons", "orderBy":"http://purl.org/linked-data/cube#order"}""" ;
+    form:displayType displayTypes:conceptSchemeSelector ;
+    sh:group ext:mainPropertyGroup .
+
+ext:mainFg form:hasField ext:pokemonComboField .

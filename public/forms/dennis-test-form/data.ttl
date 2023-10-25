@@ -2,7 +2,10 @@
 @prefix esff: <http://ember-submission-form-fields/> .
 @prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>.
 @prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>.
+@prefix concept-schemes: <http://redpencil.data.gift/concept-schemes/> .
+@prefix concepts: <http://redpencil.data.gift/concepts/> .
 
-# Inputs
+# Inputs, 'default values'
 esff:source-node ext:inputValueA "Default value A".
 esff:source-node ext:inputValueB "Default value B".
+esff:source-node ext:pokemonValue concepts:8c45d487-dabc-4178-bfdb-3a40316f078a.
