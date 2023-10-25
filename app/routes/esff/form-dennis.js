@@ -12,6 +12,7 @@ import {
   NIE,
   MU,
 } from '@lblod/submission-form-helpers';
+import DummyObject from '../../models/dummy';
 
 const FORM_GRAPHS = {
   formGraph: new NamedNode('http://data.lblod.info/form'),
@@ -35,11 +36,10 @@ export default class EsffFormDennisRoute extends Route {
       loadTextFromPublic('/forms/dennis-test-form/meta.ttl'),
       loadTextFromPublic('/forms/dennis-test-form/data.ttl'),
     ]);
-    const formStore = new ForkingStore();
+    const formStore = new ForkingStore(); // triple store in memory
     formStore.parse(formTtl, FORM_GRAPHS.formGraph, 'text/turtle');
     formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
     formStore.parse(dataTtl, FORM_GRAPHS.sourceGraph, 'text/turtle');
-    console.log(formStore);
 
     const form = formStore.any(
       undefined,
@@ -48,12 +48,15 @@ export default class EsffFormDennisRoute extends Route {
       FORM_GRAPHS.formGraph,
     );
 
+    const dummy = new DummyObject();
+
     return {
       formStore,
       form,
       title: 'Dennis test form',
       graphs: FORM_GRAPHS,
-      sourceNode: SOURCE_NODE,
+      sourceNode: SOURCE_NODE, // 'data'
+      dummy,
     };
   }
 }
