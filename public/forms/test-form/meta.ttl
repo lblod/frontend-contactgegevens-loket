@@ -1,6 +1,6 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix qb:  <http://purl.org/linked-data/cube>.
-@prefix rdf: <http://www.w3.org/2000/01/rdf-schema>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema>.
 
 
 <http://example-concept-schemes/concept-schemes/foo-bar-baz>
@@ -8,13 +8,13 @@
       skos:prefLabel "Metasyntactic variables"@en.
 
 <http://example-concept-schemes/concepts/foo>
-    a skos:Concept, rdf:Class;
+    a skos:Concept, rdfs:Class;
       skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
       skos:prefLabel "Gemeentehuis"@en;
       qb:order 1.
 
 <http://example-concept-schemes/concepts/bar>
-    a skos:Concept, skos:Class;
+    a skos:Concept, rdfs:Class;
       skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
       skos:prefLabel "Provinciehuis"@en;
       qb:order 2.
@@ -29,7 +29,7 @@
     a skos:Concept, rdfs:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
     skos:prefLabel "Maatschappelijke zetel"@en;
-    qb:order 4.
+    qb:order 4. 
 
 <http://example-concept-schemes/concepts/quux>
     a skos:Concept, rdfs:Class;
