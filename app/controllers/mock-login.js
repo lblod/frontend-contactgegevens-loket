@@ -39,7 +39,6 @@ export default class MockLoginController extends Controller {
     const group = (await user.groups)[0];
     const groupId = (await group).id;
     // TODO: Make new version of mock-login
-    // await loginFunction(account.id, groupId); // Old code using old async tasks.
     await this.session.authenticate(
       'authenticator:mock-login',
       account.id,
