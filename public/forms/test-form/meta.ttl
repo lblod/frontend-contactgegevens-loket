@@ -2,49 +2,94 @@
 @prefix qb:  <http://purl.org/linked-data/cube>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema>.
 
+# Sitetypes
 
-<http://example-concept-schemes/concept-schemes/foo-bar-baz>
+<http://example-concept-schemes/concepts/sitetypes>
     a skos:ConceptScheme;
       skos:prefLabel "Metasyntactic variables"@en.
 
-<http://example-concept-schemes/concepts/foo>
+<http://example-concept-schemes/concepts/countries>
+    a skos:ConceptScheme;
+    skos:prefLabel "Metasyntactic variables"@en.
+
+<http://example-concept-schemes/concepts/choices>
+    a skos:ConceptScheme;
+    skos:prefLabel "Metasyntactic variables"@en.
+
+
+<http://example-concept-schemes/concepts/sitetypes/gemeentehuis>
     a skos:Concept, rdfs:Class;
-      skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+      skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
       skos:prefLabel "Gemeentehuis"@en;
       qb:order 1.
 
-<http://example-concept-schemes/concepts/bar>
+<http://example-concept-schemes/concepts/sitetypes/provinciehuis>
     a skos:Concept, rdfs:Class;
-      skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+      skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
       skos:prefLabel "Provinciehuis"@en;
       qb:order 2.
 
-<http://example-concept-schemes/concepts/baz>
+<http://example-concept-schemes/concepts/sitetypes/hoofdgebouw-erediensten>
     a skos:Concept, rdfs:Class;
-    skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+    skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
     skos:prefLabel "Hoofdgebouw erediensten"@en;
     qb:order 3.
 
-<http://example-concept-schemes/concepts/qux>
+<http://example-concept-schemes/concepts/sitetypes/maatschappelijke-zetel>
     a skos:Concept, rdfs:Class;
-    skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+    skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
     skos:prefLabel "Maatschappelijke zetel"@en;
     qb:order 4. 
 
-<http://example-concept-schemes/concepts/quux>
+<http://example-concept-schemes/concepts/sitetypes/andere-vestiging>
     a skos:Concept, rdfs:Class;
-    skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+    skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
     skos:prefLabel "Andere vestiging"@en;
     qb:order 5.
 
-<http://example-concept-schemes/concepts/corge>
+<http://example-concept-schemes/concepts/sitetypes/districthuis>
     a skos:Concept, rdfs:Class;
-    skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+    skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
     skos:prefLabel "Districthuis"@en;
     qb:order 6.
 
-<http://example-concept-schemes/concepts/grault>
+<http://example-concept-schemes/concepts/sitetypes/ander-administratief-adres>
     a skos:Concept, rdfs:Class;
-    skos:inScheme <http://example-concept-schemes/concept-schemes/foo-bar-baz>;
+    skos:inScheme <http://example-concept-schemes/concepts/sitetypes>;
     skos:prefLabel "Ander administratief adres"@en;
     qb:order 7.
+
+
+# Countries
+
+<http://example-concept-schemes/concepts/countries/belgie>
+    a skos:Concept, rdfs:Class;
+    skos:inScheme <http://example-concept-schemes/concepts/countries>;
+    skos:prefLabel "België"@en;
+    qb:order 1.
+
+<http://example-concept-schemes/concepts/countries/frankrijk>
+    a skos:Concept, rdfs:Class;
+    skos:inScheme <http://example-concept-schemes/concepts/countries>;
+    skos:prefLabel "Frankrijk"@en;
+    qb:order 2.
+
+<http://example-concept-schemes/concepts/countries/nederland>
+    a skos:Concept, rdfs:Class;
+    skos:inScheme <http://example-concept-schemes/concepts/countries>;
+    skos:prefLabel "Nederland"@en;
+    qb:order 3.
+
+# Yes or No
+
+<http://example-concept-schemes/concepts/choices/yes>
+    a skos:Concept, rdfs:Class;
+    skos:inScheme <http://example-concept-schemes/concepts/choices>;
+    skos:prefLabel "Ja"@en;
+    qb:order 1.
+
+<http://example-concept-schemes/concepts/choices/no>
+    a skos:Concept, rdfs:Class;
+    skos:inScheme <http://example-concept-schemes/concepts/choices>;
+    skos:prefLabel "Neen"@en;
+    qb:order 2.
