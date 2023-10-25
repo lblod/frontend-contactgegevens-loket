@@ -1,17 +1,17 @@
-@prefix concept-schemes: <http://redpencil.data.gift/concept-schemes/>
-@prefix skos: <http://www.w3.org/2004/02/skos/core#>
-@prefix mu: <http://mu.semte.ch/vocabularies/core/>
+@prefix concept-schemes: <http://redpencil.data.gift/concept-schemes/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
 
 #Meta data for example combo box
 # I generated some uuid's myself
 concept-schemes:30ed5a34-ce1b-4fb0-be3c-77fa6987d027 a skos:ConceptScheme;
   mu:uuid "30ed5a34-ce1b-4fb0-be3c-77fa6987d027";
-  skos:prefLabel "Bulbasaur"@en.
+  skos:prefLabel "Bulbasaur"@en .
 
 concept-schemes:8c45d487-dabc-4178-bfdb-3a40316f078a a skos:ConceptScheme;
   mu:uuid "f0c7e471-6787-4e04-96d8-2e2c3cb39ba9";
-  skos:prefLabel "Charmander"@en.
+  skos:prefLabel "Charmander"@en .
 
 concept-schemes:0c42f78a-5f8b-415e-bdf3-8858ad787065 a skos:ConceptScheme;
   mu:uuid "567b97b1-eb36-4e16-9e8f-1b2f904b5ba6";
-  skos:prefLabel "Squirtle"@en.
+  skos:prefLabel "Squirtle"@en .
