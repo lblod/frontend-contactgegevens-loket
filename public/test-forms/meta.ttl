@@ -4,8 +4,7 @@
 @prefix rdf: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix order: <http://purl.org/linked-data/cube#order> .
 
-# Foo bar baz example concept scheme
-# foo, bar, baz, qux, quux, corge, grault // garply, waldo, fred, plugh, xyzzy, nacho, and thud;
+
 
 <http://example-concept-schemes/concept-schemes/sitetypes>
     a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
@@ -53,3 +52,50 @@
     skos:prefLabel "Andere vestiging"@en;
     order: 7.
 
+
+
+
+
+<http://example-concept-schemes/concept-schemes/primaircorrespondetie>
+    a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
+    <http://www.w3.org/2004/02/skos/core#prefLabel> "Metasyntactic variables"@en.
+
+
+<http://example-concept-schemes/concepts/ja>
+    a skos:Concept, rdf:Class;
+    skos:inScheme <http://example-concept-schemes/concept-schemes/primaircorrespondetie>;
+    skos:prefLabel "Ja"@en;
+    order: 8.
+
+<http://example-concept-schemes/concepts/nee>
+    a skos:Concept, rdf:Class;
+    skos:inScheme <http://example-concept-schemes/concept-schemes/primaircorrespondetie>;
+    skos:prefLabel "Nee"@en;
+    order: 9.
+
+
+
+
+
+<http://example-concept-schemes/concept-schemes/countries>
+    a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
+    <http://www.w3.org/2004/02/skos/core#prefLabel> "Metasyntactic variables"@en.
+
+
+<http://example-concept-schemes/concepts/be>
+    a skos:Concept, rdf:Class;
+    skos:inScheme <http://example-concept-schemes/concept-schemes/countries>;
+    skos:prefLabel "BE"@en;
+    order: 8.
+
+<http://example-concept-schemes/concepts/nl>
+    a skos:Concept, rdf:Class;
+    skos:inScheme <http://example-concept-schemes/concept-schemes/countries>;
+    skos:prefLabel "NL"@en;
+    order: 9.
+
+<http://example-concept-schemes/concepts/fr>
+    a skos:Concept, rdf:Class;
+    skos:inScheme <http://example-concept-schemes/concept-schemes/countries>;
+    skos:prefLabel "FR"@en;
+    order: 9.
