@@ -1,208 +1,207 @@
-@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
+@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
-@prefix fieldGroups: <http://data.lblod.info/field-groups/> .
-@prefix fields: <http://data.lblod.info/fields/> .
-@prefix displayTypes: <http://lblod.data.gift/display-types/> .
-@prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
+@prefix mu: <http://mu.semte.ch/vocabularies/core/>.
+@prefix fieldGroups: <http://data.lblod.info/field-groups/>.
+@prefix fields: <http://data.lblod.info/fields/>.
+@prefix displayTypes: <http://lblod.data.gift/display-types/>.
+@prefix ext: <http://mu.semte.ch/vocabularies/ext/>.
 @prefix schema: <http://schema.org/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
-ext:mainFg a form:FieldGroup.
+ext:mainFieldGroup a form:FieldGroup.
 
-ext:form a form:Form;
-    form:hasFieldGroup ext:mainFg.
+ext:formDefinition a form:Form;
+    form:hasFieldGroup ext:mainFieldGroup.
 
-ext:mainPg a form:PropertyGroup;
-    sh:description "parent property-group, used to group fields and property-groups together";
-    sh:name "Kerngegevens" ;
-    sh:order 2 .
+ext:corePropertyGroup a form:PropertyGroup;
+    sh:description "Parent property group, used to group fields and property groups together";
+    sh:name "Core Data";
+    sh:order 2.
 
-#Dropdown
-ext:typeVestiging a form:Field ;
-    sh:name "Type vestiging" ;
-    sh:order 3 ;
-    sh:path ext:conceptSchemeSelectorValue ;
-    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/sitetypes","searchEnabled":false}""" ;
-    form:displayType displayTypes:conceptSchemeSelector ;
-    sh:group ext:mainPg .
-ext:mainFg form:hasField ext:typeVestiging .
+# Dropdown
+ext:siteType a form:Field;
+    sh:name "Site Type";
+    sh:order 3;
+    sh:path ext:conceptSchemeSelectorValue;
+    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/sitetypes","searchEnabled":false}""";
+    form:displayType displayTypes:conceptSchemeSelector;
+    sh:group ext:corePropertyGroup.
+ext:mainFieldGroup form:hasField ext:siteType.
 
+ext:primaryAddress a form:Field;
+    sh:name "Primary Correspondence Address";
+    sh:order 4;
+    sh:path ext:conceptSchemeRadioButtonsValue;
+    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/primaircorrespondetie","searchEnabled":false}""";
+    form:displayType displayTypes:conceptSchemeRadioButtons;
+    sh:group ext:corePropertyGroup.
+ext:mainFieldGroup form:hasField ext:primaryAddress.
 
-ext:primairAdres a form:Field ;
-    sh:name "Primair Correspodentieadres" ;
-    sh:order 4 ;
-    sh:path ext:conceptSchemeRadioButtonsValue ;
-    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/primaircorrespondetie","searchEnabled":false}""" ;
-    form:displayType displayTypes:conceptSchemeRadioButtons ;
-    sh:group ext:mainPg .
-ext:mainFg form:hasField ext:primairAdres .
+ext:contactPropertyGroup a form:PropertyGroup;
+    sh:description "Parent property group, used to group fields and property groups together";
+    sh:name "Contact Information";
+    sh:order 700.
 
+#Countries
+ext:countries a form:Field;
+    sh:name "Countries";
+    sh:order 1;
+    sh:path ext:conceptSchemeSelectorValue;
+    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/countries","searchEnabled":false}""";
+    form:displayType displayTypes:conceptSchemeSelector;
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:countries.
 
-
-
-ext:mainPgCG a form:PropertyGroup;
-    sh:description "parent property-group, used to group fields and property-groups together";
-    sh:name "Contactgegevens" ;
-    sh:order 700 .
-
-
-ext:landen a form:Field ;
-    sh:name "Landen" ;
-    sh:order 1 ;
-    sh:path ext:conceptSchemeSelectorValue ;
-    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/countries","searchEnabled":false}""" ;
-    form:displayType displayTypes:conceptSchemeSelector ;
-    sh:group ext:mainPgCG .
-ext:mainFg form:hasField ext:landen .
-
-ext:straat a form:Field ;
-    sh:name "Straat" ;
-    sh:order 2 ;  
-    sh:path ext:StreetValue ;  
-    form:displayType displayTypes:defaultInput ;  
-      form:validations 
-    [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:path ext:StreetValue;
-      sh:resultMessage "Vul een geldig adres in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:straat .
-
-#Huisnummer
-ext:huisnummer a form:Field ;
-    sh:name "Huisnummer" ;
-    sh:order 20 ;  
-    sh:path ext:housenumberValue ;  
-    form:displayType displayTypes:defaultInput ; 
-      form:validations 
-    [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:path ext:housenumberValue;
-      sh:resultMessage "Vul een geldig adres in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:huisnummer .
-
-#Busnummer
-ext:busnummer a form:Field ;
-    sh:name "Busnummer" ;
-    sh:order 30 ;  
-    sh:path ext:newValue ;  
-    form:displayType displayTypes:defaultInput ;  
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:busnummer .
+#Street
+ext:street a form:Field;
+    sh:name "Street";
+    sh:order 2;
+    sh:path ext:StreetValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:RequiredConstraint;
+        form:grouping form:Bag;
+        sh:path ext:StreetValue;
+        sh:resultMessage "Please enter a valid address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:street.
 
 
-#Postcode
-ext:postcode a form:Field ;
-    sh:name "Postcode" ;
-    sh:order 40 ; 
-    sh:path ext:postalcodeValue ;
-    form:displayType displayTypes:defaultInput ;
-         form:validations 
-    [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:path ext:postalcodeValue;
-      sh:resultMessage "Vul een geldig adres in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:postcode .
+# House Number
+ext:houseNumber a form:Field;
+    sh:name "House Number";
+    sh:order 20;
+    sh:path ext:housenumberValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:RequiredConstraint;
+        form:grouping form:Bag;
+        sh:path ext:housenumberValue;
+        sh:resultMessage "Please enter a valid address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:houseNumber.
 
 
-
-#Gemeente
-ext:gemeente a form:Field ;
-    sh:name "Gemeente" ;
-    sh:order 50 ; 
-    sh:path ext:cityValue ;  
-    form:displayType displayTypes:defaultInput ; 
-    form:validations 
-    [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:path ext:cityValue;
-      sh:resultMessage "Vul een geldig adres in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:gemeente .
+# Apartment Number
+ext:boxNumber a form:Field;
+    sh:name "Box Number";
+    sh:order 30;
+    sh:path ext:newValue;
+    form:displayType displayTypes:defaultInput;
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:boxNumber.
 
 
-#Provincie
-ext:provincie a form:Field ;
-    sh:name "Provincie" ;
-    sh:order 60 ;  
-    sh:path ext:munacipiltyValue ;  
-    form:displayType displayTypes:defaultInput ;  
-    form:validations 
-    [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:path ext:munacipiltyValue;
-      sh:resultMessage "Vul een geldig adres in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:provincie .
+# Postal Code
+ext:postalCode a form:Field;
+    sh:name "Postal Code";
+    sh:order 40;
+    sh:path ext:postalcodeValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:RequiredConstraint;
+        form:grouping form:Bag;
+        sh:path ext:postalcodeValue;
+        sh:resultMessage "Please enter a valid address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:postalCode.
 
 
-#Primaire telefoonnummer
-ext:telefoonNummer a form:Field ;
-    sh:name "Primaire telefoonnummer" ;
-    sh:order 70 ;  
-    sh:path ext:phonenumberValue ;  
-    form:displayType displayTypes:defaultInput ;
-    form:validations 
-    [ a form:ValidPhoneNumber ;
-      form:grouping form:MatchEvery ;
-      form:defaultCountry "BE";  
-      sh:path ext:phonenumberValue;
-      sh:resultMessage "Vul een geldig Belgische telefoonnumer in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:telefoonNummer .
+# City
+ext:city a form:Field;
+    sh:name "City";
+    sh:order 50;
+    sh:path ext:cityValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:RequiredConstraint;
+        form:grouping form:Bag;
+        sh:path ext:cityValue;
+        sh:resultMessage "Please enter a valid address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:city.
+
+# Province
+ext:province a form:Field;
+    sh:name "Province";
+    sh:order 60;
+    sh:path ext:munacipiltyValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:RequiredConstraint;
+        form:grouping form:Bag;
+        sh:path ext:munacipiltyValue;
+        sh:resultMessage "Please enter a valid address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:province.
 
 
-#Secundaire telefoonnummer
-ext:sectelefoonNummer a form:Field ;
-    sh:name "Secundair telefoonnummer" ;
-    sh:order 70 ;  
-    sh:path ext:secondaryphonenumberValue ;  
-    form:displayType displayTypes:defaultInput ;
-    form:validations 
-    [ a form:ValidPhoneNumber ;
-      form:grouping form:MatchEvery ;
-      form:defaultCountry "BE";  
-      sh:path ext:secondaryphonenumberValue;
-      sh:resultMessage "Vul een geldig Belgische telefoonnumer in." ;
-       ] ;
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:sectelefoonNummer .
+# Primary Phone Number
+ext:primaryPhoneNumber a form:Field;
+    sh:name "Primary Phone Number";
+    sh:order 70;
+    sh:path ext:phonenumberValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:ValidPhoneNumber;
+        form:grouping form:MatchEvery;
+        form:defaultCountry "BE";
+        sh:path ext:phonenumberValue;
+        sh:resultMessage "Please enter a valid Belgian phone number."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:primaryPhoneNumber.
 
-#Email
-ext:email a form:Field ;
-    sh:name "E-mail" ;
-    sh:order 70 ;  
-    sh:path ext:emailValue ;  
-    form:displayType displayTypes:defaultInput ; 
-    form:validations 
-    [ a form:ValidEmail ;
+
+# Secondary Phone Number
+ext:secondaryPhoneNumber a form:Field;
+    sh:name "Secondary Phone Number";
+    sh:order 70;
+    sh:path ext:secondaryphonenumberValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:ValidPhoneNumber;
+        form:grouping form:MatchEvery;
+        form:defaultCountry "BE";
+        sh:path ext:secondaryphonenumberValue;
+        sh:resultMessage "Please enter a valid Belgian phone number."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:secondaryPhoneNumber.
+
+
+# Email
+ext:emailField a form:Field;
+    sh:name "Email";
+    sh:order 70;
+    sh:path ext:emailValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:ValidEmail;
         form:grouping form:MatchEvery;
         sh:path ext:emailValue;
-        sh:resultMessage "Geef een geldig email adres";
-    ] ;
-    sh:group ext:mainPgCG . 
-ext:mainFg form:hasField ext:email .
+        sh:resultMessage "Please provide a valid email address."
+    ];
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:emailField.
 
-#Website
-ext:website a form:Field ;
-    sh:name "Website" ;
-    sh:order 70 ;  
-    sh:path ext:websiteValue ;  
-    form:displayType displayTypes:defaultInput ;
-    form:validations
-    [ a form:UriConstraint;
+
+# Website
+ext:websiteField a form:Field;
+    sh:name "Website";
+    sh:order 70;
+    sh:path ext:websiteValue;
+    form:displayType displayTypes:defaultInput;
+    form:validations [
+        a form:UriConstraint;
         form:grouping form:MatchEvery;
         sh:path ext:websiteValue;
-        sh:resultMessage "Geef een geldige URL";
+        sh:resultMessage "Please provide a valid URL."
     ];
-    sh:group ext:mainPgCG .  
-ext:mainFg form:hasField ext:website .
+    sh:group ext:contactPropertyGroup.
+ext:mainFieldGroup form:hasField ext:websiteField.
