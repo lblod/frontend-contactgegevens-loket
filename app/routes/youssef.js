@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { NamedNode, Namespace } from 'rdflib';
+import { service } from '@ember/service';
 
 const FORM_GRAPHS = {
   formGraph: new NamedNode('http://data.lblod.info/form'),
@@ -23,6 +24,7 @@ const FORM_TITLES = {
 };
 
 export default class FormRoute extends Route {
+  @service store;
   async model({ formName }) {
     let [formTtl, metaTtl, dataTtl] = await Promise.all([
       fetchForm(formName),
@@ -41,6 +43,8 @@ export default class FormRoute extends Route {
       FORM('Form'),
       FORM_GRAPHS.formGraph,
     );
+    // console.log(formStore.any(new NamedNode('test')));
+    console.log(formStore);
 
     this.form = form;
     this.formStore = formStore;
