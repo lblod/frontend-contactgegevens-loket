@@ -167,6 +167,13 @@ ext:sectelefoonNummer a form:Field ;
     sh:order 70 ;  
     sh:path ext:secondaryphonenumberValue ;  
     form:displayType displayTypes:defaultInput ;
+    form:validations 
+    [ a form:ValidPhoneNumber ;
+      form:grouping form:MatchEvery ;
+      form:defaultCountry "BE";  
+      sh:path ext:secondaryphonenumberValue;
+      sh:resultMessage "Vul een geldig Belgische telefoonnumer in." ;
+       ] ;
     sh:group ext:mainPgCG .  
 ext:mainFg form:hasField ext:sectelefoonNummer .
 
@@ -189,7 +196,13 @@ ext:mainFg form:hasField ext:email .
 ext:website a form:Field ;
     sh:name "Website" ;
     sh:order 70 ;  
-    sh:path ext:phonenumberValue ;  
+    sh:path ext:websiteValue ;  
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [ a form:UriConstraint;
+        form:grouping form:MatchEvery;
+        sh:path ext:websiteValue;
+        sh:resultMessage "Geef een geldige URL";
+    ];
     sh:group ext:mainPgCG .  
 ext:mainFg form:hasField ext:website .
