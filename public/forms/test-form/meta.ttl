@@ -2,7 +2,8 @@
 @prefix qb:  <http://purl.org/linked-data/cube>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema>.
 
-# Sitetypes
+
+# Metasyntactic variables
 
 <http://example-concept-schemes/concepts/sitetypes>
     a skos:ConceptScheme;
@@ -16,6 +17,8 @@
     a skos:ConceptScheme;
     skos:prefLabel "Metasyntactic variables"@en.
 
+
+# Sitetypes
 
 <http://example-concept-schemes/concepts/sitetypes/gemeentehuis>
     a skos:Concept, rdfs:Class;
@@ -80,7 +83,8 @@
     skos:prefLabel "Nederland"@en;
     qb:order 3.
 
-# Yes or No
+
+# Choices
 
 <http://example-concept-schemes/concepts/choices/yes>
     a skos:Concept, rdfs:Class;

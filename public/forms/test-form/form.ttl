@@ -43,7 +43,8 @@ ext:isPrimairAdres a form:Field ;
   sh:path form:displayType ;
   form:displayType displayTypes:conceptSchemeRadioButtons ;
   form:options """{"conceptScheme":"http://example-concept-schemes/concepts/choices","searchEnabled":true}""" ;
-  sh:group ext:groupWhereMyFieldIsIncluded .
+  sh:group ext:kerngegevens .
+ext:mainFg form:hasField ext:isPrimairAdres .
 
 # Contactgegevens
 
