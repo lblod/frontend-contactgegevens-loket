@@ -50,7 +50,7 @@ ext:inputFieldAttributeB a form:Field ;
     sh:name "Attribute B input" ;
     sh:order 221 ;
     sh:path ext:inputValueB ;
-    form:options """{}""" ;
+    form:options """{"class":"shameTestClass2"}""" ;
     form:displayType displayTypes:defaultInput ;
     form:validations
         [ a form:RequiredConstraint ;

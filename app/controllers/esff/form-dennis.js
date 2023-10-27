@@ -5,6 +5,17 @@ import {
   importTriplesForForm,
   validateForm,
 } from '@lblod/ember-submission-form-fields';
+import rdf from 'rdflib';
+import {
+  RDF,
+  FORM,
+  SHACL,
+  SKOS,
+  XSD,
+  DCT,
+  NIE,
+  MU,
+} from '@lblod/submission-form-helpers';
 
 const FIELD_PREDICATE_MAP = {
   attributeA: 'http://mu.semte.ch/vocabularies/ext/inputValueA',
@@ -36,6 +47,13 @@ export default class CoreDataController extends Controller {
       store: this.model.formStore,
     });
     this.forceShowErrors = !result;
+
+    // Wat we gaan moeten doen:
+    const sendToBackend = this.model.formStore.serializeDataMergedGraph(
+      this.model.graphs.sourceGraph,
+    );
+    console.log('We should send to back end', sendToBackend);
+
     // Now we console.log the value for testing
     this.datasetTriples = importTriplesForForm(this.model.form, {
       ...this.model.graphs,
@@ -44,8 +62,24 @@ export default class CoreDataController extends Controller {
     });
     // Oscar magic service will save it
 
-    console.log(this.datasetTriples);
+    console.log('triples from import function', this.datasetTriples);
+    console.log('sourceNode', this.model.sourceNode); // Is this updated?
+    console.log('form', this.model.form);
+    console.log('Store', this.model.formStore);
+    console.log('Graphs', this.model.graphs);
     copyValuesFromTriplesToObject(this.datasetTriples, this.model.dummy);
     console.log(this.model.dummy);
+
+    // Aad Versteden, ForkingStore is dunne wrapper rond RDFlib graph
+    // match (subject,predicate,object,graph)
+    const statements = this.model.formStore.match(
+      rdf.sym(this.model.dummy.pokemon), // this.model.dummy.pokemon contains a string with the URI for the concept
+      SKOS('prefLabel'),
+      undefined,
+      this.model.graphs.metaGraph,
+    );
+    if (statements.length !== 1)
+      throw new Error('The universe is not what I thought it was...');
+    console.log('The selected pokemon is:', statements[0].object.value);
   }
 }
