@@ -9,6 +9,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 
+# Fields
 
 ext:mainFg a form:FieldGroup.
 
@@ -26,6 +27,7 @@ ext:contactgegevens a form:PropertyGroup;
     sh:name "Contactgegevens";
     sh:order 2 .
 
+
 # Kerngegevens
 
 ext:typeVestiging a form:Field ;
@@ -34,6 +36,14 @@ ext:typeVestiging a form:Field ;
     sh:path ext:conceptSchemeSelectorValue ;
     form:options """{"conceptScheme":"http://example-concept-schemes/concepts/sitetypes","searchEnabled":false}""" ;
     form:displayType displayTypes:conceptSchemeSelector ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:kerngegevens .
 ext:mainFg form:hasField ext:typeVestiging .
 
@@ -54,6 +64,14 @@ ext:land a form:Field ;
     sh:path ext:conceptSchemeSelectorValue ;
     form:options """{"conceptScheme":"http://example-concept-schemes/concepts/countries","searchEnabled":false}""" ;
     form:displayType displayTypes:conceptSchemeSelector ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:land .
 
@@ -63,6 +81,14 @@ ext:straat a form:Field ;
     sh:order 2 ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:straat .
 
@@ -72,6 +98,14 @@ ext:huisnummer a form:Field ;
     sh:order 3 ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:huisnummer .
 
@@ -88,6 +122,14 @@ ext:postcode a form:Field ;
     sh:order 5 ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:postcode .
 
@@ -96,6 +138,14 @@ ext:gemeente a form:Field ;
     sh:order 6 ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:gemeente .
 
@@ -104,6 +154,14 @@ ext:provincie a form:Field ;
     sh:order 7 ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:provincie .
 
@@ -113,6 +171,14 @@ ext:primairTelefoonnummer a form:Field ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
     form:help " Bijvoorbeeld: +3211211430";
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Ongeldig telefoonnummer formaat"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:primairTelefoonnummer .
 
@@ -131,6 +197,14 @@ ext:email a form:Field ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
     form:help " Bijvoorbeeld: mail@adres.com";
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Ongeldig email formaat"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:email .
 
@@ -140,5 +214,13 @@ ext:website a form:Field ;
     sh:path sh:resultMessage ;
     form:displayType displayTypes:defaultInput ;
     form:help " Bijvoorbeeld: https://www.vlaanderen.be";
+    form:validations
+    [
+        a form:RequiredConstraint;
+        sh:order 1;
+        form:grouping form:hasField;
+        sh:path ext:conceptSchemeSelectorValue;
+        sh:resultMessage "Ongeldige website formaat"
+    ];
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:website .
