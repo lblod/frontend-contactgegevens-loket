@@ -1,9 +1,4 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
-
-export default class AndreoController extends Controller {
-  @action
-  validateForm() {
-    console.log('validateForm');
-  }
-}
+// import { task } from 'ember-concurrency';
+// import { action } from '@ember/object';
+export default class AndreoController extends Controller {}
