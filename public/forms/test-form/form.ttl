@@ -175,6 +175,15 @@ ext:primairTelefoonnummer a form:Field ;
         sh:order 1;
         form:grouping form:Bag;
         sh:path ext:primaryNumberValue;
+        sh:resultMessage "Dit veld is verplicht"
+    ];
+    form:validations
+    [
+        a form:ValidPhoneNumber;
+        sh:order 1;
+        form:grouping form:MatchEvery;
+        form:defaultCountry "BE";
+        sh:path ext:primaryNumberValue;
         sh:resultMessage "Ongeldig telefoonnummer formaat"
     ];
     sh:group ext:contactgegevens .
@@ -185,6 +194,15 @@ ext:secundairTelefoonnummer a form:Field ;
     sh:order 9 ;
     sh:path ext:secondaryNumberValue ;
     form:displayType displayTypes:defaultInput ;
+    form:validations
+    [
+        a form:ValidPhoneNumber;
+        sh:order 1;
+        form:grouping form:MatchEvery;
+        form:defaultCountry "BE";
+        sh:path ext:secondaryNumberValue;
+        sh:resultMessage "Ongeldig telefoonnummer formaat"
+    ];
     form:help " Bijvoorbeeld: +3211211430";
     sh:group ext:contactgegevens .
 ext:mainFg form:hasField ext:secundairTelefoonnummer .
@@ -197,9 +215,9 @@ ext:email a form:Field ;
     form:help " Bijvoorbeeld: mail@adres.com";
     form:validations
     [
-        a form:RequiredConstraint;
+        a form:ValidEmail;
         sh:order 1;
-        form:grouping form:Bag;
+        form:grouping form:MatchEvery;
         sh:path ext:emailValue;
         sh:resultMessage "Ongeldig email formaat"
     ];
@@ -214,9 +232,9 @@ ext:website a form:Field ;
     form:help " Bijvoorbeeld: https://www.vlaanderen.be";
     form:validations
     [
-        a form:RequiredConstraint;
+        a form:UriConstraint;
         sh:order 1;
-        form:grouping form:Bag;
+        form:grouping form:MatchEvery;
         sh:path ext:websiteValue;
         sh:resultMessage "Ongeldige website formaat"
     ];
