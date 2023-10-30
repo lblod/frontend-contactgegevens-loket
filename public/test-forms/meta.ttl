@@ -10,43 +10,43 @@
     a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
     <http://www.w3.org/2004/02/skos/core#prefLabel> "Metasyntactic variables"@en.
 
-<http://example-concept-schemes/concepts/foo>
+<http://example-concept-schemes/concepts/HoofdgebouwErediensten>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Hoofdgebouw erediensten"@en;
     order: 1.
 
-<http://example-concept-schemes/concepts/bar> 
+<http://example-concept-schemes/concepts/MaatschappelijkeZetel> 
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Maatschappelijke zetel"@en;
     order: 2.
 
-<http://example-concept-schemes/concepts/baz>
+<http://example-concept-schemes/concepts/Districthuis>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Districthuis"@en;
     order: 3.
 
-<http://example-concept-schemes/concepts/qux>
+<http://example-concept-schemes/concepts/Provinciehuis>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Provinciehuis"@en;
     order: 4.
 
-<http://example-concept-schemes/concepts/quux>
+<http://example-concept-schemes/concepts/AnderAdministratiefAdres>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Ander administratief adres"@en;
     order: 5.
 
-<http://example-concept-schemes/concepts/corge>
+<http://example-concept-schemes/concepts/Gemeentehuis>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Gemeentehuis"@en;
     order: 6.
 
-<http://example-concept-schemes/concepts/grault>
+<http://example-concept-schemes/concepts/AndereVestiging>
     a skos:Concept, rdf:Class;
     skos:inScheme <http://example-concept-schemes/concept-schemes/sitetypes>;
     skos:prefLabel "Andere vestiging"@en;

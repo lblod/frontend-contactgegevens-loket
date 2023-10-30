@@ -1,0 +1,38 @@
+# @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
+# @prefix esff: <http://ember-submission-form-fields/> .
+# @prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>.
+# @prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>.
+# @prefix concept-schemes: <http://redpencil.data.gift/concept-schemes/> .
+# @prefix concepts: <http://redpencil.data.gift/concepts/> .
+
+# # Inputs, 'default values'
+# esff:source-node ext:inputValueA "Default value A".
+# esff:source-node ext:inputValueB "Default value B".
+# esff:source-node ext:pokemonValue concepts:8c45d487-dabc-4178-bfdb-3a40316f078a.
+
+
+# esff:source-node ext:siteTypeValue "Dsitricthuis".
+# esff:source-node ext:primairValue "Test" .
+# esff:source-node ext:countryValue "Belgie".
+
+
+
+
+#  <http://mu.semte.ch/vocabularies/ext/StreetValue> 
+#  <http://mu.semte.ch/vocabularies/ext/housenumberValue> 
+#  <http://mu.semte.ch/vocabularies/ext/boxValue> .
+
+
+#  <http://mu.semte.ch/vocabularies/ext/postalcodeValue> 
+#  <http://mu.semte.ch/vocabularies/ext/cityValue> 
+#  <http://mu.semte.ch/vocabularies/ext/munacipiltyValue> .
+
+#  <http://mu.semte.ch/vocabularies/ext/phonenumberValue> 
+#  <http://mu.semte.ch/vocabularies/ext/secondaryphonenumberValue> .
+ 
+
+#  <http://mu.semte.ch/vocabularies/ext/websiteValue> 
+#  <http://mu.semte.ch/vocabularies/ext/emailValue> .
+  
+ 
+ 

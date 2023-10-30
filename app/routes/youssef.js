@@ -44,7 +44,6 @@ export default class FormRoute extends Route {
       FORM_GRAPHS.formGraph,
     );
     // console.log(formStore.any(new NamedNode('test')));
-    console.log(formStore);
 
     this.form = form;
     this.formStore = formStore;
