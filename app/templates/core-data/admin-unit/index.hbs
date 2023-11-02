@@ -29,7 +29,7 @@
                 </:content>
               </Item>
             {{/if}}
-                  {{#if @model.isIgs}}
+            {{#if @model.isIgs}}
               <Item>
                 <:label>Geplande einddatum</:label>
                 <:content>
@@ -42,10 +42,7 @@
               <Item>
                 <:label>Doel</:label>
                 <:content>
-                  <RichTextEditor
-                    @show="true"
-                    @value={{@model.adminUnit.purpose}}
-                  />
+                  {{@model.adminUnit.purpose}}
                 </:content>
               </Item>
             {{/if}}
