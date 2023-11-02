@@ -23,7 +23,7 @@ ext:siteType a form:Field;
     sh:name "Site Type";
     sh:order 3;
     sh:path ext:siteTypeValue;
-    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/sitetypes","searchEnabled":false}""";
+    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/sitetypes","searchEnabled":true}""";
     form:displayType displayTypes:conceptSchemeSelector;
     form:validations [
         a form:RequiredConstraint;
@@ -32,14 +32,13 @@ ext:siteType a form:Field;
         sh:resultMessage "Choose a site Type."
     ];
     sh:group ext:corePropertyGroup.
-
-ext:mainFieldGroup form:hasField ext:siteType.
+    ext:mainFieldGroup form:hasField ext:siteType.
 
 ext:primaryAddress a form:Field;
     sh:name "Primary Correspondence Address";
     sh:order 4;
     sh:path ext:primairValue;
-    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/primaircorrespondetie","searchEnabled":false}""";
+    form:options """{"conceptScheme":"http://example-concept-schemes/concept-schemes/primaircorrespondetie","searchEnabled":true}""";
     form:displayType displayTypes:conceptSchemeRadioButtons;
     sh:group ext:corePropertyGroup.
 ext:mainFieldGroup form:hasField ext:primaryAddress.

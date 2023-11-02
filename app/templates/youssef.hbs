@@ -1,6 +1,7 @@
 {{!-- {{log @model.formStore.graph.subjectIndex}} --}}
+<div class="form">
 <RdfForm
-  @groupClass="au-o-grid__item"
+  @groupClass="rdfform"
   @form={{@model.form}}
   @graphs={{@model.graphs}}
   @sourceNode={{@model.sourceNode}}
@@ -11,6 +12,8 @@
 />
 <AuButton
   @skin="primary"
+  class="validatebutton"
   type="button"
   {{on "click" this.validateForm}}
 >Validate</AuButton>
+</div>

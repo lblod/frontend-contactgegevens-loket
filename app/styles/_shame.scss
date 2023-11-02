@@ -49,13 +49,12 @@ $ember-power-select-default-border: 1px solid $ember-power-select-border-color !
 $ember-power-select-search-field-border: $ember-power-select-default-border !default;
 $ember-power-select-search-input-border-radius: 3px !default;
 $ember-power-select-default-focus-border: 1px solid
-  $ember-power-select-focus-border-color !default;
+$ember-power-select-focus-border-color !default;
 $ember-power-select-search-field-focus-border: $ember-power-select-default-focus-border !default;
 $ember-power-select-focus-box-shadow:
   inset 0 1px 1px rgba(0, 0, 0, 0.075),
   0 0 8px rgba(102, 175, 233, 0.6) !default;
 $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
-
 .ember-power-select-movable-cursor {
   border: $ember-power-select-search-field-border;
   border-radius: $ember-power-select-search-input-border-radius;
@@ -100,6 +99,27 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
       display: block;
     }
   }
+}
+
+.form {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+.rdfform {
+  
+}
+.test {
+  color: green($color: #000000);
+}
+.au-c-input {
+  width: 32rem;
+}
+
+.validatebutton {
+  justify-content: center;
+  align-items: center;
 }
 
 #primary-site-icon {
