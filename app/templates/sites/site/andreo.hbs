@@ -3,6 +3,8 @@
 {{! Begin Form }}
 {{!  RDF form example }}
 <RdfForm
+  {{on "submit" (perform this.saveTask)}}
+  {{on "cancel" (perform this.cancelTask)}}
   @groupClass="au-o-grid__item"
   @form={{@model.form}}
   @graphs={{@model.graphs}}
@@ -15,6 +17,7 @@
 
 <AuButton
   @skin="primary"
+  @loading={{this.isLoading}}
   type="button"
-  {{on "click" this.validateForm}}
+  {{on "click" this.saveTask}}
 >Validate</AuButton>
