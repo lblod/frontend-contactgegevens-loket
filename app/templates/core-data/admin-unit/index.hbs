@@ -21,12 +21,6 @@
               <:label>Type bestuur</:label>
               <:content>{{@model.classification.label}}</:content>
             </Item>
-            {{#if this.isMunicipality}}
-              <Item>
-                <:label>Stadstitel</:label>
-                <:content>{{if @model.adminUnit.isCity "Ja" "Nee"}}</:content>
-              </Item>
-            {{/if}}
             {{#if @model.region}}
               <Item>
                 <:label>Regio</:label>
@@ -35,18 +29,23 @@
                 </:content>
               </Item>
             {{/if}}
-            <Item>
-              <:label>Verwachte einddatum</:label>
-              <:content>
-                {{@model.adminUnit.expectedEndDate}}
-              </:content>
-            </Item>
-            <Item>
-              <:label>Doel</:label>
-              <:content>
-
-              </:content>
-            </Item>
+            {{#if @model.isIgs}}
+              <Item>
+                <:label>Geplande einddatum</:label>
+                <:content>
+                  {{date-format @model.adminUnit.expectedEndDate}}
+                  {{#if this.expiredExpectedEndDate}}
+                    <AuPill @skin="error">De geplande einddatum is overschreden</AuPill>
+                  {{/if}}
+                </:content>
+              </Item>
+              <Item>
+                <:label>Doel</:label>
+                <:content>
+                  {{@model.adminUnit.purpose}}
+                </:content>
+              </Item>
+            {{/if}}
           </:left>
           <:right as |Item|>
             <Item>

@@ -112,6 +112,7 @@ export default class AdminUnitRoute extends Route {
       address,
       primaryContact,
       secondaryContact, // May be null
+      isIgs,
       kbo, // May be null
       ovo, // May be null
       nis, // May be null
