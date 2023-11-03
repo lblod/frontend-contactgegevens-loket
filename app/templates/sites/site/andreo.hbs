@@ -2,22 +2,24 @@
 
 {{! Begin Form }}
 {{!  RDF form example }}
-<RdfForm
-  {{on "submit" (perform this.saveTask)}}
-  {{on "cancel" (perform this.cancelTask)}}
-  @groupClass="au-o-grid__item"
-  @form={{@model.form}}
-  @graphs={{@model.graphs}}
-  @sourceNode={{@model.sourceNode}}
-  @formStore={{@model.formStore}}
-  @show={{false}}
-  @forceShowErrors={{false}}
-  @useNewListingLayout={{true}}
-/>
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box au-o-flow au-o-flow--large">
+    <RdfForm
+      @groupClass="au-o-grid__item"
+      @form={{@model.form}}
+      @graphs={{@model.graphs}}
+      @sourceNode={{@model.sourceNode}}
+      @formStore={{@model.formStore}}
+      @show={{false}}
+      @forceShowErrors={{false}}
+      @useNewListingLayout={{true}}
+    />
 
-<AuButton
-  @skin="primary"
-  @loading={{this.isLoading}}
-  type="button"
-  {{on "click" this.saveTask}}
->Validate</AuButton>
+    <AuButton
+      @skin="primary"
+      @loading={{this.isLoading}}
+      type="button"
+      {{on "click" (perform this.saveTask)}}
+    >Validate</AuButton>
+  </div>
+</div>
