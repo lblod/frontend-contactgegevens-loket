@@ -17,13 +17,15 @@ Router.map(function () {
     this.route('logout');
     this.route('switch');
   });
-  this.route('youssef');
+
+  
 
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
       this.route('index', { path: '/' });
     });
   });
+  this.route('youssef');
   this.route('sites', { path: '/vestigingen' }, function () {
     this.route('new', { path: '/nieuw' });
     this.route('site', { path: '/:id' }, function () {

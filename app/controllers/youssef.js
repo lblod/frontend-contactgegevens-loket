@@ -1,50 +1,34 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import {
-  importTriplesForForm,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
+import { task } from 'ember-concurrency';
+import { FORM_GRAPHS } from '../routes/youssef';
 
-const FIELD_PREDICATE_MAP = {
-  attributeA: 'http://mu.semte.ch/vocabularies/ext/StreetValue',
-  attributeB: 'http://mu.semte.ch/vocabularies/ext/cityValue',
-  pokemon: 'http://mu.semte.ch/vocabularies/ext/municipalityValue',
-};
-
-function copyValuesFromTriplesToObject(triples, targetObject) {
-  Object.keys(FIELD_PREDICATE_MAP).forEach((key) => {
-    const triple = triples.find(
-      (statement) => statement.predicate.value === FIELD_PREDICATE_MAP[key],
+export default class YoussefController extends Controller {
+  saveTask = task(async (event) => {
+    console.log('dit is boven de event preventdefault');
+    event.preventDefault();
+    console.log('dit is onder de prevent default', event.preventDefault());
+    let { adminUnitId, siteId, formData } = this.model;
+    console.log(
+      `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
     );
-    if (!triple)
-      throw new Error(`Triple not found for object attribute ${key}!`);
-    targetObject[key] = triple.object.value;
+    console.log('dit is je siteid', siteId);
+    await this.saveFormData(adminUnitId, siteId, formData);
   });
-}
 
-export default class CoreDataController extends Controller {
-  @tracked forceShowErrors = false;
-  datasetTriples = [];
+  async saveFormData(adminUnitId, siteId, formData) {
+    console.log(
+      `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
+    );
 
-  @action
-  validateForm() {
-    const result = validateForm(this.model.form, {
-      ...this.model.graphs,
-      sourceNode: this.model.sourceNode,
-      store: this.model.formStore,
-    });
-    this.forceShowErrors = !result;
-    // Now we console.log the value for testing
-    this.datasetTriples = importTriplesForForm(this.model.form, {
-      ...this.model.graphs,
-      sourceNode: this.model.sourceNode,
-      store: this.model.formStore,
-    });
-    // Oscar magic service will save it
-
-    console.log('dit is je datasettriples', this.datasetTriples);
-    copyValuesFromTriplesToObject(this.datasetTriples, this.model.dummy);
-    console.log(this.model.dummy);
+    await fetch(
+      `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
   }
 }

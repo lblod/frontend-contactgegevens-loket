@@ -1,19 +1,28 @@
-{{!-- {{log @model.formStore.graph.subjectIndex}} --}}
-<div class="form">
-<RdfForm
-  @groupClass="rdfform"
-  @form={{@model.form}}
-  @graphs={{@model.graphs}}
-  @sourceNode={{@model.sourceNode}}
-  @formStore={{@model.formStore}}
-  @show={{false}}
-  @forceShowErrors={{false}}
-  @useNewListingLayout={{true}}
-/>
-<AuButton
-  @skin="primary"
-  class="validatebutton"
-  type="button"
-  {{on "click" this.validateForm}}
->Validate</AuButton>
-</div>
+{{page-title "youssef-test-form"}}
+
+{{! Begin Form }}
+{{!  RDF form example }}
+<form
+  id="new-vestiging-form"
+  {{on "submit" (perform this.saveTask)}}
+  {{on "cancel" (perform this.cancelTask)}}
+>
+  <RdfForm
+    {{on "submit" (perform this.saveTask @model.siteId @model.adminUnitId)}}
+    @groupClass="au-o-grid__item"
+    @form={{@model.form}}
+    @graphs={{@model.graphs}}
+    @sourceNode={{@model.sourceNode}}
+    @formStore={{@model.formStore}}
+    @show={{false}}
+    @forceShowErrors={{false}}
+    @useNewListingLayout={{true}}
+  />
+
+  <AuButton
+    @skin="primary"
+    @loading={{this.isLoading}}
+    type="submit"
+    {{on "click" (perform this.saveTask @model.siteId @model.adminUnitId)}}
+  >Validate</AuButton>
+</form>

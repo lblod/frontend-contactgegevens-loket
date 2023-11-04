@@ -1,9 +1,64 @@
 import Route from '@ember/routing/route';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { NamedNode, Namespace } from 'rdflib';
-import { service } from '@ember/service';
+import { Namespace, NamedNode } from 'rdflib';
+import { inject as service } from '@ember/service';
+export default class YoussefRoute extends Route {
+  @service currentSession;
 
-const FORM_GRAPHS = {
+  async model() {
+    const siteId = this.paramsFor('sites.site');
+    const [formTtl, metaTtl, dataTtl] = await Promise.all([
+      this.fetchForm('/forms/test-form/form.ttl'),
+      this.fetchFormMeta('/forms/test-form/meta.ttl'),
+      this.fetchFormData('/forms/test-form/data.ttl'),
+    ]);
+    const adminUnitId = this.currentSession.group.id;
+    const formStore = new ForkingStore();
+    formStore.parse(formTtl, FORM_GRAPHS.formGraph, 'text/turtle');
+    formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
+    formStore.parse(dataTtl, FORM_GRAPHS.sourceGraph, 'text/turtle');
+    const form = formStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      FORM_GRAPHS.formGraph,
+    );
+    return {
+      formStore,
+      form,
+      title: 'Youssef Form',
+      graphs: FORM_GRAPHS,
+      sourceNode: SOURCE_NODE,
+      adminUnitId,
+      siteId,
+    };
+  }
+
+  async fetchForm() {
+    let response = await fetch(getFormDataPath('form.ttl'));
+    let ttl = await response.text();
+
+    return ttl;
+  }
+
+  async fetchFormMeta() {
+    let response = await fetch(getFormDataPath('meta.ttl'));
+    if (response.status >= 200 && response.status < 300) {
+      return await response.text();
+    }
+    return '';
+  }
+
+  async fetchFormData() {
+    let response = await fetch(getFormDataPath('data.ttl'));
+    if (response.status >= 200 && response.status < 300) {
+      return await response.text();
+    }
+    return '';
+  }
+}
+
+export const FORM_GRAPHS = {
   formGraph: new NamedNode('http://data.lblod.info/form'),
   metaGraph: new NamedNode('http://data.lblod.info/metagraph'),
   sourceGraph: new NamedNode(`http://data.lblod.info/sourcegraph`),
@@ -16,78 +71,6 @@ const SOURCE_NODE = new NamedNode(
 const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
 const RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
 
-const FORM_TITLES = {
-  'basic-fields': 'Basic form fields',
-  'climate-subsidy-costs-table': 'Climate subsidy costs table',
-  'plan-living-together': 'Plan living together table',
-  'scoped-fields': 'Scoped fields',
-};
-
-export default class FormRoute extends Route {
-  @service store;
-  async model({ formName }) {
-    let [formTtl, metaTtl, dataTtl] = await Promise.all([
-      fetchForm(formName),
-      fetchFormMeta(formName),
-      fetchFormData(formName),
-    ]);
-
-    let formStore = new ForkingStore();
-    formStore.parse(formTtl, FORM_GRAPHS.formGraph, 'text/turtle');
-    formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
-    formStore.parse(dataTtl, FORM_GRAPHS.sourceGraph, 'text/turtle');
-
-    let form = formStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      FORM_GRAPHS.formGraph,
-    );
-    // console.log(formStore.any(new NamedNode('test')));
-
-    this.form = form;
-    this.formStore = formStore;
-    return {
-      formName,
-      form,
-      formStore,
-      title: FORM_TITLES[formName],
-      graphs: FORM_GRAPHS,
-      sourceNode: SOURCE_NODE,
-    };
-  }
-
-  // setupController(controller, model) {
-  //   super.setupController(controller, model);
-  //   controller.datasetTriples = [];
-  //   controller.registerObserver();
-  //   controller.setTriplesForTables();
-  // }
-}
-
-async function fetchForm() {
-  let response = await fetch(getFormDataPath('form.ttl'));
-  let ttl = await response.text();
-
-  return ttl;
-}
-
-async function fetchFormMeta() {
-  let response = await fetch(getFormDataPath('meta.ttl'));
-  if (response.status >= 200 && response.status < 300) {
-    return await response.text();
-  }
-  return '';
-}
-
-async function fetchFormData() {
-  let response = await fetch(getFormDataPath('data.ttl'));
-  if (response.status >= 200 && response.status < 300) {
-    return await response.text();
-  }
-  return '';
-}
-
-function getFormDataPath(fileName) {
+export function getFormDataPath(fileName) {
   return `/test-forms/${fileName}`;
 }
