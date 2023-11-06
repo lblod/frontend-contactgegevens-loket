@@ -12,11 +12,11 @@ const FORM_GRAPHS = {
 };
 
 async function saveFormData(adminUnitId, siteId, formData) {
-  await fetch(`http://localhost:8888/${adminUnitId}/${siteId}/form/site-form`, {
+  await fetch(`/semantic-forms/${adminUnitId}/${siteId}/form/site-form`, {
     method: 'PUT',
     body: JSON.stringify(formData),
     headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
+      'Content-Type': 'application/json;',
     },
   });
 }
@@ -42,7 +42,7 @@ export default class AndreoController extends Controller {
     console.log('siteId:', this.siteId);
     console.log(
       'request URL -> ',
-      `http://localhost:8888/${this.adminUnitId}/${this.siteId}/form/site-form`,
+      `/semantic-forms/${this.adminUnitId}/${this.siteId}/form/site-form`,
     );
     const serializedData = formStore.serializeDataWithAddAndDelGraph(
       FORM_GRAPHS.sourceGraph,

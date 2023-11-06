@@ -27,7 +27,7 @@ Router.map(function () {
     this.route('new', { path: '/nieuw' });
     this.route('site', { path: '/:id' }, function () {
       this.route('edit', { path: '/bewerk' });
-      this.route('andreo');
+      this.route('edit-esff');
     });
   });
 
