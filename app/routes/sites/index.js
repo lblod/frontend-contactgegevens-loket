@@ -9,7 +9,7 @@ export default class ContactDataViewSiteRoute extends Route {
     // TODO: Not every site seems to get an address? Why?
     let sites = await this.currentSession.group.get('sites');
     let primarySite = await this.currentSession.group.get('primarySite');
-    const allSites = A([...sites, primarySite]);
+    const allSites = A([primarySite, ...sites]);
     return {
       allSites,
       primarySiteId: primarySite.id,
