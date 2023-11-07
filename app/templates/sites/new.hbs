@@ -3,7 +3,7 @@
   <div class="au-o-box au-o-flow au-o-flow--large">
 
     <PageHeader>
-      <:title>Voeg vestiging toe</:title>
+      <:title>Voeg vestiging toe (old form new address search)</:title>
       <:action>
         <AuButtonGroup class="au-c-button-group--align-right">
           <AuButton
@@ -81,11 +81,6 @@
 
         <ContactDataEditCard
           @address={{@model.address}}
-          @isAddressSearchEnabledInitially={{if
-            (or (not @model.address.id) @model.address.addressRegisterUri)
-            true
-            false
-          }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
         >
