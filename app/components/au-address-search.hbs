@@ -1,16 +1,85 @@
 {{#let (if @itemComponent @itemComponent (component "au-address-search/default-item")) as |Item|}}
 <div ...attributes>
-  <Item>
+  <Item
+    @labelFor="{{@id}}-mode-switch"
+  >
     <:label>Adres ingave</:label>
     <:content>
-      Manueel<AuToggleSwitch
-        @checked={{this.modeSwitchValue}}
-        @onChange={{this.handleModeSwitchChange}}
-        @identifier="{{@id}}-mode-switch"
-      />Automatisch
+        <div class="au-u-margin-top-tiny">Manueel&nbsp;<AuToggleSwitch
+          @checked={{this.isAutomatic}}
+          @onChange={{this.handleModeSwitchChange}}
+          @identifier="{{@id}}-mode-switch"
+        />&nbsp;Automatisch&nbsp;
+        {{#if this.addressOk}}
+          <AuPill
+            @skin="success"
+            @size="small"
+            @icon="check"
+          >Adres geverifieerd</AuPill>
+        {{else}}
+          <AuPill
+            @skin="error"
+            @size="small"
+            @icon="x"
+          >Adres niet ingegeven</AuPill>
+        {{/if}}
+        </div>
     </:content>
   </Item>
+  {{#if this.isAutomatic}}
+  <Item
+    @labelFor="{{@id}}-fuzzy-search"
+  >
+    <:label>
+      Zoek automatisch
+    </:label>
+    <:content>
+        <PowerSelect
+          @options={{this.fuzzySearchOptions}}
+          @onChange={{this.handleFuzzySearchChange}}
+          @selected={{this.selectedLocation}}
+          @search={{this.handleFuzzySearch}}
+          @allowClear={{true}}
+          @searchEnabled={{true}}
+          @loadingMessage="Bezig met zoeken"
+          @noMatchesMessage="Geen adressen gevonden"
+          @searchMessage="Zoek naar een adres in Vlaanderen (e.g. VoorbeeldStraat 30)"
+          @placeholder="Zoek adres"
+          @triggerId="{{@id}}-fuzzy-search"
+          as |locationInFlanders|
+        >
+          {{locationInFlanders.street}} {{locationInFlanders.housenumber}}, {{locationInFlanders.postalCode}} {{locationInFlanders.municipality}}
+        </PowerSelect>
+    </:content>
+  </Item>
+  <Item
+    @labelFor="{{@id}}-box-number-select"
+  >
+    <:label>
+      Busnummer
+    </:label>
+    <:content>
+        <PowerSelect
+          @disabled={{not this.boxNumberActive}}
+          @options={{this.boxNumberOptions}}
+          @onChange={{this.handleBoxNumberChange}}
+          @selected={{this.selectedAddressSuggestion}}
+          @allowClear={{false}}
+          @searchEnabled={{false}}
+          @loadingMessage="Bezig met zoeken"
+          @noMatchesMessage="Geen adressen gevonden"
+          @placeholder="Selecteer busnummer of laat blank"
+          @triggerId="{{@id}}-box-number-select"
+          as |addressSuggestion|
+        >
+          {{if addressSuggestion.boxNumber addressSuggestion.boxNumber "Geen busnummer"}}
+        </PowerSelect>
+    </:content>
+  </Item>
+  {{/if}}
+  {{#unless this.isAutomatic}}
 
+  {{/unless}}
 
 </div>
 {{/let}}
