@@ -5,7 +5,8 @@
       <:left as |Item|>
         <AuAddressSearch
           @id="new-address-search"
-          @initAddress={{null}}
+          @initialMode="automatic"
+          @initialAddress={{null}}
           @itemComponent={{Item}}
           @onChange={{this.handleAddressUpdate}}
         />

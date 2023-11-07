@@ -1,0 +1,16 @@
+{{#let (if @itemComponent @itemComponent (component "au-address-search/default-item")) as |Item|}}
+<div ...attributes>
+  <Item>
+    <:label>Adres ingave</:label>
+    <:content>
+      Manueel<AuToggleSwitch
+        @checked={{this.modeSwitchValue}}
+        @onChange={{this.handleModeSwitchChange}}
+        @identifier="{{@id}}-mode-switch"
+      />Automatisch
+    </:content>
+  </Item>
+
+
+</div>
+{{/let}}
