@@ -1,20 +1,19 @@
 {{page-title "andreo-test-form"}}
-
-{{! Begin Form }}
-{{!  RDF form example }}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
-    <RdfForm
-      @groupClass="au-o-grid__item"
-      @form={{@model.form}}
-      @graphs={{@model.graphs}}
-      @sourceNode={{@model.sourceNode}}
-      @formStore={{@model.formStore}}
-      @show={{false}}
-      @forceShowErrors={{false}}
-      @useNewListingLayout={{true}}
-    />
 
+    <form id={{this.id}} {{on "submit" (perform this.saveTask)}}>
+      <RdfForm
+        @groupClass="au-o-grid__item"
+        @form={{@model.form}}
+        @graphs={{@model.graphs}}
+        @sourceNode={{@model.sourceNode}}
+        @formStore={{@model.formStore}}
+        @show={{false}}
+        @forceShowErrors={{false}}
+        @useNewListingLayout={{true}}
+      />
+    </form>
     <AuButton
       @skin="primary"
       @loading={{this.isLoading}}
