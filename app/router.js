@@ -23,9 +23,10 @@ Router.map(function () {
       this.route('index', { path: '/' });
     });
   });
-  this.route('youssef');
+
   this.route('sites', { path: '/vestigingen' }, function () {
     this.route('new', { path: '/nieuw' });
+    this.route('youssef', { path: '/youssef' });
     this.route('site', { path: '/:id' }, function () {
       this.route('edit', { path: '/bewerk' });
     });

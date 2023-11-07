@@ -8,5 +8,8 @@ export default class App extends Application {
   podModulePrefix = config.podModulePrefix;
   Resolver = Resolver;
 }
+Object.defineProperty(Array.prototype, '_super', {
+  enumerable: false,
+});
 
 loadInitializers(App, config.modulePrefix);

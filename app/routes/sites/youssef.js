@@ -1,8 +1,5 @@
 import Route from '@ember/routing/route';
-import {
-  ForkingStore,
-  validateForm,
-} from '@lblod/ember-submission-form-fields';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { Namespace, NamedNode } from 'rdflib';
 import { inject as service } from '@ember/service';
 export default class YoussefRoute extends Route {
@@ -60,17 +57,17 @@ export default class YoussefRoute extends Route {
   }
 }
 
-export const FORM_GRAPHS = {
+const FORM_GRAPHS = {
   formGraph: new NamedNode('http://data.lblod.info/form'),
   metaGraph: new NamedNode('http://data.lblod.info/metagraph'),
   sourceGraph: new NamedNode(`http://data.lblod.info/sourcegraph`),
 };
 
-export const SOURCE_NODE = new NamedNode(
+const SOURCE_NODE = new NamedNode(
   'http://ember-submission-form-fields/source-node',
 );
 
-export const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
+const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
 const RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
 
 export function getFormDataPath(fileName) {

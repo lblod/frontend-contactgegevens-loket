@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { validateForm } from '@lblod/ember-submission-form-fields';
-import { FORM, FORM_GRAPHS, SOURCE_NODE } from '../routes/youssef';
 import { tracked } from '@glimmer/tracking';
 
 export default class YoussefController extends Controller {
@@ -17,30 +16,39 @@ export default class YoussefController extends Controller {
   get formStore() {
     return this.model.formStore;
   }
+  get graphs() {
+    return this.model.graphs;
+  }
+  get sourceNode() {
+    return this.model.sourceNode;
+  }
+  get form() {
+    return this.model.form;
+  }
   @tracked forceShowErrors = false;
-  saveTask = task(async (siteId, adminUnitId, formData) => {
+  saveTask = task(async (event) => {
+    event.preventDefault();
     await this.model.site.save();
-    // let serializedData = this.formStore.serializeDataWithAddAndDelGraph(
-    //   FORM_GRAPHS.sourceGraph,
-    //   'application/n-triples',
-    // );
-    // console.log('Serialized Data', this.formStore);
-    await this.saveFormData(siteId, adminUnitId, formData);
+    const serializedData = this.formStore.serializeDataWithAddAndDelGraph(
+      this.graphs.sourceGraph,
+      'application/n-triples',
+    );
+    await this.saveFormData(this.adminUnitId, this.site.id, serializedData);
   });
   // Define the saveFormData function
   async saveFormData(adminUnitId, siteId, formData) {
-    console.log(`/semantic-forms/${siteId}/form/site-form`);
+    console.log(`/semantic-forms/${adminUnitId}/${siteId}/form/site-form`);
     let isValidForm = validateForm(this.model.form, {
-      ...FORM_GRAPHS,
-      sourceNode: SOURCE_NODE,
+      ...this.graphs,
+      sourceNode: this.sourceNode,
       store: this.formStore,
     });
     this.forceShowErrors = !isValidForm;
     if (isValidForm) {
       const response = await fetch(
-        `/semantic-forms/${this.model.site.id}/form/site-form`,
+        `/semantic-forms/${adminUnitId}/${siteId}/form/site-form`,
         {
-          method: 'PUT',
+          method: 'POST',
           body: JSON.stringify(formData),
           headers: {
             'Content-Type': 'application/json',
@@ -49,8 +57,6 @@ export default class YoussefController extends Controller {
       );
       console.log('This is validated');
       return response;
-    } else {
-      console.log('Not validated');
     }
   }
 }
