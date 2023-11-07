@@ -1,28 +1,26 @@
 {{page-title "youssef-test-form"}}
-
 {{! Begin Form }}
 {{!  RDF form example }}
-<form
-  id="new-vestiging-form"
-  {{on "submit" (perform this.saveTask)}}
-  {{on "cancel" (perform this.cancelTask)}}
->
-  <RdfForm
-    {{on "submit" (perform this.saveTask @model.siteId @model.adminUnitId)}}
-    @groupClass="au-o-grid__item"
-    @form={{@model.form}}
-    @graphs={{@model.graphs}}
-    @sourceNode={{@model.sourceNode}}
-    @formStore={{@model.formStore}}
-    @show={{false}}
-    @forceShowErrors={{false}}
-    @useNewListingLayout={{true}}
-  />
+<div class="au-c-body-container au-c-body-container--scroll">
+  <div class="au-o-box au-o-flow au-o-flow--large">
+    <RdfForm
+  @groupClass="au-o-grid__item"
+  @form={{@model.form}}
+  @graphs={{@model.graphs}}
+  @sourceNode={{@model.sourceNode}}
+  @formStore={{@model.formStore}}
+  @show={{false}}
+  @forceShowErrors={{false}}
+  @useNewListingLayout={{true}}
+/>
 
-  <AuButton
-    @skin="primary"
-    @loading={{this.isLoading}}
-    type="submit"
-    {{on "click" (perform this.saveTask @model.siteId @model.adminUnitId)}}
-  >Validate</AuButton>
-</form>
+<AuButton
+  @skin="primary"
+  @loading={{this.isLoading}}
+  type="submit"
+  {{on "click" (fn (perform this.saveTask this.model.site.id this.adminUnitId this.formData))}}>
+Validate</AuButton>
+
+
+  </div>
+  </div>

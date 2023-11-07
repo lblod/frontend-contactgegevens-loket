@@ -12,7 +12,6 @@ export default class CreateSitesNewController extends Controller {
   get isLoading() {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
-
   saveTask = task(async (event) => {
     event.preventDefault();
     const { address, primaryContact, secondaryContact, site, adminUnit } =

@@ -1,53 +1,44 @@
 import Controller from '@ember/controller';
 import { task, timeout } from 'ember-concurrency';
-import { action } from '@ember/object';
 
 export default class YoussefController extends Controller {
-  @task
-  *saveTask(event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-
-    let { adminUnitId, siteId, formData } = this.model;
-
-    console.log(
-      `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
-    );
-    console.log('dit is je siteid', siteId);
-
-    // Simulate an asynchronous operation (remove this part in your actual code)
-    yield timeout(1000);
-
-    yield this.saveFormData(adminUnitId, siteId, formData);
+  get site() {
+    return this.model.site;
+  }
+  get adminUnitId() {
+    return this.model.adminUnitId;
+  }
+  get formData() {
+    return this.model.formData;
   }
 
+  saveTask = task(async (siteId, adminUnitId, formData) => {
+    // Simulate an asynchronous operation (remove this part in your actual code)
+    await timeout(1000);
+    await this.model.site.save();
+
+    await this.saveFormData(siteId, adminUnitId, formData);
+  });
+
   // Define the saveFormData function
-  async saveFormData(adminUnitId, siteId, formData) {
-    console.log(
-      `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
-    );
+  async saveFormData(adminUnitId, formData) {
+    console.log(`/semantic-forms/${this.model.site.id}/form/site-form`);
+    console.log(this.model.site.id);
 
-    try {
-      console.log('Dit is je siteID', siteId)
-      // Perform the HTTP request to save the form data
-      const response = await fetch(
-        `http://localhost:8000/semantic-forms/${adminUnitId}/form/${siteId}`,
-        {
-          method: 'POST',
-          body: JSON.stringify(formData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
+    console.log('Dit is een call die word gemaakt');
+    // Perform the HTTP request to save the form data
+    const response = await fetch(
+      `/semantic-forms/${this.model.site.id}/form/site-form`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
-
-      if (response.ok) {
-        console.log('success');
-      } else {
-        console.log('failed');
-      }
-    } catch (error) {
-      // Handle any network or request errors
-    }
+      },
+    );
+    return response;
+    // console.log(response);
+    // return response;
   }
 }

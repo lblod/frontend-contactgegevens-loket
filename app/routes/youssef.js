@@ -4,9 +4,8 @@ import { Namespace, NamedNode } from 'rdflib';
 import { inject as service } from '@ember/service';
 export default class YoussefRoute extends Route {
   @service currentSession;
-
+  @service store;
   async model() {
-    const siteId = this.paramsFor('sites.site');
     const [formTtl, metaTtl, dataTtl] = await Promise.all([
       this.fetchForm('/forms/test-form/form.ttl'),
       this.fetchFormMeta('/forms/test-form/meta.ttl'),
@@ -30,7 +29,7 @@ export default class YoussefRoute extends Route {
       graphs: FORM_GRAPHS,
       sourceNode: SOURCE_NODE,
       adminUnitId,
-      siteId,
+      site: this.store.createRecord('site'),
     };
   }
 

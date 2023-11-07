@@ -18,8 +18,6 @@ Router.map(function () {
     this.route('switch');
   });
 
-  
-
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
       this.route('index', { path: '/' });
