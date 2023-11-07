@@ -22,7 +22,7 @@ export async function findStructuredIdentifierByIdName(identifiers, idName) {
   const structuredIdentifier = await resultIdentifier.structuredIdentifier;
   if (!structuredIdentifier)
     throw new Error(
-      `Identifier with id ${identifier.id} does not have an associated structuredIdentifier. Is not possible.`,
+      `Identifier with id ${identifiers.id} does not have an associated structuredIdentifier. Is not possible.`,
     );
   return structuredIdentifier;
 }

@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
-import { tracked } from '@glimmer/tracking';
 
 export default class ProvinceSelectComponent extends Component {
   @service store;

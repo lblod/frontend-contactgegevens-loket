@@ -90,10 +90,6 @@ export default class ContactDataEditFormComponent extends Component {
       this.args.onChange(this.computeResult());
     };
   }
-
-  @action
-  automaticAddressSearchChanged(...args) {}
-
   @action
   handleManualStreetControl(event) {
     this.addressInputEventHandler('straatnaam')(event);

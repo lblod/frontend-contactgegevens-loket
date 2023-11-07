@@ -20,7 +20,6 @@ module.exports = function (environment) {
       // when it is created
     },
     appName: 'Contactgegevens',
-    contactEmail: 'contactgegevens.abb@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
   };
 
