@@ -1,5 +1,8 @@
 import Controller from '@ember/controller';
 import { task, timeout } from 'ember-concurrency';
+import { validateForm } from '@lblod/ember-submission-form-fields';
+import { FORM, FORM_GRAPHS, SOURCE_NODE } from '../routes/youssef';
+import { tracked } from '@glimmer/tracking';
 
 export default class YoussefController extends Controller {
   get site() {
@@ -11,34 +14,43 @@ export default class YoussefController extends Controller {
   get formData() {
     return this.model.formData;
   }
-
+  get formStore() {
+    return this.model.formStore;
+  }
+  @tracked forceShowErrors = false;
   saveTask = task(async (siteId, adminUnitId, formData) => {
-    // Simulate an asynchronous operation (remove this part in your actual code)
-    await timeout(1000);
     await this.model.site.save();
-
+    // let serializedData = this.formStore.serializeDataWithAddAndDelGraph(
+    //   FORM_GRAPHS.sourceGraph,
+    //   'application/n-triples',
+    // );
+    // console.log('Serialized Data', this.formStore);
     await this.saveFormData(siteId, adminUnitId, formData);
   });
-
   // Define the saveFormData function
-  async saveFormData(adminUnitId, formData) {
-    console.log(`/semantic-forms/${this.model.site.id}/form/site-form`);
-    console.log(this.model.site.id);
-
-    console.log('Dit is een call die word gemaakt');
-    // Perform the HTTP request to save the form data
-    const response = await fetch(
-      `/semantic-forms/${this.model.site.id}/form/site-form`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
+  async saveFormData(adminUnitId, siteId, formData) {
+    console.log(`/semantic-forms/${siteId}/form/site-form`);
+    let isValidForm = validateForm(this.model.form, {
+      ...FORM_GRAPHS,
+      sourceNode: SOURCE_NODE,
+      store: this.formStore,
+    });
+    this.forceShowErrors = !isValidForm;
+    if (isValidForm) {
+      const response = await fetch(
+        `/semantic-forms/${this.model.site.id}/form/site-form`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    );
-    return response;
-    // console.log(response);
-    // return response;
+      );
+      console.log('This is validated');
+      return response;
+    } else {
+      console.log('Not validated');
+    }
   }
 }
