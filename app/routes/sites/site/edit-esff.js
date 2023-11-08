@@ -13,18 +13,21 @@ export default class AndreoRoute extends Route {
       sourceGraph: new NamedNode(`http://data.lblod.info/sourcegraph`),
     };
     const SOURCE_NODE = new NamedNode(
-      'http://ember-submission-form-fields/source-node',
+      `http://data.lblod.info/id/vestigingen/${siteId}`,
     );
     const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
     const RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-    const [formTtl, metaTtl, dataTtl] = await Promise.all([
-      loadTextFromPublic('/forms/test-form/form.ttl'),
-      loadTextFromPublic('/forms/test-form/meta.ttl'),
-      loadTextFromPublic('/forms/test-form/data.ttl'),
-    ]);
+    const response = await fetch(
+      `/semantic-forms/${adminUnitId}/${siteId}/form/site-form`,
+    );
+    const json = await response.json();
+    const { form: formTtl, meta: metaTtl, source: dataTtl } = json;
     const formStore = new ForkingStore();
+    console.log(formTtl);
     formStore.parse(formTtl, FORM_GRAPHS.formGraph, 'text/turtle');
-    formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
+    console.log(metaTtl);
+    //formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
+    console.log(dataTtl);
     formStore.parse(dataTtl, FORM_GRAPHS.sourceGraph, 'text/turtle');
     const form = formStore.any(
       undefined,
