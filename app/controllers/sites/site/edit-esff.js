@@ -55,7 +55,7 @@ async function saveFormData(adminUnitId, siteId, formData) {
     method: 'PUT',
     body: JSON.stringify(formData),
     headers: {
-      'Content-Type': 'application/json;',
+      'Content-Type': 'application/json',
     },
   });
 }
