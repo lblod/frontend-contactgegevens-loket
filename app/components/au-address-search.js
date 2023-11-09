@@ -27,12 +27,36 @@ import { task, timeout } from 'ember-concurrency';
  */
 
 export default class AuAddressSearchComponent extends Component {
+  constructor(...args) {
+    super(...args);
+    this.fetchCountryTask.perform();
+  }
+
+  /** @type {} */
+  @tracked serverErrorMessage = undefined;
+
   /** @type {AddressSearchMode | null} */
   @tracked _mode = null;
 
   /** @type {AddressSearchMode} */
   get mode() {
     return this._mode ?? this.args.initialMode ?? 'automatic';
+  }
+
+  @tracked freeInputChecked = false;
+
+  get freeInputDisplayValue() {
+    return this.manualAddressSuggestion?.country !== 'België'
+      ? true
+      : this.freeInputChecked;
+  }
+
+  get freeInputDisabled() {
+    return this.manualAddressSuggestion?.country !== 'België';
+  }
+
+  @action handleFreeInputChecked(newValue) {
+    this.freeInputChecked = newValue;
   }
 
   /** @type {Address | null} */
@@ -58,7 +82,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   /** @type {Boolean} */
-  get addressOk() {
+  get automaticAddressOk() {
     return !!this.selectedAddressSuggestion;
   }
 
@@ -107,6 +131,9 @@ export default class AuAddressSearchComponent extends Component {
         location,
       )}`,
     );
+    if (response.status !== 200) {
+      // Nuke the component, show error message
+    }
     /** @type {Address[]} */
     const addresses = await response.json();
     // The return value will set the boxNumberOptions 'attribute'. But we need to set the value
@@ -115,7 +142,7 @@ export default class AuAddressSearchComponent extends Component {
     );
     if (!addressToSelect)
       throw new Error(
-        `Backend sent back a list of addresses and none of which has the boxnumber unset. This is impossible.`,
+        `Backend sent back a list of addresses and none of which has the boxnumber unset. This is normally impossible.`,
       );
     this.selectedAddressSuggestion = addressToSelect;
     return addresses;
@@ -144,5 +171,91 @@ export default class AuAddressSearchComponent extends Component {
       return;
     }
     this.selectedAddressSuggestion = selectedAddressSuggestion;
+  }
+
+  /** @type {Partial<Address>} */
+  @tracked manualAddressSuggestion = {};
+
+  get manualAddressComplete() {
+    return !Object.values(this.manualAddressSuggestion).some(
+      (value) => value === undefined,
+    );
+  }
+  /** @type { (fieldName: keyof<Address>) => ((e:UIEvent)=>void) } */
+  handleSimpleManualInputEventChange(fieldName) {
+    return function (e) {
+      e.preventDefault();
+      const newValue = e.target.value ?? undefined;
+      this.manualAddressSuggestion = {
+        ...this.manualAddressSuggestion,
+        [fieldName]: newValue,
+      };
+    };
+  }
+
+  /** @type {'yes' | 'no' } */
+  @tracked manualBoxnumberSpecified = 'no';
+
+  @action handleBoxnumberSpecifiedChange(choice) {
+    this.manualBoxnumberSpecified = choice;
+    if (choice === 'no') {
+      this.manualAddressSuggestion = {
+        ...this.manualAddressSuggestion,
+        boxNumber: null,
+      };
+    }
+  }
+
+  fetchCountryTask = task(async () => {
+    const response = await fetch(`/address-search-add-on/countries`);
+    const countries = await response.json();
+    // Set the manual country as belgium by default
+    this.manualAddressSuggestion = {
+      ...this.manualAddressSuggestion,
+      country: 'België',
+    };
+    return countries;
+  });
+
+  get countryOptions() {
+    return this.fetchCountryTask.last?.value;
+  }
+
+  @action handleCountryChange(country) {
+    if (
+      country === 'België' &&
+      this.manualAddressSuggestion.country !== 'België'
+    ) {
+      // When switching from something else to belgium we want to remove everything
+      this.manualBoxnumberSpecified = 'no';
+      this.manualAddressSuggestion = {
+        ...this.manualAddressSuggestion,
+        country,
+        street: undefined,
+        houseNumber: undefined,
+        boxNumber: undefined,
+        municipality: undefined,
+        postalCode: undefined,
+        province: undefined,
+      };
+    }
+    this.manualAddressSuggestion = {
+      ...this.manualAddressSuggestion,
+      country,
+    };
+  }
+
+  get showBelgiumManualControls() {
+    return (
+      this.manualAddressSuggestion.country === 'België' &&
+      !this.freeInputChecked
+    );
+  }
+
+  @action handleChangeManualControlsBelgium(newAddressSuggesion) {
+    this.manualAddressSuggestion = {
+      ...this.manualAddressSuggestion,
+      ...newAddressSuggesion,
+    };
   }
 }

@@ -1,0 +1,81 @@
+{{#let @itemComponent as |Item| }}
+<span>State: {{this.state}} Ready: {{this.ready}}</span>
+<Item
+  @labelFor="{{@id}}-postalName-select"
+  @required={{true}}
+>
+  <:label>
+    Gemeente of postnaam
+  </:label>
+  <:content>
+      <PowerSelect
+        @options={{this.postalNameOptions}}
+        @onChange={{this.handlePostalNameChange}}
+        @selected={{this.selections.postalNameSelection}}
+        @allowClear={{false}}
+        @searchEnabled={{true}}
+        @loadingMessage="Bezig met ophalen van gemeentes"
+        @noMatchesMessage="Geen gemeente gevonden"
+        @placeholder="Selecteer een gemeente"
+        @triggerId="{{@id}}-postalName-select"
+        @disabled={{this.anyLoading}}
+        as |postalNameSuggestion|
+      >
+        {{#if postalNameSuggestion.isMunicipality}}
+          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}})<AuBadge @skin="brand" @size="small" @number="G"/>
+        {{else}}
+          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}})
+        {{/if}}
+      </PowerSelect>
+  </:content>
+</Item>
+<Item
+  @labelFor="{{@id}}-postalcode-select"
+  @required={{true}}
+>
+  <:label>
+    Postcode
+  </:label>
+  <:content>
+      <PowerSelect
+        @options={{this.postalCodeOptions}}
+        @onChange={{this.handlePostalCodeChange}}
+        @selected={{this.selections.postalCodeSelection}}
+        @allowClear={{false}}
+        @searchEnabled={{true}}
+        @loadingMessage="Bezig met ophalen van postcodes"
+        @noMatchesMessage="Geen postcode gevonden"
+        @placeholder="Selecteer een postcode"
+        @triggerId="{{@id}}-postalcode-select"
+        @disabled={{this.anyLoading}}
+        as |postalCodeSuggestion|
+      >
+        {{printPostalCodeSuggestion postalCodeSuggestion}}
+      </PowerSelect>
+  </:content>
+</Item>
+<Item
+  @labelFor="{{@id}}-province-select"
+  @required={{true}}
+>
+  <:label>
+    Provincie
+  </:label>
+  <:content>
+      <PowerSelect
+        @options={{this.provinceOptions}}
+        @onChange={{this.handleprovinceChange}}
+        @selected={{this.manualAddressSuggestion.province}}
+        @allowClear={{false}}
+        @searchEnabled={{false}}
+        @loadingMessage="Bezig met ophalen van provincies"
+        @placeholder="Selecteer een provincie"
+        @triggerId="{{@id}}-province-select"
+        @disabled={{this.anyLoading}}
+        as |province|
+      >
+        {{province}}
+      </PowerSelect>
+  </:content>
+</Item>
+{{/let}}
