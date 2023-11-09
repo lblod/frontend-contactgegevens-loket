@@ -10,18 +10,20 @@
           @onChange={{this.handleModeSwitchChange}}
           @identifier="{{@id}}-mode-switch"
         />&nbsp;Automatisch&nbsp;
-        {{#if this.addressOk}}
-          <AuPill
-            @skin="success"
-            @size="small"
-            @icon="check"
-          >Adres geverifieerd</AuPill>
-        {{else}}
-          <AuPill
-            @skin="error"
-            @size="small"
-            @icon="x"
-          >Adres niet ingegeven</AuPill>
+        {{#if this.isAutomatic}}
+          {{#if this.addressOk}}
+            <AuPill
+              @skin="success"
+              @size="small"
+              @icon="check"
+            >Adres geverifieerd</AuPill>
+          {{else}}
+            <AuPill
+              @skin="error"
+              @size="small"
+              @icon="x"
+            >Adres niet ingegeven</AuPill>
+          {{/if}}
         {{/if}}
         </div>
     </:content>
@@ -78,6 +80,166 @@
   </Item>
   {{/if}}
   {{#unless this.isAutomatic}}
+  <Item
+    @labelFor="{{@id}}-country-select"
+    @required={{true}}
+  >
+    <:label>
+      Land
+    </:label>
+    <:content>
+        <div class="address-search-flex-container ">
+          <div class="address-search-flex-child-stretch">
+            <PowerSelect
+              @disabled={{not this.fetchCountryTask.last}}
+              @options={{this.countryOptions}}
+              @onChange={{this.handleCountryChange}}
+              @selected={{this.manualAddressSuggestion.country}}
+              @allowClear={{false}}
+              @searchEnabled={{true}}
+              @loadingMessage="Bezig met ophalen van landen"
+              @noMatchesMessage="Geen land gevonden"
+              @placeholder="Selecteer een land"
+              @triggerId="{{@id}}-country-select"
+              as |country|
+            >
+              {{country}}
+            </PowerSelect>
+          </div>
+          <div class="address-search-flex-child-nostretch au-u-margin-top-small">
+            <AuCheckbox
+              @id="{{@id}}-free-input-checkbox"
+              @checked={{this.freeInputDisplayValue}}
+              @onChange={{this.handleFreeInputChecked}}
+              @disabled={{this.freeInputDisabled}}
+            >
+              Vrije ingave
+            </AuCheckbox>
+          </div>
+        </div>
+    </:content>
+  </Item>
+  <Item
+    @labelFor="{{@id}}-street-input"
+    @required={{true}}
+  >
+    <:label>
+      Straat
+    </:label>
+    <:content>
+        <AuInput
+          id="{{@id}}-street-input"
+          value={{this.manualAddressSuggestion.street}}
+          {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+          @width="block"
+        />
+    </:content>
+  </Item>
+  <Item
+    @labelFor="{{@id}}-housenumber-input"
+    @required={{true}}
+  >
+    <:label>
+      Huisnummer
+    </:label>
+    <:content>
+        <AuInput
+          id="{{@id}}-housenumber-input"
+          value={{this.manualAddressSuggestion.houseNumber}}
+          {{on "input" (fn this.handleSimpleManualInputEventChange "houseNumber")}}
+          @width="block"
+        />
+    </:content>
+  </Item>
+  <Item
+    @labelFor="{{@id}}-boxnumber-input"
+    @required={{true}}
+  >
+    <:label>
+      Busnummer
+    </:label>
+    <:content>
+      <div class="address-search-flex-container">
+        <div class="au-u-margin-top-tiny address-search-flex-child-nostretch">
+          <AuRadioGroup
+            @selected={{this.manualBoxnumberSpecified}}
+            @onChange={{this.handleBoxnumberSpecifiedChange}}
+            @alignment="inline"
+            as |Group|
+          >
+              <Group.Radio @value="no">Geen</Group.Radio>
+              <Group.Radio @value="yes">Expliciet</Group.Radio>
+          </AuRadioGroup>
+        </div>
+        <div class="address-search-flex-child-stretch">
+          <AuInput
+            id="{{@id}}-boxnumber-input"
+            value={{this.manualAddressSuggestion.boxNumber}}
+            {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+            @disabled={{eq this.manualBoxnumberSpecified "no"}}
+            @width="block"
+          />
+        </div>
+      </div>
+    </:content>
+  </Item>
+  {{#if this.showBelgiumManualControls}}
+  <AuAddressSearch::ManualControlsBelgium
+    @itemComponent={{Item}}
+    @id={{@id}}
+    @manualAddressSuggestion={{this.manualAddressSuggestion}}
+    @onChange={{this.handleChangeManualControlsBelgium}}
+  />
+  {{else}}
+  <Item
+    @labelFor="{{@id}}-municipality-input"
+    @required={{true}}
+  >
+    <:label>
+      Gemeente
+    </:label>
+    <:content>
+        <AuInput
+          id="{{@id}}-municipality-input"
+          value={{this.manualAddressSuggestion.municipality}}
+          {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+          @width="block"
+        />
+    </:content>
+  </Item>
+  <Item
+    @labelFor="{{@id}}-postalcode-input"
+    @required={{true}}
+  >
+    <:label>
+      Postcode
+    </:label>
+    <:content>
+        <AuInput
+          id="{{@id}}-postalcode-input"
+          value={{this.manualAddressSuggestion.postalCode}}
+          {{on "input" (fn this.handleSimpleManualInputEventChange "postalCode")}}
+          @width="block"
+        />
+    </:content>
+  </Item>
+    <Item
+    @labelFor="{{@id}}-postalcode-input"
+    @required={{true}}
+  >
+    <:label>
+      Provicie
+    </:label>
+    <:content>
+        <AuInput
+          id="{{@id}}-province-input"
+          value={{this.manualAddressSuggestion.province}}
+          {{on "input" (fn this.handleSimpleManualInputEventChange "province")}}
+          @width="block"
+        />
+    </:content>
+  </Item>
+  {{/if}}
 
   {{/unless}}
 
