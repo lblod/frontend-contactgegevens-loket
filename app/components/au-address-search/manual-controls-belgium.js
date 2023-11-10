@@ -30,32 +30,30 @@ import { task, timeout } from 'ember-concurrency';
  */
 
 /**
- * Helper function to print postal code suggestions
- * @param {PostalCodeSuggestion} suggestion
- * @returns {string}
+ *
+ * @param {Record<string,any>} params
+ * @returns string
  */
-// eslint-disable-next-line no-unused-vars
-function printPostalCodeSuggestion(suggestion) {
-  const names = suggestion.postalNames
-    .map((postalName) => postalName.name)
-    .sort();
-  return `${suggestion.postalCode} (${names.join()})`;
+function generateQueryString(params) {
+  return Object.keys(params)
+    .reduce((acc, key) => {
+      if (params[key]) acc.append(key, params[key]);
+      return acc;
+    }, new URLSearchParams())
+    .toString();
 }
 
 export default class AuAddressSearchManualControlsBelgiumComponent extends Component {
   initializingTask = task(async () => {
-    this.fetchPostalCodesTask.perform();
-    this.fetchPostalNamesTask.perform();
-    this.fetchProvincesTask.perform();
+    this.fetchPostalCodesTask.perform({});
+    this.fetchPostalNamesTask.perform({});
+    this.fetchProvincesTask.perform({});
   });
 
   constructor(...args) {
     super(...args);
     this.initializingTask.perform();
   }
-
-  /** @type { State } */
-  @tracked state = 'not-initialized';
 
   /** @type { Partial<Address> } */
   @tracked manualAddressSuggestion = {};
@@ -67,23 +65,9 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     provinceSelection: null,
   };
 
-  @action async stateChange() {
-    console.log('Activate statemachine', this.state);
-    switch (this.state) {
-      case 'initializing':
-        // No operation, taken care for during the init task
-        break;
-      case 'loading':
-        // No operation
-        break;
-      default:
-        throw new Error(`Impossible state: ${this.state}`);
-    }
-  }
-
   fetchPostalNamesTask = task(async ({ postalCode, province }, callback) => {
     const response = await fetch(
-      `/address-search-add-on/postal-names?${new URLSearchParams({
+      `http://localhost:9300/postal-names?${generateQueryString({
         postalCode,
         province,
       })}`,
@@ -110,6 +94,12 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     const postalName = this.selections.postalNameSelection
       ? this.selections.postalNameSelection.postalName
       : undefined;
+    console.log('Restarting fetches', {
+      completed: this.completed,
+      province,
+      postalCode,
+      postalName,
+    });
     if (!this.selections.postalCodeSelection)
       this.fetchPostalCodesTask.perform({ province, postalName });
     if (!this.selections.provinceSelection)
@@ -154,7 +144,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
 
   fetchPostalCodesTask = task(async ({ postalName, province }, callback) => {
     const response = await fetch(
-      `/address-search-add-on/postal-codes?${new URLSearchParams({
+      `http://localhost:9300/postal-codes?${generateQueryString({
         postalName,
         province,
       })}`,
@@ -181,7 +171,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
 
   fetchProvincesTask = task(async ({ postalName, postalCode }, callback) => {
     const response = await fetch(
-      `/address-search-add-on/provinces?${new URLSearchParams({
+      `http://localhost:9300/provinces?${generateQueryString({
         postalName,
         postalCode,
       })}`,
@@ -200,7 +190,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    *
    * @param {Province} newSuggestion
    */
-  @action handeProvinceChange(newSuggestion) {
+  @action handleProvinceChange(newSuggestion) {
     this.selections.provinceSelection = newSuggestion;
     this._restartAllFetches();
     if (this.completed) this._triggerOnChangeComplete();
@@ -210,7 +200,20 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     return (
       this.fetchPostalNamesTask.isRunning ||
       this.fetchPostalCodesTask.isRunning ||
-      this.fetchProvincesTask
+      this.fetchProvincesTask.isRunning
     );
+  }
+
+  /**
+   * Helper function to print postal code suggestions
+   * @param {PostalCodeSuggestion} suggestion
+   * @returns {string}
+   */
+  // eslint-disable-next-line no-unused-vars
+  printPostalCodeSuggestion(suggestion) {
+    const names = suggestion.postalNames
+      .map((postalName) => postalName.name)
+      .sort();
+    return `${suggestion.postalCode} (${names.join(', ')})`;
   }
 }

@@ -95,7 +95,7 @@ export default class AuAddressSearchComponent extends Component {
     await timeout(500); // Debounce
 
     const response = await fetch(
-      `/address-search-add-on/search?query=${encodeURIComponent(query)}`,
+      `http://localhost:9300/search?query=${encodeURIComponent(query)}`,
     );
     const locationsInflanders = await response.json();
     return locationsInflanders;
@@ -127,7 +127,7 @@ export default class AuAddressSearchComponent extends Component {
 
   findAddressesFromLocationTask = task(async (location) => {
     const response = await fetch(
-      `/address-search-add-on/verified-addresses?${new URLSearchParams(
+      `http://localhost:9300/verified-addresses?${new URLSearchParams(
         location,
       )}`,
     );
@@ -207,7 +207,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   fetchCountryTask = task(async () => {
-    const response = await fetch(`/address-search-add-on/countries`);
+    const response = await fetch(`http://localhost:9300/countries`);
     const countries = await response.json();
     // Set the manual country as belgium by default
     this.manualAddressSuggestion = {

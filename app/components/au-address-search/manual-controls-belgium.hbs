@@ -1,5 +1,4 @@
 {{#let @itemComponent as |Item| }}
-<span>State: {{this.state}} Ready: {{this.ready}}</span>
 <Item
   @labelFor="{{@id}}-postalName-select"
   @required={{true}}
@@ -19,6 +18,7 @@
         @placeholder="Selecteer een gemeente"
         @triggerId="{{@id}}-postalName-select"
         @disabled={{this.anyLoading}}
+        @searchField="postalName"
         as |postalNameSuggestion|
       >
         {{#if postalNameSuggestion.isMunicipality}}
@@ -48,9 +48,10 @@
         @placeholder="Selecteer een postcode"
         @triggerId="{{@id}}-postalcode-select"
         @disabled={{this.anyLoading}}
+        @searchField="postalCode"
         as |postalCodeSuggestion|
       >
-        {{printPostalCodeSuggestion postalCodeSuggestion}}
+        {{this.printPostalCodeSuggestion postalCodeSuggestion}}
       </PowerSelect>
   </:content>
 </Item>
@@ -64,7 +65,7 @@
   <:content>
       <PowerSelect
         @options={{this.provinceOptions}}
-        @onChange={{this.handleprovinceChange}}
+        @onChange={{this.handleProvinceChange}}
         @selected={{this.manualAddressSuggestion.province}}
         @allowClear={{false}}
         @searchEnabled={{false}}
