@@ -8,6 +8,6 @@ export default class ContactDataEditCard extends Component {
 
   @action
   handleAddressUpdate(newAddress) {
-    console.log('handleAddressUpdate',newAddress);
+    console.log('handleAddressUpdate', newAddress);
   }
 }
