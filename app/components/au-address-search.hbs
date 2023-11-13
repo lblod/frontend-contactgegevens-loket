@@ -9,20 +9,34 @@
           @checked={{this.isAutomatic}}
           @onChange={{this.handleModeSwitchChange}}
           @identifier="{{@id}}-mode-switch"
-        />&nbsp;Automatisch&nbsp;
+        />&nbsp;Auto&nbsp;
         {{#if this.isAutomatic}}
-          {{#if this.addressOk}}
+          {{#if this.automaticAddressOk}}
             <AuPill
               @skin="success"
               @size="small"
               @icon="check"
-            >Adres geverifieerd</AuPill>
+            >Adres compleet en geverifieerd</AuPill>
           {{else}}
             <AuPill
               @skin="error"
               @size="small"
               @icon="x"
-            >Adres niet ingegeven</AuPill>
+            >Adres niet compleet</AuPill>
+          {{/if}}
+        {{else}}
+          {{#if this.manualAddressOk}}
+            <AuPill
+              @skin="warning"
+              @size="small"
+              @icon="alert-triangle"
+            >Adres compleet, niet geverifieerd</AuPill>
+          {{else}}
+            <AuPill
+              @skin="error"
+              @size="small"
+              @icon="x"
+            >Adres niet compleet</AuPill>
           {{/if}}
         {{/if}}
         </div>
@@ -37,6 +51,7 @@
     </:label>
     <:content>
         <PowerSelect
+          @disabled={{this.isLoading}}
           @options={{this.fuzzySearchOptions}}
           @onChange={{this.handleFuzzySearchChange}}
           @selected={{this.selectedLocation}}
@@ -58,11 +73,11 @@
     @labelFor="{{@id}}-box-number-select"
   >
     <:label>
-      Busnummer
+      Geverifieerde adressen
     </:label>
     <:content>
         <PowerSelect
-          @disabled={{not this.boxNumberActive}}
+          @disabled={{or this.isLoading (not this.selectedLocation)}}
           @options={{this.boxNumberOptions}}
           @onChange={{this.handleBoxNumberChange}}
           @selected={{this.selectedAddressSuggestion}}
@@ -74,7 +89,7 @@
           @triggerId="{{@id}}-box-number-select"
           as |addressSuggestion|
         >
-          {{if addressSuggestion.boxNumber addressSuggestion.boxNumber "Geen busnummer"}}
+          {{this.printAddress addressSuggestion}}
         </PowerSelect>
     </:content>
   </Item>
@@ -130,7 +145,7 @@
         <AuInput
           id="{{@id}}-street-input"
           value={{this.manualAddressSuggestion.street}}
-          {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+          {{on "input" this.updateStreet}}
           @width="block"
         />
     </:content>
@@ -146,7 +161,7 @@
         <AuInput
           id="{{@id}}-housenumber-input"
           value={{this.manualAddressSuggestion.houseNumber}}
-          {{on "input" (fn this.handleSimpleManualInputEventChange "houseNumber")}}
+          {{on "input" this.updateHouseNumber}}
           @width="block"
         />
     </:content>
@@ -175,7 +190,7 @@
           <AuInput
             id="{{@id}}-boxnumber-input"
             value={{this.manualAddressSuggestion.boxNumber}}
-            {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+            {{on "input" this.updateBoxNumber}}
             @disabled={{eq this.manualBoxnumberSpecified "no"}}
             @width="block"
           />
@@ -202,7 +217,7 @@
         <AuInput
           id="{{@id}}-municipality-input"
           value={{this.manualAddressSuggestion.municipality}}
-          {{on "input" (fn this.handleSimpleManualInputEventChange "municipality")}}
+          {{on "input" this.updateMunicipality}}
           @width="block"
         />
     </:content>
@@ -218,7 +233,7 @@
         <AuInput
           id="{{@id}}-postalcode-input"
           value={{this.manualAddressSuggestion.postalCode}}
-          {{on "input" (fn this.handleSimpleManualInputEventChange "postalCode")}}
+          {{on "input" this.updatePostalCode}}
           @width="block"
         />
     </:content>
@@ -234,14 +249,12 @@
         <AuInput
           id="{{@id}}-province-input"
           value={{this.manualAddressSuggestion.province}}
-          {{on "input" (fn this.handleSimpleManualInputEventChange "province")}}
+          {{on "input" this.updateProvince}}
           @width="block"
         />
     </:content>
   </Item>
   {{/if}}
-
   {{/unless}}
-
 </div>
 {{/let}}

@@ -11,7 +11,7 @@
         @options={{this.postalNameOptions}}
         @onChange={{this.handlePostalNameChange}}
         @selected={{this.selections.postalNameSelection}}
-        @allowClear={{false}}
+        @allowClear={{true}}
         @searchEnabled={{true}}
         @loadingMessage="Bezig met ophalen van gemeentes"
         @noMatchesMessage="Geen gemeente gevonden"
@@ -22,9 +22,15 @@
         as |postalNameSuggestion|
       >
         {{#if postalNameSuggestion.isMunicipality}}
-          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}})<AuBadge @skin="brand" @size="small" @number="G"/>
+          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}}) <AuPill
+              @skin="success"
+              @size="small"
+            >Gemeente</AuPill>
         {{else}}
-          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}})
+          {{postalNameSuggestion.postalName}} ({{postalNameSuggestion.postalCode}}) <AuPill
+              @skin="warning"
+              @size="small"
+            >Post naam</AuPill>
         {{/if}}
       </PowerSelect>
   </:content>
@@ -41,7 +47,7 @@
         @options={{this.postalCodeOptions}}
         @onChange={{this.handlePostalCodeChange}}
         @selected={{this.selections.postalCodeSelection}}
-        @allowClear={{false}}
+        @allowClear={{true}}
         @searchEnabled={{true}}
         @loadingMessage="Bezig met ophalen van postcodes"
         @noMatchesMessage="Geen postcode gevonden"
@@ -66,8 +72,8 @@
       <PowerSelect
         @options={{this.provinceOptions}}
         @onChange={{this.handleProvinceChange}}
-        @selected={{this.manualAddressSuggestion.province}}
-        @allowClear={{false}}
+        @selected={{this.selections.provinceSelection}}
+        @allowClear={{true}}
         @searchEnabled={{false}}
         @loadingMessage="Bezig met ophalen van provincies"
         @placeholder="Selecteer een provincie"

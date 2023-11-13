@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 
 /** @typedef { Pick<import('../au-address-search').Address,"municipality"|"province"|"postalCode"> } PartialAddress */
 
@@ -45,9 +45,7 @@ function generateQueryString(params) {
 
 export default class AuAddressSearchManualControlsBelgiumComponent extends Component {
   initializingTask = task(async () => {
-    this.fetchPostalCodesTask.perform({});
-    this.fetchPostalNamesTask.perform({});
-    this.fetchProvincesTask.perform({});
+    this._restartAllFetchesTask.perform();
   });
 
   constructor(...args) {
@@ -65,25 +63,11 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     provinceSelection: null,
   };
 
-  fetchPostalNamesTask = task(async ({ postalCode, province }, callback) => {
-    const response = await fetch(
-      `http://localhost:9300/postal-names?${generateQueryString({
-        postalCode,
-        province,
-      })}`,
-    );
-    /** @type {PostalNameSuggestion[]} */
-    const postalNameSuggestions = await response.json();
-    if (callback) callback();
-    return postalNameSuggestions;
-  });
-
-  get postalNameOptions() {
-    return this.fetchPostalNamesTask.last?.value ?? [];
-  }
-
-  _restartAllFetches() {
-    if (this.completed) return;
+  _restartAllFetchesTask = task(async () => {
+    // Skip the actual fetches if completed
+    if (this.completed) {
+      return;
+    }
     // Restart the other tasks
     const province = this.selections.provinceSelection
       ? this.selections.provinceSelection
@@ -94,18 +78,48 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     const postalName = this.selections.postalNameSelection
       ? this.selections.postalNameSelection.postalName
       : undefined;
-    console.log('Restarting fetches', {
-      completed: this.completed,
-      province,
-      postalCode,
-      postalName,
-    });
-    if (!this.selections.postalCodeSelection)
-      this.fetchPostalCodesTask.perform({ province, postalName });
-    if (!this.selections.provinceSelection)
-      this.fetchProvincesTask.perform({ postalName, postalCode });
-    if (!this.selections.postalNameSelection)
-      this.fetchPostalNamesTask.perform({ province, postalCode });
+
+    const childTasks = [];
+    if (!this.selections.postalNameSelection) {
+      childTasks.push(
+        this.fetchPostalNamesTask.perform({ province, postalCode }),
+      );
+    }
+    if (!this.selections.postalCodeSelection) {
+      childTasks.push(
+        this.fetchPostalCodesTask.perform({ province, postalName }),
+      );
+    }
+    if (!this.selections.provinceSelection) {
+      childTasks.push(
+        this.fetchProvincesTask.perform({ postalName, postalCode }),
+      );
+    }
+    if (childTasks.length) {
+      await all(childTasks);
+      this._autoSelectWhenOnlyOneOption();
+    }
+  });
+
+  _autoSelectWhenOnlyOneOption() {
+    const acc = {};
+    if (this.postalNameOptions.length === 1)
+      acc.postalNameSelection = this.postalNameOptions[0];
+    if (this.postalCodeOptions.length === 1)
+      acc.postalCodeSelection = this.postalCodeOptions[0];
+    if (this.provinceOptions.length === 1)
+      acc.provinceSelection = this.provinceOptions[0];
+
+    if (Object.keys(acc).length)
+      this.selections = {
+        ...this.selections,
+        ...acc,
+      };
+    if (this.completed) {
+      this._triggerOnChangeComplete();
+    } else {
+      this._triggerOnChangeClear();
+    }
   }
 
   get completed() {
@@ -132,17 +146,35 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     this.args.onChange(newPartialAddress);
   }
 
+  fetchPostalNamesTask = task(async ({ postalCode, province }) => {
+    const response = await fetch(
+      `http://localhost:9300/postal-names?${generateQueryString({
+        postalCode,
+        province,
+      })}`,
+    );
+    /** @type {PostalNameSuggestion[]} */
+    const postalNameSuggestions = await response.json();
+    return postalNameSuggestions;
+  });
+
+  get postalNameOptions() {
+    return this.fetchPostalNamesTask.last?.value ?? [];
+  }
+
   /**
    *
    * @param {PostalNameSuggestion} newSuggestion
    */
   @action handlePostalNameChange(newSuggestion) {
-    this.selections.postalNameSelection = newSuggestion;
-    this._restartAllFetches();
-    if (this.completed) this._triggerOnChangeComplete();
+    this.selections = {
+      ...this.selections,
+      postalNameSelection: newSuggestion,
+    };
+    this._restartAllFetchesTask.perform();
   }
 
-  fetchPostalCodesTask = task(async ({ postalName, province }, callback) => {
+  fetchPostalCodesTask = task(async ({ postalName, province }) => {
     const response = await fetch(
       `http://localhost:9300/postal-codes?${generateQueryString({
         postalName,
@@ -151,7 +183,6 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     );
     /** @type {PostalCodeSuggestion[]} */
     const postalCodeSuggestions = await response.json();
-    if (callback) callback();
     return postalCodeSuggestions;
   });
 
@@ -164,12 +195,14 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    * @param {PostalCodeSuggestion} newSuggestion
    */
   @action handlePostalCodeChange(newSuggestion) {
-    this.selections.postalCodeSelection = newSuggestion;
-    this._restartAllFetches();
-    if (this.completed) this._triggerOnChangeComplete();
+    this.selections = {
+      ...this.selections,
+      postalCodeSelection: newSuggestion,
+    };
+    this._restartAllFetchesTask.perform();
   }
 
-  fetchProvincesTask = task(async ({ postalName, postalCode }, callback) => {
+  fetchProvincesTask = task(async ({ postalName, postalCode }) => {
     const response = await fetch(
       `http://localhost:9300/provinces?${generateQueryString({
         postalName,
@@ -178,7 +211,6 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     );
     /** @type {Province[]} */
     const provinces = await response.json();
-    if (callback) callback();
     return provinces;
   });
 
@@ -191,9 +223,8 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    * @param {Province} newSuggestion
    */
   @action handleProvinceChange(newSuggestion) {
-    this.selections.provinceSelection = newSuggestion;
-    this._restartAllFetches();
-    if (this.completed) this._triggerOnChangeComplete();
+    this.selections = { ...this.selections, provinceSelection: newSuggestion };
+    this._restartAllFetchesTask.perform();
   }
 
   get anyLoading() {

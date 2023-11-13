@@ -14,6 +14,16 @@ import { task, timeout } from 'ember-concurrency';
  * @property {string | null} boxNumber
  */
 
+const ADDRESS_KEYS = [
+  'country',
+  'province',
+  'municipality',
+  'postalCode',
+  'street',
+  'houseNumber',
+  'boxNumber',
+];
+
 /**
  * @typedef {Object} LocationInFlanders
  * @property {string} municipality
@@ -26,10 +36,33 @@ import { task, timeout } from 'ember-concurrency';
  * @typedef {'manual'|'automatic'} AddressSearchMode
  */
 
+/** @type { (fieldName: keyof<Address>) => ((e:UIEvent)=>void) } */
+function handleSimpleManualInputEventChange(fieldName) {
+  return function (e) {
+    e.preventDefault();
+    const newValue = e.target.value ?? undefined;
+    this.manualAddressSuggestion = {
+      ...this.manualAddressSuggestion,
+      [fieldName]: newValue,
+    };
+    this._updateParent();
+  };
+}
+
 export default class AuAddressSearchComponent extends Component {
   constructor(...args) {
     super(...args);
     this.fetchCountryTask.perform();
+  }
+  /**
+   * A little helper function
+   * @param { Address } address
+   * @returns { string }
+   */
+  printAddress(address) {
+    return address.boxNumber
+      ? `${address.street} ${address.houseNumber} (Bus: ${address.boxNumber}), ${address.postalCode} ${address.municipality}`
+      : `${address.street} ${address.houseNumber}, ${address.postalCode} ${address.municipality}`;
   }
 
   /** @type {} */
@@ -60,17 +93,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   /** @type {Address | null} */
-  _currentAddress = null;
-
-  /** @type {Address | null} */
-  get initialAddress() {
-    return this.args.initialAddress ?? null;
-  }
-
-  /** @type {Address | null} */
-  get currentAddress() {
-    return this._currentAddress ?? this.initialAddress;
-  }
+  currentAddress = null;
 
   /** @type {Boolean} */
   get isAutomatic() {
@@ -84,6 +107,30 @@ export default class AuAddressSearchComponent extends Component {
   /** @type {Boolean} */
   get automaticAddressOk() {
     return !!this.selectedAddressSuggestion;
+  }
+
+  /** @type {Boolean} */
+  get manualAddressOk() {
+    return (
+      this.manualAddressSuggestion.country &&
+      this.manualAddressSuggestion.province &&
+      this.manualAddressSuggestion.municipality &&
+      this.manualAddressSuggestion.street &&
+      this.manualAddressSuggestion.houseNumber &&
+      this.manualAddressSuggestion.boxNumber !== undefined
+    );
+  }
+
+  _updateParent() {
+    if (this.mode === 'automatic') {
+      this.args.onChange(
+        this.automaticAddressOk ? this.selectedAddressSuggestion : null,
+      );
+    } else {
+      this.args.onChange(
+        this.manualAddressOk ? this.manualAddressSuggestion : null,
+      );
+    }
   }
 
   @action
@@ -113,7 +160,6 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   @action handleFuzzySearchChange(selectedLocation) {
-    console.log('selectedLocation', selectedLocation);
     this.selectedLocation = selectedLocation;
     if (selectedLocation)
       // When the location is set then we search for verified addresses.
@@ -121,6 +167,7 @@ export default class AuAddressSearchComponent extends Component {
     else {
       // When the loation is unset (dropdown cleared) we unset the addressSuggestions as well
       this.selectedAddressSuggestion = null;
+      this._updateParent();
       this.findAddressesFromLocationTask.lastComplete = undefined;
     }
   }
@@ -136,15 +183,14 @@ export default class AuAddressSearchComponent extends Component {
     }
     /** @type {Address[]} */
     const addresses = await response.json();
-    // The return value will set the boxNumberOptions 'attribute'. But we need to set the value
+    // Select the value with no busnumber by default if a value exists with no busnumber
     const addressToSelect = addresses.find(
       (address) => address.boxNumber === null,
     );
-    if (!addressToSelect)
-      throw new Error(
-        `Backend sent back a list of addresses and none of which has the boxnumber unset. This is normally impossible.`,
-      );
-    this.selectedAddressSuggestion = addressToSelect;
+    if (addressToSelect) {
+      this.selectedAddressSuggestion = addressToSelect;
+      this._updateParent();
+    }
     return addresses;
   });
 
@@ -163,35 +209,40 @@ export default class AuAddressSearchComponent extends Component {
   @tracked selectedAddressSuggestion = null;
 
   @action handleBoxNumberChange(selectedAddressSuggestion) {
-    console.log('handleBoxNumberChange', selectedAddressSuggestion);
     if (!selectedAddressSuggestion) {
-      console.warn(
-        `Handler invoked of box number change with falsy value:${selectedAddressSuggestion}`,
-      );
       return;
     }
     this.selectedAddressSuggestion = selectedAddressSuggestion;
+    this._updateParent();
+  }
+
+  get isLoading() {
+    return (
+      this.fuzzySearchTask.isLoading ||
+      this.findAddressesFromLocationTask.isLoading
+    );
   }
 
   /** @type {Partial<Address>} */
-  @tracked manualAddressSuggestion = {};
+  @tracked manualAddressSuggestion = {
+    boxNumber: null,
+  };
 
   get manualAddressComplete() {
     return !Object.values(this.manualAddressSuggestion).some(
       (value) => value === undefined,
     );
   }
-  /** @type { (fieldName: keyof<Address>) => ((e:UIEvent)=>void) } */
-  handleSimpleManualInputEventChange(fieldName) {
-    return function (e) {
-      e.preventDefault();
-      const newValue = e.target.value ?? undefined;
-      this.manualAddressSuggestion = {
-        ...this.manualAddressSuggestion,
-        [fieldName]: newValue,
-      };
-    };
-  }
+
+  updateStreet = handleSimpleManualInputEventChange('street').bind(this);
+  updateHouseNumber =
+    handleSimpleManualInputEventChange('houseNumber').bind(this);
+  updateBoxNumber = handleSimpleManualInputEventChange('boxNumber').bind(this);
+  updateMunicipality =
+    handleSimpleManualInputEventChange('municipality').bind(this);
+  updatePostalCode =
+    handleSimpleManualInputEventChange('postalCode').bind(this);
+  updateProvince = handleSimpleManualInputEventChange('province').bind(this);
 
   /** @type {'yes' | 'no' } */
   @tracked manualBoxnumberSpecified = 'no';
@@ -243,6 +294,7 @@ export default class AuAddressSearchComponent extends Component {
       ...this.manualAddressSuggestion,
       country,
     };
+    this._updateParent();
   }
 
   get showBelgiumManualControls() {
@@ -257,5 +309,6 @@ export default class AuAddressSearchComponent extends Component {
       ...this.manualAddressSuggestion,
       ...newAddressSuggesion,
     };
+    this._updateParent();
   }
 }
