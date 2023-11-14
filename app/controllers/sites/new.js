@@ -16,14 +16,13 @@ export default class CreateSitesNewController extends Controller {
   }
 
   async validateData() {
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
+    const { address, primaryContact, secondaryContact, site } = this.model;
 
     const validationData = {
       siteType: site.siteType.get('label'),
       street: address.street,
       country: address.country,
-      housenumber: address.number,
+      number: address.number,
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
@@ -61,18 +60,19 @@ export default class CreateSitesNewController extends Controller {
       } else {
         nonPrimarySites.push(site);
       }
-
       await adminUnit.save();
       this.router.transitionTo('sites.index');
     } else {
-      this.validationErrors = validationResult.error.details.reduce((errors, detail) => {
-        errors[detail.context.key] = detail.message;
+      this.validationErrors = validationResult.error.details.reduce(
+        (errors, detail) => {
+          errors[detail.context.key] = detail.message;
           return errors;
         },
         {},
       );
       console.log('Validation Errors:', this.validationErrors);
     }
+
   });
 
   cancelTask = task(async (event) => {

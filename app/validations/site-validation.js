@@ -14,7 +14,7 @@ export const errorValidation = Joi.object({
   street: Joi.string()
     .required()
     .messages({ '*': 'Please fill in a valid street name' }),
-  housenumber: Joi.string()
+  number: Joi.string()
     .required()
     .messages({ '*': 'Please fill in a valid housenumber' }),
   postcode: Joi.string()
