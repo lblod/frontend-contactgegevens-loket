@@ -49,6 +49,15 @@ function handleSimpleManualInputEventChange(fieldName) {
   };
 }
 
+/**
+ *
+ * @param { LocationInFlanders } location
+ * @returns { string }
+ */
+function locationToString(location) {
+  return `${location.street} ${location.housenumber}, ${location.postalCode} ${location.municipality}`;
+}
+
 export default class AuAddressSearchComponent extends Component {
   constructor(...args) {
     super(...args);
@@ -135,7 +144,39 @@ export default class AuAddressSearchComponent extends Component {
 
   @action
   handleModeSwitchChange(automatic) {
-    this._mode = automatic ? 'automatic' : 'manual';
+    const oldMode = this.mode;
+    const newMode = automatic ? 'automatic' : 'manual';
+    console.log('Mode switch', {
+      oldMode,
+      newMode,
+      automaticOk: this.automaticAddressOk,
+      manualOk: this.manualAddressOk,
+    });
+    // From auto to manual, copy information if address is complete
+    if (oldMode === 'automatic' && newMode === 'manual') {
+      if (this.automaticAddressOk) {
+        this.manualAddressSuggestion = { ...this.selectedAddressSuggestion };
+      } else {
+        this.manualAddressSuggestion = { boxNumber: null };
+      }
+    }
+    // From manual to auto fill in some things in the fuzzy search
+    if (oldMode === 'manual' && newMode === 'automatic') {
+      if (this.manualAddressOk) {
+        this.fuzzySearchTask.perform(
+          locationToString({
+            housenumber: this.manualAddressSuggestion.houseNumber,
+            municipality: this.manualAddressSuggestion.municipality,
+            postalCode: this.manualAddressSuggestion.postalCode,
+            street: this.manualAddressSuggestion.street,
+          }),
+        );
+      } else {
+        this.fuzzySearchOptions = [];
+        this.selectedLocation = null;
+      }
+    }
+    this._mode = newMode;
   }
 
   fuzzySearchTask = task({ restartable: true }, async (query) => {
@@ -217,10 +258,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   get isLoading() {
-    return (
-      this.fuzzySearchTask.isLoading ||
-      this.findAddressesFromLocationTask.isLoading
-    );
+    return this.findAddressesFromLocationTask.isRunning;
   }
 
   /** @type {Partial<Address>} */
