@@ -43,7 +43,7 @@
                 <Item
                   @labelFor="site-type"
                   @required={{true}}
-                  @errorMessage={{this.model.site.error.siteType.validation}}
+                  @errorMessage={{this.validationErrors.siteType}}
                 >
                   <:label>Type vestiging</:label>
                   <:content as |hasError|>
@@ -88,6 +88,7 @@
           }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
+          @errorMessage={{this.validationErrors}}
         >
           <:title>Contactgegevens</:title>
 
