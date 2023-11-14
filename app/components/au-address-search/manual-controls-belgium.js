@@ -63,6 +63,14 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     provinceSelection: null,
   };
 
+  @action
+  manualAddressSuggestionChanged() {
+    console.log(
+      'ManualAddressSuggestionChanged',
+      this.args.manualAddressSuggestion,
+    );
+  }
+
   _restartAllFetchesTask = task(async () => {
     // Skip the actual fetches if completed
     if (this.completed) {
@@ -100,6 +108,15 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
       this._autoSelectWhenOnlyOneOption();
     }
   });
+
+  _eraseAll() {
+    this.selections = {
+      postalCodeSelection: null,
+      postalNameSelection: null,
+      provinceSelection: null,
+    };
+    this._restartAllFetchesTask.perform();
+  }
 
   _autoSelectWhenOnlyOneOption() {
     const acc = {};
@@ -167,6 +184,10 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    * @param {PostalNameSuggestion} newSuggestion
    */
   @action handlePostalNameChange(newSuggestion) {
+    if (!newSuggestion) {
+      this._eraseAll();
+      return;
+    }
     this.selections = {
       ...this.selections,
       postalNameSelection: newSuggestion,
@@ -195,6 +216,10 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    * @param {PostalCodeSuggestion} newSuggestion
    */
   @action handlePostalCodeChange(newSuggestion) {
+    if (!newSuggestion) {
+      this._eraseAll();
+      return;
+    }
     this.selections = {
       ...this.selections,
       postalCodeSelection: newSuggestion,
@@ -223,6 +248,10 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
    * @param {Province} newSuggestion
    */
   @action handleProvinceChange(newSuggestion) {
+    if (!newSuggestion) {
+      this._eraseAll();
+      return;
+    }
     this.selections = { ...this.selections, provinceSelection: newSuggestion };
     this._restartAllFetchesTask.perform();
   }
