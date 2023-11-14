@@ -1,11 +1,15 @@
-{{breadcrumb this.model.site.address.fullAddress route="sites.site.index" model=(params-for "sites.site" param="id")}}
+{{breadcrumb
+  this.model.site.address.fullAddress
+  route="sites.site.index"
+  model=(params-for "sites.site" param="id")
+}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
     <PageHeader>
       <:title>Vestiging: {{@model.site.address.fullAddress}}</:title>
       <:subtitle>{{@model.administrativeUnit.name}}</:subtitle>
       <:action>
-        <AuLink
+        {{!-- <AuLink
           @route="sites.site.edit"
           @model={{@model.site.id}}
           @skin="button-secondary"
@@ -13,7 +17,8 @@
           @iconAlignment="left"
         >
           Bewerk
-        </AuLink>
+        </AuLink> --}}
+
       </:action>
     </PageHeader>
 
