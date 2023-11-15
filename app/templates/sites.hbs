@@ -1,5 +1,5 @@
 {{page-title "Vestigingen"}}
-
+{{breadcrumb "Vestigingen" route="sites.index"}}
 <AuMainContainer as |m|>
   <m.sidebar>
     <div class="au-c-sidebar">
@@ -22,7 +22,7 @@
     </div>
   </m.sidebar>
   <m.content @scroll={{true}}>
-    {{breadcrumb "Vestigingen" route="sites.index"}}
+    <NavigationBar />
     {{outlet}}
   </m.content>
 
