@@ -5,9 +5,12 @@
       <:left as |Item|>
         <AuAddressSearch
           @id="new-address-search"
-          @initialMode="manual"
+          @errorMessage={{this.addressError}}
+          @warningMessage={{this.addressWarning}}
+          @initialMode="automatic"
           @itemComponent={{Item}}
           @onChange={{this.handleAddressUpdate}}
+          @address={{@address}}
         />
       </:left>
       <:right as |Item|>

@@ -1,5 +1,5 @@
 {{#let (if @itemComponent @itemComponent (component "au-address-search/default-item")) as |Item|}}
-<div ...attributes>
+<div class={{this.classes}} ...attributes>
   <Item
     @labelFor="{{@id}}-mode-switch"
   >
@@ -202,7 +202,6 @@
   <AuAddressSearch::ManualControlsBelgium
     @itemComponent={{Item}}
     @id={{@id}}
-    @manualAddressSuggestion={{this.manualAddressSuggestion}}
     @onChange={{this.handleChangeManualControlsBelgium}}
   />
   {{else}}
@@ -257,4 +256,7 @@
   {{/if}}
   {{/unless}}
 </div>
+{{#if this.displayMessage}}
+<AuHelpText @skin="primary" @error={{@errorMessage}} @warning={{unless @errorMessage @warningMessage}}>{{this.extraMessage}}</AuHelpText>
+{{/if}}
 {{/let}}

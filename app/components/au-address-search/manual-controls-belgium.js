@@ -3,11 +3,9 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, all } from 'ember-concurrency';
 
-/** @typedef { Pick<import('../au-address-search').Address,"municipality"|"province"|"postalCode"> } PartialAddress */
+/** @typedef { import('../au-address-search').Address } Address */
 
-/**
- * @typedef { 'not-initialized' |'initializing' | 'postalName-first' | 'postalCode-first' | 'province-first' | 'loading' | 'wait-first-input'} State
- */
+/** @typedef { Pick<Address,"municipality"|"province"|"postalCode"> } PartialAddress */
 
 /**
  * @typedef {('West-Vlaanderen' | 'Oost-Vlaanderen' | 'Antwerpen' | 'Vlaams-Brabant' | 'Limburg')} Province
@@ -30,6 +28,10 @@ import { task, all } from 'ember-concurrency';
  */
 
 /**
+ * @typedef { {postalNameSelection: PostalNameSuggestion | null, postalCodeSelection: PostalCodeSuggestion | null, provinceSelection: Province | null} } ManualSelections
+ */
+
+/**
  *
  * @param {Record<string,any>} params
  * @returns string
@@ -44,32 +46,17 @@ function generateQueryString(params) {
 }
 
 export default class AuAddressSearchManualControlsBelgiumComponent extends Component {
-  initializingTask = task(async () => {
-    this._restartAllFetchesTask.perform();
-  });
-
   constructor(...args) {
     super(...args);
-    this.initializingTask.perform();
+    this._restartAllFetchesTask.perform();
   }
 
-  /** @type { Partial<Address> } */
-  @tracked manualAddressSuggestion = {};
-
-  /** @type { {postalNameSelection: PostalNameSuggestion | null, postalCodeSelection: PostalCodeSuggestion | null, provinceSelection: Province | null} } */
+  /** @type { ManualSelections } */
   @tracked selections = {
     postalNameSelection: null,
     postalCodeSelection: null,
     provinceSelection: null,
   };
-
-  @action
-  manualAddressSuggestionChanged() {
-    console.log(
-      'ManualAddressSuggestionChanged',
-      this.args.manualAddressSuggestion,
-    );
-  }
 
   _restartAllFetchesTask = task(async () => {
     // Skip the actual fetches if completed
@@ -274,6 +261,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
     const names = suggestion.postalNames
       .map((postalName) => postalName.name)
       .sort();
+    if (!names.length) return `${suggestion.postalCode}`;
     return `${suggestion.postalCode} (${names.join(', ')})`;
   }
 }
