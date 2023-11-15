@@ -63,8 +63,25 @@ export default class AuAddressSearchComponent extends Component {
     super(...args);
     this.fetchCountryTask.perform();
   }
+
+  get classes() {
+    if (this.args.errorMessage) return 'address-search-error-container';
+    if (this.args.warningMessage) return 'address-search-warning-container';
+    return '';
+  }
+
+  get extraMessage() {
+    if (this.args.errorMessage) return this.args.errorMessage;
+    if (this.args.warningMessage) return this.args.warningMessage;
+    return '';
+  }
+
+  get displayMessage() {
+    return !!this.extraMessage;
+  }
+
   /**
-   * A little helper function
+   * A little helper function to pretty print an address
    * @param { Address } address
    * @returns { string }
    */
@@ -152,13 +169,9 @@ export default class AuAddressSearchComponent extends Component {
       automaticOk: this.automaticAddressOk,
       manualOk: this.manualAddressOk,
     });
-    // From auto to manual, copy information if address is complete
+    // From auto to manual, TODO: Copy information from auto address to manual controls as the manual control constructs
     if (oldMode === 'automatic' && newMode === 'manual') {
-      if (this.automaticAddressOk) {
-        this.manualAddressSuggestion = { ...this.selectedAddressSuggestion };
-      } else {
-        this.manualAddressSuggestion = { boxNumber: null };
-      }
+      this.manualAddressSuggestion = {};
     }
     // From manual to auto fill in some things in the fuzzy search
     if (oldMode === 'manual' && newMode === 'automatic') {
@@ -172,11 +185,11 @@ export default class AuAddressSearchComponent extends Component {
           }),
         );
       } else {
-        this.fuzzySearchOptions = [];
         this.selectedLocation = null;
       }
     }
     this._mode = newMode;
+    this._updateParent();
   }
 
   fuzzySearchTask = task({ restartable: true }, async (query) => {
