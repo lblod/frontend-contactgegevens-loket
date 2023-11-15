@@ -1,4 +1,3 @@
-
 /* ==================================
    #APPUNIVERSUM
    ================================== */
@@ -18,7 +17,6 @@
  * UTILITIES: Single function helper classes (namespace: '.au-u-...')
  */
 
-
 // VARIABLES
 
 @import "ember-appuniversum/s-colors.scss";
@@ -30,16 +28,13 @@
 @import "ember-appuniversum/t-font-size";
 @import "ember-appuniversum/t-sass-mq";
 
-
 // GENERIC
 @import "ember-appuniversum/g-reset";
 @import "ember-appuniversum/g-box-sizing";
 @import "ember-appuniversum/g-font";
 
-
 // ELEMENTS
 @import "ember-appuniversum/e-page";
-
 
 // OBJECTS
 @import "ember-appuniversum/o-box";
@@ -47,7 +42,6 @@
 @import "ember-appuniversum/o-grid";
 @import "ember-appuniversum/o-layout";
 @import "ember-appuniversum/o-region";
-
 
 // COMPONENTS
 @import "ember-appuniversum/c-accordion";
@@ -102,7 +96,6 @@
 @import "ember-appuniversum/p-ember-power-select";
 @import "ember-appuniversum/p-duet-datepicker";
 
-
 // UTILITIES
 @import "ember-appuniversum/u-align-text";
 @import "ember-appuniversum/u-background";
@@ -121,6 +114,4 @@
 @import "ember-appuniversum/u-widths";
 
 // TEMPORARY HACKS AND QUICKFIXES
-@import 'shame';
-
-@import "ember-power-select";
+@import "shame";
