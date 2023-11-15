@@ -88,19 +88,19 @@ $ember-power-select-focus-outline: solid 2px rgb(16, 108, 200) !default;
 }
 
 // Tweak breadcrumb list: improve responsive behaviour
-.au-c-list-horizontal--breadcrumbs {
-  @include au-font-size($au-base);
+// .au-c-list-horizontal--breadcrumbs {
+//   @include au-font-size($au-base);
 
-  @include mq($until: small) {
-    .au-c-list-horizontal__item {
-      display: none;
-    }
+//   @include mq($until: small) {
+//     .au-c-list-horizontal__item {
+//       display: none;
+//     }
 
-    .au-c-list-horizontal__item:first-child {
-      display: block;
-    }
-  }
-}
+//     .au-c-list-horizontal__item:first-child {
+//       display: block;
+//     }
+//   }
+// }
 
 #primary-site-icon {
   color: var(--au-blue-700);
