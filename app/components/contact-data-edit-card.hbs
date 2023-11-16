@@ -4,7 +4,7 @@
     <Card.Columns>
       <:left as |Item|>
         <AddressSearch
-          @address={{@address}}
+        @address={{@address}}
           @itemComponent={{Item}}
           @isSearchEnabledInitially={{@isAddressSearchEnabledInitially}}
           @required={{true}}
@@ -151,26 +151,34 @@
         </AddressSearch>
       </:left>
       <:right as |Item|>
-        <Item
-          @required={{true}}
-          @labelFor={{concat @id "-telPrimary"}}
-          @errorMessage={{@errorMessage.telephonePrimary}}
-        >
-          <:label>Primair telefoonnummer</:label>
-          <:content as |hasError|>
-            <TrimInput
-              @width="block"
-              @value={{@primaryContact.telephone}}
-              @onUpdate={{fn (mut @primaryContact.telephone)}}
-              @error={{hasError}}
-              @id={{concat @id "-telPrimary"}}
-              type="tel"
-            />
-          </:content>
-          <:helpText>
-            {{help-text "phone-number"}}
-          </:helpText>
-        </Item>
+
+          <Item
+    @required={{true}}
+    @labelFor={{concat @id "-telPrimary"}}
+    @warningMessage={{@warningMessage.telephonePrimary}}
+  >
+    <:label>Primair telefoonnummer</:label>
+    <:content>
+      <TrimInput
+        @width="block"
+        @value={{@primaryContact.telephone}}
+        @onUpdate={{fn (mut @primaryContact.telephone)}}
+        @warning={{@warningMessage.telephonePrimary}}
+        @id={{concat @id "-telPrimary"}}
+        type="tel"
+      />
+      {{#if @warningMessage}}
+          {{#if (has-block "warning")}}
+            {{yield @warningMessage to="warning"}}
+          {{else}}
+            <AuHelpText @warning={{true}}>{{@warningMessage.telephonePrimary}}</AuHelpText>
+          {{/if}}
+        {{/if}}
+    </:content>
+    <:helpText>
+      {{help-text "phone-number"}}
+    </:helpText>
+  </Item>
 
         <Item
           @labelFor={{concat @id "-telSecondary"}}

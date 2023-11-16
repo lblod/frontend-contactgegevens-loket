@@ -12,6 +12,7 @@
             @skin="secondary"
             type="cancel"
             form="new-vestiging-form"
+            {{on 'click' (perform this.cancelTask)}}
           >
             Annuleer
           </AuButton>
@@ -89,11 +90,26 @@
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
           @errorMessage={{this.validationErrors}}
+          @warningMessage={{this.validationWarnings}}
         >
           <:title>Contactgegevens</:title>
 
         </ContactDataEditCard>
       </div>
     </form>
+    <AuModal @modalOpen={{this.showWarningModal}} @closable={{false}}>
+      <:title>There are warnings</:title>
+      <:body>Some fields in the form have warnings. Are you sure you want to
+        continue?</:body>
+      <:footer>
+        <AuButton @skin="primary" {{on "click" this.handleWarningModalOK}}>
+          Yes
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.handleWarningModalBack}}>
+          Back
+        </AuButton>
+      </:footer>
+    </AuModal>
+
   </div>
 </div>
