@@ -12,6 +12,7 @@ export default class AndreoRoute extends Route {
       metaGraph: new NamedNode('http://data.lblod.info/metagraph'),
       sourceGraph: new NamedNode(`http://data.lblod.info/sourcegraph`),
     };
+    //TODO: get URI from mu-resource
     const SOURCE_NODE = new NamedNode(
       `http://data.lblod.info/id/vestigingen/${siteId}`,
     );
@@ -26,7 +27,7 @@ export default class AndreoRoute extends Route {
     console.log(formTtl);
     formStore.parse(formTtl, FORM_GRAPHS.formGraph, 'text/turtle');
     console.log(metaTtl);
-    //formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
+    formStore.parse(metaTtl, FORM_GRAPHS.metaGraph, 'text/turtle');
     console.log(dataTtl);
     formStore.parse(dataTtl, FORM_GRAPHS.sourceGraph, 'text/turtle');
     const form = formStore.any(
@@ -35,7 +36,6 @@ export default class AndreoRoute extends Route {
       FORM('Form'),
       FORM_GRAPHS.formGraph,
     );
-
     return {
       formStore,
       form,
