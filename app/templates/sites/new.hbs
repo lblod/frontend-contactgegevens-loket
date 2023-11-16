@@ -12,6 +12,7 @@
             @skin="secondary"
             type="cancel"
             form="new-vestiging-form"
+            {{on 'click' (perform this.cancelTask)}}
           >
             Annuleer
           </AuButton>
@@ -32,7 +33,6 @@
     <form
       id="new-vestiging-form"
       {{on "submit" (perform this.saveTask)}}
-      {{on "cancel" (perform this.cancelTask)}}
     >
       <div class="au-o-flow au-o-flow--large">
         <EditCard>

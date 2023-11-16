@@ -15,6 +15,7 @@ export default class CreateSitesNewController extends Controller {
 
   saveTask = task(async (event) => {
     event.preventDefault();
+    console.log('Saving');
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
     address.fullAddress = combineFullAddress(address);
@@ -42,6 +43,7 @@ export default class CreateSitesNewController extends Controller {
 
   cancelTask = task(async (event) => {
     event.preventDefault();
+    console.log('Canceling');
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
     // Destroy the newly created models
@@ -53,8 +55,10 @@ export default class CreateSitesNewController extends Controller {
     await secondaryContact.save();
     site.deleteRecord();
     await site.save();
-    // Roll back the changes to admin unit if any
-    adminUnit.rollback();
+    if (adminUnit) {
+      adminUnit.rollbackAttributes();
+      adminUnit.save();
+    }
 
     this.router.transitionTo('sites.index'); // Model does not reload?
   });
