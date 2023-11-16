@@ -1,14 +1,27 @@
-<div class="au-c-sidebar-container" ...attributes>
-  <div class="au-c-sidebar-container__sidebar">
+<AuMainContainer as |m|>
+  <m.sidebar>
     <div class="au-c-sidebar">
       <div class="au-c-sidebar__content">
-        {{yield to="sidebar"}}
+        <nav>
+          <ul class="au-c-list-navigation">
+            <li class="au-c-list-navigation__item">
+              <AuNavigationNestedLink @route="sites">
+                Vestigingen
+              </AuNavigationNestedLink>
+            </li>
+            <li class="au-c-list-navigation__item">
+              <AuNavigationNestedLink @route="core-data.admin-unit">
+                Kerngegevens
+              </AuNavigationNestedLink>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
-  </div>
-  <div class="au-c-sidebar-container__content">
-    <div class="au-c-body-container {{if @scroll "au-c-body-container--scroll"}}">
-      {{yield to="content"}}
-    </div>
-  </div>
-</div>
+  </m.sidebar>
+  <m.content @scroll={{true}}>
+    <NavigationBar />
+    {{outlet}}
+  </m.content>
+
+</AuMainContainer>
