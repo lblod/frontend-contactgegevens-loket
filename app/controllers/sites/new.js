@@ -40,18 +40,15 @@ export default class CreateSitesNewController extends Controller {
 
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
-    console.log(validationData);
     return {
       errors: errorValidationResult.error,
       warnings: warningValidationResult.error,
     };
   }
   saveTask = task(async (event) => {
-    console.log('IK geraak gier');
-    if (event) {
-      event.preventDefault();
-    }
-    console.log('Ik geraak tot vanonder');
+    event.preventDefault();
+    this.validationErrors = {};
+    this.validationWarnings = {};
     const validationResult = await this.validateData();
     if (
       validationResult.errors &&
@@ -65,7 +62,9 @@ export default class CreateSitesNewController extends Controller {
         },
         {},
       );
-    } else if (
+      return;
+    }
+    if (
       validationResult.warnings &&
       validationResult.warnings.details.length > 0
     ) {
@@ -80,64 +79,17 @@ export default class CreateSitesNewController extends Controller {
       );
       return;
     } else {
-      console.log('Ik ga beginnen met saven');
-      const { address, primaryContact, secondaryContact, site, adminUnit } =
-        this.model;
-      address.fullAddress = combineFullAddress(address);
-      await primaryContact.save();
-      await secondaryContact.save();
-      await address.save();
-      site.contacts = [primaryContact, secondaryContact];
-      site.address = address;
-      await site.save();
-
-      const nonPrimarySites = await adminUnit.sites;
-      if (this.isPrimarySite) {
-        const previousPrimarySite = await adminUnit.primarySite;
-        if (previousPrimarySite) {
-          nonPrimarySites.push(previousPrimarySite);
-        }
-        adminUnit.primarySite = site;
-      } else {
-        nonPrimarySites.push(site);
-      }
-      await adminUnit.save();
-      this.router.transitionTo('sites.index');
-      console.log('ik heb gesaved wa k moest saven');
+      this.performSave.perform();
     }
   });
-  @action
-  async handleWarningModalOK() {
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
 
-    address.fullAddress = combineFullAddress(address);
-    await primaryContact.save();
-    await secondaryContact.save();
-    await address.save();
+  handleWarningModalOK = task(async (event) => {
+    event.preventDefault();
+    this.performSave.perform();
+    this.warningValidation = {};
+    this.showWarningModal = false;
+  });
 
-    site.contacts = [primaryContact, secondaryContact];
-    site.address = address;
-    await site.save();
-
-    const nonPrimarySites = adminUnit.sites;
-
-    if (this.isPrimarySite) {
-      const previousPrimarySite = await adminUnit.primarySite;
-
-      if (previousPrimarySite) {
-        nonPrimarySites.push(previousPrimarySite);
-      }
-
-      adminUnit.primarySite = site;
-    } else {
-      nonPrimarySites.push(site);
-    }
-
-    await adminUnit.save();
-    this.router.transitionTo('sites.index');
-    console.log('I have saved what I needed to save');
-  }
   @action
   handleWarningModalBack(event) {
     event.preventDefault();
@@ -150,14 +102,16 @@ export default class CreateSitesNewController extends Controller {
 
     address.deleteRecord();
     await address.save();
-    primaryContact.deleteRecord();https://www.google.com/
+    primaryContact.deleteRecord();
     await primaryContact.save();
     secondaryContact.deleteRecord();
     await secondaryContact.save();
     site.deleteRecord();
     await site.save();
-
-    adminUnit.rollback();
+    if (adminUnit) {
+      adminUnit.rollbackAttributes();
+      adminUnit.save();
+    }
     this.router.transitionTo('sites.index');
   });
 
@@ -185,4 +139,35 @@ export default class CreateSitesNewController extends Controller {
       secondaryContact.destroyRecord();
     }
   }
+
+  performSave = task(async (event) => {
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    address.fullAddress = combineFullAddress(address);
+
+    await primaryContact.save();
+    await secondaryContact.save();
+    await address.save();
+
+    site.contacts = [primaryContact, secondaryContact];
+    site.address = address;
+    await site.save();
+
+    const nonPrimarySites = await adminUnit.sites;
+
+    if (this.isPrimarySite) {
+      const previousPrimarySite = await adminUnit.primarySite;
+
+      if (previousPrimarySite) {
+        nonPrimarySites.push(previousPrimarySite);
+      }
+
+      adminUnit.primarySite = site;
+    } else {
+      nonPrimarySites.push(site);
+    }
+
+    await adminUnit.save();
+    this.router.transitionTo('sites.index');
+  });
 }

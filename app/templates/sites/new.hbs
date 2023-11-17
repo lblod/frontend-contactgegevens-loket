@@ -12,7 +12,7 @@
             @skin="secondary"
             type="cancel"
             form="new-vestiging-form"
-            {{on 'click' (perform this.cancelTask)}}
+            {{on "click" (perform this.cancelTask)}}
           >
             Annuleer
           </AuButton>
@@ -30,11 +30,7 @@
       </:action>
     </PageHeader>
 
-    <form
-      id="new-vestiging-form"
-      {{on "submit" (perform this.saveTask)}}
-      {{on "cancel" (perform this.cancelTask)}}
-    >
+    <form id="new-vestiging-form" {{on "submit" (perform this.saveTask)}}>
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
           <:title>Kerngegevens</:title>
@@ -102,7 +98,10 @@
       <:body>Some fields in the form have warnings. Are you sure you want to
         continue?</:body>
       <:footer>
-        <AuButton @skin="primary" {{on "click" this.handleWarningModalOK}}>
+        <AuButton
+          @skin="primary"
+          {{on "click" (perform this.handleWarningModalOK)}}
+        >
           Yes
         </AuButton>
         <AuButton @skin="secondary" {{on "click" this.handleWarningModalBack}}>
