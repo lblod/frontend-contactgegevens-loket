@@ -8,6 +8,7 @@
         <AuButtonGroup class="au-c-button-group--align-right">
           <AuButton
             @loading={{this.isLoading}}
+            @loadingMessage="Annuleren"
             @disabled={{this.isLoading}}
             @skin="secondary"
             type="cancel"
@@ -18,6 +19,7 @@
           </AuButton>
           <AuButton
             @loading={{this.isLoading}}
+            @loadingMessage="Toevoegen"
             @disabled={{this.isLoading}}
             @icon="add"
             @iconAlignment="left"

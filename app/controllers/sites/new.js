@@ -20,6 +20,7 @@ export default class CreateSitesNewController extends Controller {
   get isLoading() {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
+
   async validateData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
 
@@ -45,6 +46,7 @@ export default class CreateSitesNewController extends Controller {
       warnings: warningValidationResult.error,
     };
   }
+
   saveTask = task(async (event) => {
     event.preventDefault();
     this.validationErrors = {};
@@ -78,14 +80,14 @@ export default class CreateSitesNewController extends Controller {
         {},
       );
       return;
-    } else {
-      this.performSave.perform();
     }
+    // No errors and no warnings
+    await this.save();
   });
 
   handleWarningModalOK = task(async (event) => {
     event.preventDefault();
-    this.performSave.perform();
+    await this.save();
     this.warningValidation = {};
     this.showWarningModal = false;
   });
@@ -140,7 +142,7 @@ export default class CreateSitesNewController extends Controller {
     }
   }
 
-  performSave = task(async (event) => {
+  async save() {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
     address.fullAddress = combineFullAddress(address);
@@ -169,5 +171,5 @@ export default class CreateSitesNewController extends Controller {
 
     await adminUnit.save();
     this.router.transitionTo('sites.index');
-  });
+  }
 }
