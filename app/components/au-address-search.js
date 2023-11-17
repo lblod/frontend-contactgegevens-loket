@@ -91,14 +91,20 @@ export default class AuAddressSearchComponent extends Component {
       : `${address.street} ${address.houseNumber}, ${address.postalCode} ${address.municipality}`;
   }
 
-  /** @type {} */
-  @tracked serverErrorMessage = undefined;
-
   /** @type {AddressSearchMode | null} */
   @tracked _mode = null;
 
   /** @type {AddressSearchMode} */
   get mode() {
+    if (
+      this.args.initialMode &&
+      !(
+        this.args.initialMode === 'automatic' ||
+        this.args.initialMode === 'manual'
+      )
+    ) {
+      throw new Error(`Illegal initialmode ${this.args.initialMode}`);
+    }
     return this._mode ?? this.args.initialMode ?? 'automatic';
   }
 
@@ -125,7 +131,7 @@ export default class AuAddressSearchComponent extends Component {
   get isAutomatic() {
     return this.mode === 'automatic';
   }
-  // This is unfortunate because the AuSwitch component tries to use old fashioned two way data binding
+  // AuSwitch component tries to use old fashioned two way data binding
   set isAutomatic(value) {
     this._mode = value ? 'automatic' : 'manual';
   }
@@ -275,9 +281,20 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   /** @type {Partial<Address>} */
-  @tracked manualAddressSuggestion = {
+  @tracked _manualAddressSuggestion = {
     boxNumber: null,
   };
+
+  @tracked dirty = false;
+
+  get manualAddressSuggestion() {
+    if (this.dirty) return this._manualAddressSuggestion;
+    return this.args.address;
+  }
+
+  set manualAddressSuggestion(value) {
+    this._manualAddressSuggestion = value;
+  }
 
   get manualAddressComplete() {
     return !Object.values(this.manualAddressSuggestion).some(
