@@ -11,6 +11,11 @@
           @identifier="{{@id}}-mode-switch"
         />&nbsp;Auto&nbsp;
         {{#if this.isAutomatic}}
+          {{#if this.dirty}}
+
+          {{else}}
+
+          {{/if}}
           {{#if this.automaticAddressOk}}
             <AuPill
               @skin="success"
@@ -203,6 +208,7 @@
     @itemComponent={{Item}}
     @id={{@id}}
     @onChange={{this.handleChangeManualControlsBelgium}}
+    @address={{@address}}
   />
   {{else}}
   <Item
