@@ -17,6 +17,14 @@ export default class CreateSitesNewController extends Controller {
   @tracked validationWarnings = {};
   @tracked showWarningModal = false;
 
+  @action
+  reset() {
+    this.isPrimarySite = false;
+    this.validationErrors = {};
+    this.validationWarnings = {};
+    this.showWarningModal = false;
+  }
+
   get isLoading() {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
@@ -83,13 +91,15 @@ export default class CreateSitesNewController extends Controller {
     }
     // No errors and no warnings
     await this.save();
+    this.reset();
+    this.router.transitionTo('sites.index');
   });
 
   handleWarningModalOK = task(async (event) => {
     event.preventDefault();
     await this.save();
-    this.warningValidation = {};
-    this.showWarningModal = false;
+    this.reset();
+    this.router.transitionTo('sites.index');
   });
 
   @action
@@ -97,6 +107,7 @@ export default class CreateSitesNewController extends Controller {
     event.preventDefault();
     this.showWarningModal = false;
   }
+
   cancelTask = task(async (event) => {
     event.preventDefault();
     const { address, primaryContact, secondaryContact, site, adminUnit } =
@@ -114,13 +125,9 @@ export default class CreateSitesNewController extends Controller {
       adminUnit.rollbackAttributes();
       adminUnit.save();
     }
+    this.reset();
     this.router.transitionTo('sites.index');
   });
-
-  reset() {
-    this.isPrimarySite = false;
-    this.removeUnsavedRecords();
-  }
 
   removeUnsavedRecords() {
     let { site, address, primaryContact, secondaryContact } = this.model;
@@ -170,6 +177,5 @@ export default class CreateSitesNewController extends Controller {
     }
 
     await adminUnit.save();
-    this.router.transitionTo('sites.index');
   }
 }
