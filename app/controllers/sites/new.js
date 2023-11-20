@@ -31,7 +31,6 @@ export default class CreateSitesNewController extends Controller {
 
   async validateData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
-
     const validationData = {
       siteType: site.siteType.get('label'),
       street: address.street,
@@ -41,7 +40,9 @@ export default class CreateSitesNewController extends Controller {
       municipality: address.municipality,
       province: address.province,
       fullAddress: address.fullAddress,
-      telephonePrimary: primaryContact.telephone,
+      telephonePrimary: primaryContact.telephone
+        ? primaryContact.telephone.replace(/ /g, '')
+        : '',
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
       telephoneSecondary: secondaryContact.telephone,

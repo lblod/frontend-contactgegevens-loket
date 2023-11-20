@@ -195,10 +195,20 @@
               @value={{@secondaryContact.telephone}}
               @onUpdate={{fn (mut @secondaryContact.telephone)}}
               @error={{hasError}}
+              @warning={{unless @errorMessage @warningMessage}}
               @disabled={{not @secondaryContact}}
               @id={{concat @id "-telSecondary"}}
               type="tel"
             />
+            {{#if @warningMessage}}
+              {{#if (has-block "warning")}}
+                {{yield @warningMessage to="warning"}}
+              {{else}}
+                <AuHelpText
+                  @warning={{true}}
+                >{{@warningMessage.telephonePrimary}}</AuHelpText>
+              {{/if}}
+            {{/if}}
           </:content>
           <:helpText>
             {{help-text "phone-number"}}

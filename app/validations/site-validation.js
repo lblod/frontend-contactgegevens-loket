@@ -57,11 +57,7 @@ export const errorValidation = Joi.object()
     websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
       '*': 'Please fill in a valid URL. Example: https://www.vlaanderen.be',
     }),
-    telephoneSecondary: Joi.string()
-      .optional()
-      .allow('')
-      .pattern(belgiumPhoneNumberRegex)
-      .messages({ '*': 'Please fill in a valid Belgium phone number' }),
+    telephoneSecondary: Joi.string().optional().allow(''),
   })
   .options({ abortEarly: false });
 
