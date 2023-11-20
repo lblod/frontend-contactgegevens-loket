@@ -6,19 +6,15 @@
       <:title>Voeg vestiging toe</:title>
       <:action>
         <AuButtonGroup class="au-c-button-group--align-right">
+           <AuLink
+              @route="sites.index"
+              @skin="button-secondary"
+            >
+              Annuleer
+            </AuLink>
           <AuButton
-            @loading={{this.isLoading}}
-            @disabled={{this.isLoading}}
-            @skin="secondary"
-            type="cancel"
-            form="new-vestiging-form"
-            {{on 'click' (perform this.cancelTask)}}
-          >
-            Annuleer
-          </AuButton>
-          <AuButton
-            @loading={{this.isLoading}}
-            @disabled={{this.isLoading}}
+            @loading={{this.createSiteTask.isRunning}}
+            @disabled={{this.createSiteTask.isRunning}}
             @icon="add"
             @iconAlignment="left"
             type="submit"
