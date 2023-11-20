@@ -83,8 +83,8 @@
     <:content>
         <PowerSelect
           @disabled={{or this.isLoading (not this.selectedLocation)}}
-          @options={{this.boxNumberOptions}}
-          @onChange={{this.handleBoxNumberChange}}
+          @options={{this.addressSuggestionOptions}}
+          @onChange={{this.handleAddressSuggestionChange}}
           @selected={{this.selectedAddressSuggestion}}
           @allowClear={{false}}
           @searchEnabled={{false}}
@@ -262,7 +262,7 @@
   {{/if}}
   {{/unless}}
 </div>
-{{#if this.displayMessage}}
+{{#if this.extraMessage}}
 <AuHelpText @skin="primary" @error={{@errorMessage}} @warning={{unless @errorMessage @warningMessage}}>{{this.extraMessage}}</AuHelpText>
 {{/if}}
 {{/let}}
