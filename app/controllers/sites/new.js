@@ -45,7 +45,9 @@ export default class CreateSitesNewController extends Controller {
         : '',
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
-      telephoneSecondary: secondaryContact.telephone,
+      telephoneSecondary: secondaryContact.telephone
+        ? secondaryContact.telephone.replace(/ /g, '')
+        : '',
     };
 
     const errorValidationResult = errorValidation.validate(validationData);
