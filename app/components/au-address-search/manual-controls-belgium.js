@@ -48,17 +48,35 @@ function generateQueryString(params) {
 export default class AuAddressSearchManualControlsBelgiumComponent extends Component {
   constructor(...args) {
     super(...args);
-    this._restartAllFetchesTask.perform();
+    this._initTask.perform();
   }
 
   /** @type { ManualSelections } */
-  @tracked selections = {
+  @tracked _selections = {
     postalNameSelection: null,
     postalCodeSelection: null,
     provinceSelection: null,
   };
 
-  _restartAllFetchesTask = task(async () => {
+  /** @type { ManualSelections } */
+  get selections() {
+    return this._selections;
+  }
+  /** @type { ManualSelections } */
+  set selections(value) {
+    this._selections = value;
+  }
+
+  _initTask = task(async () => {
+    this.selections = {
+      postalNameSelection: this.args.address?.municipality ?? null,
+      postalCodeSelection: this.args.address?.postalCode ?? null,
+      provinceSelection: this.args.address?.province ?? null,
+    };
+    await this._restartAllFetches();
+  });
+
+  async _restartAllFetches() {
     // Skip the actual fetches if completed
     if (this.completed) {
       return;
@@ -94,7 +112,9 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
       await all(childTasks);
       this._autoSelectWhenOnlyOneOption();
     }
-  });
+  }
+
+  _restartAllFetchesTask = task(this._restartAllFetches);
 
   _eraseAll() {
     this.selections = {
@@ -138,6 +158,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
       province: this.selections.provinceSelection,
     };
     this.args.onChange(newPartialAddress);
+    this.args.address = newPartialAddress;
   }
 
   _triggerOnChangeClear() {
@@ -148,6 +169,10 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
       province: undefined,
     };
     this.args.onChange(newPartialAddress);
+    this.args.address = {
+      ...this.args.address,
+      ...newPartialAddress,
+    };
   }
 
   fetchPostalNamesTask = task(async ({ postalCode, province }) => {
