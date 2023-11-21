@@ -24,3 +24,7 @@
     flex-grow: 1;
   }
 }
+
+.au-c-list-navigation__link.active {
+  background-color: var(--au-gray-200);
+}
