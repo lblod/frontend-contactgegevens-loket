@@ -28,33 +28,7 @@ export default class CreateSitesNewController extends Controller {
   get isLoading() {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
-  formatValidationErrors(result) {
-    return result.reduce((collection, detail) => {
-      collection[detail.context.key] = detail.message;
-      return collection;
-    }, {});
-  }
-  hasErrors(validationResult) {
-    return Object.keys(validationResult.errors).length > 0;
-  }
 
-  handleErrors(validationResult) {
-    this.validationErrors = validationResult.errors;
-  }
-
-  hasWarnings(validationResult) {
-    return Object.keys(validationResult.warnings).length > 0;
-  }
-
-  handleWarnings(validationResult) {
-    this.showWarningModal = true;
-    this.validationWarnings = validationResult.warnings;
-  }
-
-  resetValidationState() {
-    this.validationErrors = {};
-    this.validationWarnings = {};
-  }
   async validateData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
@@ -79,12 +53,8 @@ export default class CreateSitesNewController extends Controller {
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
     return {
-      errors: errorValidationResult.error
-        ? this.formatValidationErrors(errorValidationResult.error.details)
-        : {},
-      warnings: warningValidationResult.warning
-        ? this.formatValidationErrors(warningValidationResult.warning.details)
-        : {},
+      errors: errorValidationResult.error,
+      warnings: warningValidationResult.error,
     };
   }
 
@@ -93,12 +63,33 @@ export default class CreateSitesNewController extends Controller {
     this.validationErrors = {};
     this.validationWarnings = {};
     const validationResult = await this.validateData();
-    if (this.hasErrors(validationResult)) {
-      this.handleErrors(validationResult);
+    if (
+      validationResult.errors &&
+      Object.keys(validationResult.errors).length > 0
+    ) {
+      // Handle errors
+      this.validationErrors = validationResult.errors.details.reduce(
+        (errors, detail) => {
+          errors[detail.context.key] = detail.message;
+          return errors;
+        },
+        {},
+      );
       return;
     }
-    if (this.hasWarnings(validationResult)) {
-      this.handleWarnings(validationResult);
+    if (
+      validationResult.warnings &&
+      validationResult.warnings.details.length > 0
+    ) {
+      console.log('er zijn warnings');
+      this.showWarningModal = true;
+      this.validationWarnings = validationResult.warnings.details.reduce(
+        (warnings, detail) => {
+          warnings[detail.context.key] = detail.message;
+          return warnings;
+        },
+        {},
+      );
       return;
     }
     // No errors and no warnings
