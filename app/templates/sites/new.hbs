@@ -100,10 +100,7 @@
       <:body>Some fields in the form have warnings. Are you sure you want to
         continue?</:body>
       <:footer>
-        <AuButton
-          @skin="primary"
-          {{on "click" (perform this.handleWarningModalOK)}}
-        >
+        <AuButton @skin="primary" {{on "click" this.handleWarningModalOK}}>
           Yes
         </AuButton>
         <AuButton @skin="secondary" {{on "click" this.handleWarningModalBack}}>

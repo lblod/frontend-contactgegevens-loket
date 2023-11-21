@@ -98,12 +98,13 @@ export default class CreateSitesNewController extends Controller {
     this.router.transitionTo('sites.index');
   });
 
-  handleWarningModalOK = task(async (event) => {
+  @action
+  async handleWarningModalOK(event) {
     event.preventDefault();
     await this.save();
     this.reset();
     this.router.transitionTo('sites.index');
-  });
+  }
 
   @action
   handleWarningModalBack(event) {
