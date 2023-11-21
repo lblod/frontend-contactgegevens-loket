@@ -39,11 +39,7 @@ export const errorValidation = Joi.object()
     websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
       '*': 'Please fill in a valid URL. Example: https://www.vlaanderen.be',
     }),
-    telephoneSecondary: Joi.string()
-      .optional()
-      .allow('')
-      .pattern(belgiumPhoneNumberRegex)
-      .messages({ '*': 'Please fill in a valid Belgium phone number' }),
+    telephoneSecondary: Joi.string().optional().allow(''),
   })
   .options({ abortEarly: false });
 
@@ -56,10 +52,8 @@ export const warningValidation = Joi.object()
     postcode: Joi.optional(),
     municipality: Joi.optional(),
     province: Joi.optional(),
+    telephonePrimary: Joi.optional(),
     fullAddress: Joi.optional(),
-    telephonePrimary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Please fill in a Belgium number, are you sure to continue ?',
-    }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
       .optional()
@@ -67,6 +61,13 @@ export const warningValidation = Joi.object()
     websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
       '*': 'Please fill in a valid URL. Example: https://www.vlaanderen.be',
     }),
-    telephoneSecondary: Joi.optional(),
+    telephoneSecondary: Joi.string()
+      .optional()
+      .allow('')
+      .when(Joi.exist(), {
+        then: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
+          '*': 'Please fill in a valid Belgium phone number, are you sure to continue?',
+        }),
+      }),
   })
   .options({ abortEarly: false });

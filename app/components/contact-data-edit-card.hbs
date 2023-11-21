@@ -186,6 +186,7 @@
         <Item
           @labelFor={{concat @id "-telSecondary"}}
           @errorMessage={{@errorMessage.telephoneSecondary}}
+          @warningMessage={{@warningMessage.telephoneSecondary}}
         >
           <:label>Secundaire telefoonnummer</:label>
           <:content as |hasError|>
@@ -193,9 +194,19 @@
               @width="block"
               @value={{@secondaryContact.telephone}}
               @onUpdate={{fn (mut @secondaryContact.telephone)}}
+              @warning={{unless @errorMessage @warningMessage}}
               @error={{hasError}}
               @id={{concat @id "-telSecondary"}}
             />
+            {{#if @warningMessage.telephoneSecondary}}
+              {{#if (has-block "warning")}}
+                {{yield @warningMessage to="warning"}}
+              {{else}}
+                <AuHelpText
+                  @warning={{true}}
+                >{{@warningMessage.telephoneSecondary}}</AuHelpText>
+              {{/if}}
+            {{/if}}
           </:content>
           <:helpText>
             {{help-text "url"}}
