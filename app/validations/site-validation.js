@@ -52,7 +52,9 @@ export const warningValidation = Joi.object()
     postcode: Joi.optional(),
     municipality: Joi.optional(),
     province: Joi.optional(),
-    telephonePrimary: Joi.optional(),
+    telephonePrimary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
+      '*': 'Please fill in a valid Belgium phone number, are you sure to continue ?',
+    }),
     fullAddress: Joi.optional(),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
