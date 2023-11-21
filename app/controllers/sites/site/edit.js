@@ -58,19 +58,27 @@ export default class ContactDataEditSiteController extends Controller {
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
+  reset() {
+    this.currentIsPrimary = false;
+    this.removeUnsavedRecords();
+  }
+  removeUnsavedRecords() {
+    let { site, address, primaryContact, secondaryContact } = this.model;
 
-  @action
-  cancel(event) {
-    event.preventDefault();
-    const { site, address, primaryContact, secondaryContact, adminUnit } =
-      this.model;
-    // Undo any changes
-    site.rollback();
-    address.rollback();
-    primaryContact.rollback();
-    if (secondaryContact) secondaryContact.rollback();
-    adminUnit.rollback();
-    // Navigate away
-    this.router.transitionTo('sites.site.index');
+    if (site.isNew) {
+      site.destroyRecord();
+    }
+
+    if (address.isNew) {
+      address.destroyRecord();
+    }
+
+    if (primaryContact.isNew) {
+      primaryContact.destroyRecord();
+    }
+
+    if (secondaryContact.isNew) {
+      secondaryContact.destroyRecord();
+    }
   }
 }

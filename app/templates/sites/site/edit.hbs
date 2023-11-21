@@ -20,13 +20,10 @@
           class="au-u-flex au-u-flex--column au-u-flex--nowrap au-u-flex--flex-end"
         >
           <AuButtonGroup>
-            <AuButton
-              @loading={{this.saveTask.isRunning}}
-              @disabled={{this.saveTask.isRunning}}
-              @skin="secondary"
-              type="submit"
-              form="edit-site-form"
-            >Annuleer</AuButton>
+            <AuLink
+              @route="sites.index"
+              @skin="button-secondary"
+            >Annuleer</AuLink>
             <AuButton
               @loading={{this.saveTask.isRunning}}
               @disabled={{this.saveTask.isRunning}}
@@ -47,7 +44,6 @@
       id="edit-site-form"
       aria-label="Edit site"
       {{on "submit" (perform this.saveTask)}}
-      {{on "cancel" this.cancel}}
     >
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
