@@ -41,6 +41,7 @@ export const errorValidation = Joi.object()
     }),
     telephoneSecondary: Joi.string()
       .optional()
+      .allow('')
       .pattern(belgiumPhoneNumberRegex)
       .messages({ '*': 'Please fill in a valid Belgium phone number' }),
   })

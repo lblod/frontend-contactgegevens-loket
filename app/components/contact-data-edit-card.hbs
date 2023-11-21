@@ -156,6 +156,7 @@
           @required={{true}}
           @labelFor={{concat @id "-telPrimary"}}
           @errorMessage={{@errorMessage.telephonePrimary}}
+          @warningMessage={{@warningMessage.telephonePrimary}}
         >
           <:label>Primair telefoonnummer</:label>
           <:content as |hasError|>
@@ -182,24 +183,22 @@
             {{help-text "phone-number"}}
           </:helpText>
         </Item>
-            <Item
+        <Item
           @labelFor={{concat @id "-telSecondary"}}
           @errorMessage={{@errorMessage.telephoneSecondary}}
         >
-          <:label>Secundair telefoonnummer</:label>
+          <:label>Secundaire telefoonnummer</:label>
           <:content as |hasError|>
             <TrimInput
               @width="block"
               @value={{@secondaryContact.telephone}}
               @onUpdate={{fn (mut @secondaryContact.telephone)}}
               @error={{hasError}}
-              @disabled={{not @secondaryContact}}
               @id={{concat @id "-telSecondary"}}
-              type="tel"
             />
           </:content>
           <:helpText>
-            {{help-text "phone-number"}}
+            {{help-text "url"}}
           </:helpText>
         </Item>
         <Item
