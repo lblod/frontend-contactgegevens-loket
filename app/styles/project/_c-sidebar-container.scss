@@ -33,4 +33,5 @@
 
 .au-c-list-navigation__link.active {
   background-color: var(--au-gray-200);
+  box-shadow: inset -0.3rem 0 0 var(--au-gray-300);
 }
