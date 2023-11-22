@@ -169,7 +169,7 @@ export default class AuAddressSearchComponent extends Component {
     async (query, debounce = true) => {
       if (debounce) await timeout(500);
       const response = await fetch(
-        `http://localhost:9300/search?query=${encodeURIComponent(query)}`,
+        `/address-search-add-on/search?query=${encodeURIComponent(query)}`,
       );
       // API error. Nuke the component
       if (response.status !== 200) {
@@ -214,7 +214,7 @@ export default class AuAddressSearchComponent extends Component {
   findAddressesFromLocationTask = task(async (location) => {
     this.selectedAddress = {};
     const response = await fetch(
-      `http://localhost:9300/verified-addresses?${new URLSearchParams(
+      `/address-search-add-on/verified-addresses?${new URLSearchParams(
         location,
       )}`,
     );
@@ -294,7 +294,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   fetchCountryTask = task(async () => {
-    const response = await fetch(`http://localhost:9300/countries`);
+    const response = await fetch(`/address-search-add-on/countries`);
     // API error. Nuke the component
     if (response.status !== 200) {
       this.apiError = `Status ${response.status}:\n${(

@@ -4,14 +4,15 @@
   <:subtitle>{{this.currentSession.fullName}}
     ({{this.currentSession.groupClassificationLabel}})</:subtitle>
   <:action>
-    <AuLink
+    {{! <AuLink
       @route="sites.new"
       @skin="button"
       @icon="plus"
       @iconAlignment="left"
     >
       Nieuwe vestiging toevoegen
-    </AuLink>
+    </AuLink> }}
+    <ReportWrongData />
   </:action>
 </PageHeader>
 <AuDataTable
@@ -43,9 +44,9 @@
       </td>
       <td>{{site.siteType.label}}</td>
       <td>
-        <AuLink @model={{site.id}} @route="sites.site.edit">
+        {{!-- <AuLink @model={{site.id}} @route="sites.site.edit">
           Bewerk
-        </AuLink>
+        </AuLink> --}}
       </td>
     </c.body>
   </t.content>
