@@ -126,7 +126,6 @@ export default class CreateSitesNewController extends Controller {
 
   @action
   handleChangeAddress(addressSearchAddress) {
-    console.log('new handle change address', addressSearchAddress);
     copyAddressSearchAddressToAddressModel(
       this.model.address,
       addressSearchAddress,

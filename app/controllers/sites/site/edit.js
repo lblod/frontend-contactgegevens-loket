@@ -55,7 +55,6 @@ export default class ContactDataEditSiteController extends Controller {
     const newAddress = createAddressSearchAddressFromAddressModel(
       this.model.address,
     );
-    console.log('edit passed to ausearchAddress', newAddress);
     return newAddress;
   }
 
@@ -127,7 +126,6 @@ export default class ContactDataEditSiteController extends Controller {
 
   @action
   handleChangeAddress(addressSearchAddress) {
-    console.log('edit handle change address', addressSearchAddress);
     copyAddressSearchAddressToAddressModel(
       this.model.address,
       addressSearchAddress,
