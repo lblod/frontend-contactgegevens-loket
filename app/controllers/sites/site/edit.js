@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
+import { action } from '@ember/object';
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
@@ -60,25 +60,16 @@ export default class ContactDataEditSiteController extends Controller {
   });
   reset() {
     this.currentIsPrimary = false;
-    this.removeUnsavedRecords();
   }
-  removeUnsavedRecords() {
-    let { site, address, primaryContact, secondaryContact } = this.model;
-
-    if (site.isNew) {
-      site.destroyRecord();
-    }
-
-    if (address.isNew) {
-      address.destroyRecord();
-    }
-
-    if (primaryContact.isNew) {
-      primaryContact.destroyRecord();
-    }
-
-    if (secondaryContact.isNew) {
-      secondaryContact.destroyRecord();
-    }
+  @action
+  cancel(event) {
+    event.preventDefault();
+    const { site, address, primaryContact, secondaryContact, adminUnit } =
+      this.model;
+    site.rollbackAttributes();
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    adminUnit.rollbackAttributes();
   }
 }
