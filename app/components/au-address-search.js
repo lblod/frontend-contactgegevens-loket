@@ -14,16 +14,6 @@ import { task, timeout } from 'ember-concurrency';
  * @property {string | null} boxNumber
  */
 
-const ADDRESS_KEYS = [
-  'country',
-  'province',
-  'municipality',
-  'postalCode',
-  'street',
-  'houseNumber',
-  'boxNumber',
-];
-
 /**
  * @typedef {Object} LocationInFlanders
  * @property {string} municipality
@@ -41,28 +31,29 @@ function handleSimpleManualInputEventChange(fieldName) {
   return function (e) {
     e.preventDefault();
     const newValue = e.target.value ?? undefined;
-    this.args.address = {
-      ...this.args.address,
+    this.selectedAddress = {
+      ...this.selectedAddress,
       [fieldName]: newValue,
     };
-    this._updateParent();
   };
-}
-
-/**
- *
- * @param { LocationInFlanders } location
- * @returns { string }
- */
-function locationToString(location) {
-  return `${location.street} ${location.housenumber}, ${location.postalCode} ${location.municipality}`;
 }
 
 export default class AuAddressSearchComponent extends Component {
   constructor(...args) {
     super(...args);
-    this.fetchCountryTask.perform();
+    // We use a task here because by the time ember concurrency invokes it the args will be
+    // passed to the component. When this constructor runs the ember framework has not yet
+    // passed `this.args`
+    this._initTask.perform();
   }
+
+  /** Initialse the component with args */
+  _initTask = task(async () => {
+    if (this.addressOk) {
+      // If the passed address is already OK we pre fill the addrress suggestion
+      this.selectedAddressSuggestion = this.args.address;
+    }
+  });
 
   get classes() {
     if (this.args.errorMessage) return 'address-search-error-container';
@@ -74,6 +65,15 @@ export default class AuAddressSearchComponent extends Component {
     if (this.args.errorMessage) return this.args.errorMessage;
     if (this.args.warningMessage) return this.args.warningMessage;
     return '';
+  }
+
+  /** @type { Partial<Address> } */
+  get selectedAddress() {
+    return this.args.address;
+  }
+
+  set selectedAddress(value) {
+    this.args.onChange(value);
   }
 
   /**
@@ -107,21 +107,18 @@ export default class AuAddressSearchComponent extends Component {
   @tracked freeInputChecked = false;
 
   get freeInputDisplayValue() {
-    return this.args.address?.country !== 'België'
+    return this.selectedAddress?.country !== 'België'
       ? true
       : this.freeInputChecked;
   }
 
   get freeInputDisabled() {
-    return this.args.address?.country !== 'België';
+    return this.selectedAddress?.country !== 'België';
   }
 
   @action handleFreeInputChecked(newValue) {
     this.freeInputChecked = newValue;
   }
-
-  /** @type {Address | null} */
-  currentAddress = null;
 
   /** @type {Boolean} */
   get isAutomatic() {
@@ -134,41 +131,37 @@ export default class AuAddressSearchComponent extends Component {
 
   /** @type {Boolean} */
   get addressOk() {
-    // If one value is undefined then the address is not OK
-    return !Object.values(this.args.address).some(
-      (value) => value === undefined,
+    return (
+      this.selectedAddress.country &&
+      this.selectedAddress.street &&
+      this.selectedAddress.municipality &&
+      this.selectedAddress.province &&
+      this.selectedAddress.postalCode &&
+      this.selectedAddress.houseNumber &&
+      this.selectedAddress.boxNumber !== undefined
     );
-  }
-
-  _updateParent() {
-    this.args.onChange(this.args.address);
   }
 
   @action
   handleModeSwitchChange(automatic) {
     const oldMode = this.mode;
     const newMode = automatic ? 'automatic' : 'manual';
-    this.args.address = {};
+    // this.selectedAddress = {};
     // From auto to manual, TODO: Copy information from auto address to manual controls as the manual control constructs
-    // if (oldMode === 'automatic' && newMode === 'manual') {
-    // }
+    if (oldMode === 'automatic' && newMode === 'manual') {
+      // Check if the fetchCountriestask has been performed. If not perform it
+      if (!this.fetchCountryTask.last) this.fetchCountryTask.perform();
+    }
     // From manual to auto fill in some things in the fuzzy search
     if (oldMode === 'manual' && newMode === 'automatic') {
       if (this.addressOk) {
-        this.fuzzySearchTask.perform(
-          locationToString({
-            housenumber: this.args.address.houseNumber,
-            municipality: this.args.address.municipality,
-            postalCode: this.args.address.postalCode,
-            street: this.args.address.street,
-          }),
-          false,
-        );
+        // this.addressSuggestionOptions = [this.args.address];
+        this.selectedAddressSuggestion = this.args.address;
       }
+      // In any case clear the location search
       this.selectedLocation = null;
     }
     this._mode = newMode;
-    this._updateParent();
   }
 
   fuzzySearchTask = task(
@@ -178,6 +171,13 @@ export default class AuAddressSearchComponent extends Component {
       const response = await fetch(
         `http://localhost:9300/search?query=${encodeURIComponent(query)}`,
       );
+      // API error. Nuke the component
+      if (response.status !== 200) {
+        this.apiError = `Status ${response.status}:\n${(
+          await response.text()
+        ).slice(0, 1_000)}`;
+        return [];
+      }
       const locationsInflanders = await response.json();
       return locationsInflanders;
     },
@@ -190,6 +190,9 @@ export default class AuAddressSearchComponent extends Component {
   /** @type {LocationInFlanders | null} */
   @tracked selectedLocation = null;
 
+  /** @type {Address | null} */
+  @tracked selectedAddressSuggestion = null;
+
   @action handleFuzzySearch(query) {
     this.fuzzySearchTask.perform(query);
   }
@@ -200,31 +203,34 @@ export default class AuAddressSearchComponent extends Component {
       // When the location is set then we search for verified addresses.
       this.findAddressesFromLocationTask.perform(selectedLocation);
     else {
-      // When the loation is unset (dropdown cleared) we unset the addressSuggestions as well
-      this.args.address = null;
-      this._updateParent();
+      // When the location is unset (dropdown cleared) we unset the addressSuggestions as well
+      // And we clear the selectedaddress
+      this.selectedAddressSuggestion = null;
+      this.selectedAddress = {};
       this.findAddressesFromLocationTask.lastComplete = undefined;
     }
   }
 
   findAddressesFromLocationTask = task(async (location) => {
-    this.args.address = null;
-    this._updateParent();
+    this.selectedAddress = {};
     const response = await fetch(
       `http://localhost:9300/verified-addresses?${new URLSearchParams(
         location,
       )}`,
     );
+    // API error. Nuke the component
     if (response.status !== 200) {
-      // Nuke the component, show error message
+      this.apiError = `Status ${response.status}:\n${(
+        await response.text()
+      ).slice(0, 1_000)}`;
+      return [];
     }
     /** @type {Address[]} */
     const addresses = await response.json();
     if (addresses.length === 1) {
       // Select the first one if there is only one
       this.selectedAddressSuggestion = addresses[0];
-      this.args.address = { ...addresses[0] };
-      this._updateParent();
+      this.selectedAddress = { ...addresses[0] };
     } else {
       // Select the value with no busnumber by default if a value exists with no busnumber and if more then one value is given
       const addressToSelect = addresses.find(
@@ -232,8 +238,7 @@ export default class AuAddressSearchComponent extends Component {
       );
       if (addressToSelect) {
         this.selectedAddressSuggestion = addressToSelect;
-        this.args.address = { ...addressToSelect };
-        this._updateParent();
+        this.selectedAddress = { ...addressToSelect };
       }
     }
     return addresses;
@@ -252,8 +257,7 @@ export default class AuAddressSearchComponent extends Component {
 
   @action handleAddressSuggestionChange(newSuggestion) {
     this.selectedAddressSuggestion = newSuggestion;
-    this.args.address = newSuggestion ? { ...newSuggestion } : null;
-    this._updateParent();
+    this.selectedAddress = newSuggestion ? { ...newSuggestion } : {};
   }
 
   get isLoading() {
@@ -272,18 +276,18 @@ export default class AuAddressSearchComponent extends Component {
 
   /** @type {'yes' | 'no' } */
   get manualBoxnumberSpecified() {
-    return this.args.address.boxNumber !== null ? 'yes' : 'no';
+    return this.selectedAddress.boxNumber !== null ? 'yes' : 'no';
   }
 
   @action handleBoxnumberSpecifiedChange(choice) {
     if (choice === 'no') {
-      this.args.address = {
-        ...this.args.address,
+      this.selectedAddress = {
+        ...this.selectedAddress,
         boxNumber: null,
       };
     } else {
-      this.args.address = {
-        ...this.args.address,
+      this.selectedAddress = {
+        ...this.selectedAddress,
         boxNumber: '',
       };
     }
@@ -291,13 +295,17 @@ export default class AuAddressSearchComponent extends Component {
 
   fetchCountryTask = task(async () => {
     const response = await fetch(`http://localhost:9300/countries`);
+    // API error. Nuke the component
+    if (response.status !== 200) {
+      this.apiError = `Status ${response.status}:\n${(
+        await response.text()
+      ).slice(0, 1_000)}`;
+      return [];
+    }
     const countries = await response.json();
-    if (!this.args.address?.country) {
-      // Set the manual country as belgium by default
-      this.args.address = {
-        ...this.args.address,
-        country: 'België',
-      };
+    if (!this.selectedAddress?.country) {
+      // Set the manual country as belgium by default in case the address is not filled in yet
+      this.selectedAddress.country = 'België';
     }
     return countries;
   });
@@ -307,11 +315,11 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   @action handleCountryChange(country) {
-    if (country === 'België' && this.args.address.country !== 'België') {
+    if (country === 'België' && this.selectedAddress.country !== 'België') {
       // When switching from something else to belgium we want to remove everything
       this.manualBoxnumberSpecified = 'no';
-      this.args.address = {
-        ...this.args.address,
+      this.selectedAddress = {
+        ...this.selectedAddress,
         country,
         street: undefined,
         houseNumber: undefined,
@@ -321,18 +329,43 @@ export default class AuAddressSearchComponent extends Component {
         province: undefined,
       };
     }
-    this._updateParent();
   }
 
   get showBelgiumManualControls() {
-    return this.args.address.country === 'België' && !this.freeInputChecked;
+    return this.selectedAddress.country === 'België' && !this.freeInputChecked;
   }
 
   @action handleChangeManualControlsBelgium(newAddressSuggesion) {
-    this.args.address = {
-      ...this.args.address,
+    this.selectedAddress = {
+      ...this.selectedAddress,
       ...newAddressSuggesion,
     };
-    this._updateParent();
+  }
+
+  // In case of API error
+  // Empty string means no error
+  // Set this string to any value to show an error message instead of the controls
+  @tracked apiError = '';
+
+  get apiErrorMailContent() {
+    if (!this.apiError) return '';
+    let mail = 'support-team-todo@vlaanderen.be';
+    let subject = encodeURIComponent('Adres API foutief');
+    // The indentation is intentional, otherwise the email would display white space in the front
+    // TODO: look for some de-indent solution since we could use it in other places as well
+    let message = encodeURIComponent(`\
+Beste CLBV team,
+
+Ik heb een boodschap ontvangen van de interface dat de adres API niet beschikbaar is.
+Dit was het foutbericht:
+
+${this.apiError}
+
+TODO: Expand this message with more information.
+
+Mvg,
+
+`);
+    return `mailto:${mail}?subject=${subject}&body=${message}`;
   }
 }

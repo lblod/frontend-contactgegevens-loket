@@ -1,5 +1,32 @@
 {{#let (if @itemComponent @itemComponent (component "au-address-search/default-item")) as |Item|}}
 <div class={{this.classes}} ...attributes>
+  {{#if this.apiError}}
+  <Item
+    @labelFor="{{@id}}-api-malfunction-panel"
+  >
+    <:label>Adres ingave</:label>
+    <:content>
+        <AuCard
+          @size="small"
+          @id="{{@id}}-api-malfunction-panel"
+          @flex={{true}}
+          class="address-search-api-error-card"
+        as |c|>
+          <c.header
+            @badgeIcon="alert-triangle"
+            @badgeSkin="error"
+            @badgeSize="small"
+          >
+            <AuHeading @level="2" @skin="4" class="address-search-api-error-text">Adres API fout</AuHeading>
+          </c.header>
+          <c.content>
+            <AuHelpText class="address-search-api-error-text">Er is een fout opgetreden bij het ophalen van adresgegevens. Ververs de pagina en probeer opnieuw. Indien het probleem aanhoud neem dan contact op met <AuLinkExternal href={{this.apiErrorMailContent}}>onze technische ploeg</AuLinkExternal>.</AuHelpText>
+          </c.content>
+        </AuCard>
+    </:content>
+  </Item>
+  {{/if}}
+  {{#unless this.apiError}}
   <Item
     @labelFor="{{@id}}-mode-switch"
   >
@@ -11,12 +38,7 @@
           @identifier="{{@id}}-mode-switch"
         />&nbsp;Auto&nbsp;
         {{#if this.isAutomatic}}
-          {{#if this.dirty}}
-
-          {{else}}
-
-          {{/if}}
-          {{#if this.automaticAddressOk}}
+          {{#if this.addressOk}}
             <AuPill
               @skin="success"
               @size="small"
@@ -30,7 +52,7 @@
             >Adres niet compleet</AuPill>
           {{/if}}
         {{else}}
-          {{#if this.manualAddressOk}}
+          {{#if this.addressOk}}
             <AuPill
               @skin="warning"
               @size="small"
@@ -114,7 +136,7 @@
               @disabled={{not this.fetchCountryTask.last}}
               @options={{this.countryOptions}}
               @onChange={{this.handleCountryChange}}
-              @selected={{this.manualAddressSuggestion.country}}
+              @selected={{this.selectedAddress.country}}
               @allowClear={{false}}
               @searchEnabled={{true}}
               @loadingMessage="Bezig met ophalen van landen"
@@ -149,7 +171,7 @@
     <:content>
         <AuInput
           id="{{@id}}-street-input"
-          value={{this.manualAddressSuggestion.street}}
+          value={{this.selectedAddress.street}}
           {{on "input" this.updateStreet}}
           @width="block"
         />
@@ -165,7 +187,7 @@
     <:content>
         <AuInput
           id="{{@id}}-housenumber-input"
-          value={{this.manualAddressSuggestion.houseNumber}}
+          value={{this.selectedAddress.houseNumber}}
           {{on "input" this.updateHouseNumber}}
           @width="block"
         />
@@ -194,7 +216,7 @@
         <div class="address-search-flex-child-stretch">
           <AuInput
             id="{{@id}}-boxnumber-input"
-            value={{this.manualAddressSuggestion.boxNumber}}
+            value={{this.selectedAddress.boxNumber}}
             {{on "input" this.updateBoxNumber}}
             @disabled={{eq this.manualBoxnumberSpecified "no"}}
             @width="block"
@@ -209,6 +231,7 @@
     @id={{@id}}
     @onChange={{this.handleChangeManualControlsBelgium}}
     @address={{@address}}
+    @onApiError={{fn (mut this.apiError)}}
   />
   {{else}}
   <Item
@@ -221,7 +244,7 @@
     <:content>
         <AuInput
           id="{{@id}}-municipality-input"
-          value={{this.manualAddressSuggestion.municipality}}
+          value={{this.selectedAddress.municipality}}
           {{on "input" this.updateMunicipality}}
           @width="block"
         />
@@ -237,7 +260,7 @@
     <:content>
         <AuInput
           id="{{@id}}-postalcode-input"
-          value={{this.manualAddressSuggestion.postalCode}}
+          value={{this.selectedAddress.postalCode}}
           {{on "input" this.updatePostalCode}}
           @width="block"
         />
@@ -253,13 +276,14 @@
     <:content>
         <AuInput
           id="{{@id}}-province-input"
-          value={{this.manualAddressSuggestion.province}}
+          value={{this.selectedAddress.province}}
           {{on "input" this.updateProvince}}
           @width="block"
         />
     </:content>
   </Item>
   {{/if}}
+  {{/unless}}
   {{/unless}}
 </div>
 {{#if this.extraMessage}}

@@ -27,3 +27,14 @@
   border-radius: var(--au-outline-border);
   padding: var(--au-outline-offset);
 }
+
+.address-search-api-error-card {
+  background-color: var(--au-red-200);
+  border: 0.3rem solid var(--au-red-600);
+  border-radius: var(--au-outline-border);
+  padding: var(--au-outline-offset);
+}
+
+.address-search-api-error-text {
+  color: var(--au-red-600);
+}

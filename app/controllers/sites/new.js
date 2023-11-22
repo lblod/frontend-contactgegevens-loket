@@ -4,21 +4,41 @@ import { combineFullAddress } from 'frontend-contactgegevens-loket/models/addres
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import {
-  errorValidation,
-  warningValidation,
-} from '../../validations/site-validation';
 
 /**
- * Transforms a Joi validation error to a simple hash of keys and error massages
- * @param { import("joi").ValidationError['details'] } validationDetails
- * @returns { Record<string,string> }
+ *
+ * @param { import('../../models/address').AddressModel } addressModel
+ * @param { import('../../components/au-address-search').Address } addressSearchAddress
  */
-function mapValidationDetailsToErrors(validationDetails) {
-  return validationDetails.reduce((accumulator, detail) => {
-    accumulator[detail.context.key] = detail.message;
-    return accumulator;
-  }, {});
+function copyAddressSearchAddressToAddressModel(
+  addressModel,
+  addressSearchAddress,
+) {
+  addressModel.number = addressSearchAddress.houseNumber;
+  addressModel.boxNumber = addressSearchAddress.boxNumber ?? null;
+  addressModel.street = addressSearchAddress.street;
+  addressModel.postcode = addressSearchAddress.postalCode;
+  addressModel.municipality = addressSearchAddress.municipality;
+  addressModel.province = addressSearchAddress.province;
+  addressModel.country = addressSearchAddress.country;
+  addressModel.fullAddress = combineFullAddress(addressModel);
+}
+
+/**
+ *
+ * @param { import('../../models/address').AddressModel } addressModel
+ * @returns { import('../../components/au-address-search').Address }
+ */
+function createAddressSearchAddressFromAddressModel(addressModel) {
+  return {
+    houseNumber: addressModel?.number,
+    boxNumber: addressModel?.boxNumber,
+    street: addressModel?.street,
+    postalCode: addressModel?.postcode,
+    municipality: addressModel?.municipality,
+    province: addressModel?.province,
+    country: addressModel?.country,
+  };
 }
 
 export default class CreateSitesNewController extends Controller {
@@ -31,13 +51,12 @@ export default class CreateSitesNewController extends Controller {
   @tracked hasError = false;
   @tracked hasWarning = false;
 
-  reset() {
-    this.isPrimarySite = false;
-    this.validationErrors = {};
-    this.validationWarnings = {};
-    this.hasError = false;
-    this.hasWarning = false;
-    this.saveButtonPressed = 0;
+  get addressSearchAddress() {
+    return createAddressSearchAddressFromAddressModel(this.model.address);
+  }
+
+  get isLoading() {
+    return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
 
   get isLoading() {
@@ -76,8 +95,6 @@ export default class CreateSitesNewController extends Controller {
   saveTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
-    address.fullAddress = combineFullAddress(address);
-
     await primaryContact.save();
     await secondaryContact.save();
     await address.save();
@@ -156,5 +173,14 @@ export default class CreateSitesNewController extends Controller {
     adminUnit.rollbackAttributes();
     this.reset();
     this.router.transitionTo('sites.index');
+  }
+
+  @action
+  handleChangeAddress(addressSearchAddress) {
+    console.log('new handle change address', addressSearchAddress);
+    copyAddressSearchAddressToAddressModel(
+      this.model.address,
+      addressSearchAddress,
+    );
   }
 }

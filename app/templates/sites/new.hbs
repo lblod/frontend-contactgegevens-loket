@@ -5,7 +5,7 @@
     <PageHeader>
       <:title>Voeg vestiging toe</:title>
       <:action>
-         <div class="au-u-test-right">
+        <div class="au-u-test-right">
           <AuButtonGroup class="au-c-button-group--align-right">
             <AuButton
               @loading={{this.isLoading}}
@@ -31,7 +31,7 @@
           </AuButtonGroup>
           {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
-          {{else if this.hasWarning }}
+          {{else if this.hasWarning}}
             <Error::Warning @showSaveWarning={{this.hasWarning}} />
 
           {{/if}}
@@ -88,8 +88,8 @@
         </EditCard>
 
         <ContactDataEditCard
-          @clearValidationError={{this.clearValidationError}}
-          @address={{@model.address}}
+          @address={{this.addressSearchAddress}}
+          @onChangeAddress={{this.handleChangeAddress}}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
           @errorMessage={{this.validationErrors}}
