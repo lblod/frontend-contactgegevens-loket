@@ -29,23 +29,6 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.isIgs}}
-              <Item>
-                <:label>Geplande einddatum</:label>
-                <:content>
-                  {{date-format @model.adminUnit.expectedEndDate}}
-                  {{#if this.expiredExpectedEndDate}}
-                    <AuPill @skin="error">De geplande einddatum is overschreden</AuPill>
-                  {{/if}}
-                </:content>
-              </Item>
-              <Item>
-                <:label>Doel</:label>
-                <:content>
-                  {{@model.adminUnit.purpose}}
-                </:content>
-              </Item>
-            {{/if}}
           </:left>
           <:right as |Item|>
             <Item>
