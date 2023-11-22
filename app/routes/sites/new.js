@@ -25,7 +25,7 @@ export default class CreateSitesNewRoute extends Route {
     return {
       adminUnit: this.currentSession.group,
       site: this.store.createRecord('site'),
-      address: address,
+      address,
       primaryContact: createPrimaryContact(this.store),
       secondaryContact: createSecondaryContact(this.store),
     };

@@ -96,17 +96,13 @@
         {{! Contactgegevens }}
 
         <ContactDataEditCard
-          @address={{@model.address}}
-          @isAddressSearchEnabledInitially={{if
-            (or (not @model.address.id) @model.address.addressRegisterUri)
-            true
-            false
-          }}
+          @address={{this.addressSearchAddress}}
+          @onChangeAddress={{this.handleChangeAddress}}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
+
         >
           <:title>Contactgegevens</:title>
-
         </ContactDataEditCard>
       </div>
     </form>

@@ -80,7 +80,8 @@
         </EditCard>
 
         <ContactDataEditCard
-          @address={{@model.address}}
+          @address={{this.addressSearchAddress}}
+          @onChangeAddress={{this.handleChangeAddress}}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
         >

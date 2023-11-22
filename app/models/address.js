@@ -49,23 +49,3 @@ export function createAddress(store) {
   let record = store.createRecord('address');
   return record;
 }
-/** @typedef { import('../components/au-address-search').Address } Address */
-
-export const addressModelProxyHandler = {
-  /**
-   *
-   * @param { AddressModel } target
-   * @param { keyof Address } prop
-   */
-  get(target, prop) {
-    switch (prop) {
-      case 'postalCode':
-        return target.postcode;
-      case 'boxNumber':
-        return target.number;
-      case 'country':
-      default:
-        return Reflect.get(...arguments);
-    }
-  },
-};
