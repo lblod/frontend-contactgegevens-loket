@@ -29,7 +29,7 @@ export default class CreateSitesNewController extends Controller {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
 
-  async validateData() {
+  async validateFormData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
       siteType: site.siteType.get('label'),
@@ -58,102 +58,14 @@ export default class CreateSitesNewController extends Controller {
     };
   }
 
-  saveTask = task(async (event) => {
-    event.preventDefault();
-    this.validationErrors = {};
-    this.validationWarnings = {};
-    const validationResult = await this.validateData();
-    if (
-      validationResult.errors &&
-      Object.keys(validationResult.errors).length > 0
-    ) {
-      // Handle errors
-      this.validationErrors = validationResult.errors.details.reduce(
-        (errors, detail) => {
-          errors[detail.context.key] = detail.message;
-          return errors;
-        },
-        {},
-      );
-      return;
-    }
-    if (
-      validationResult.warnings &&
-      validationResult.warnings.details.length > 0
-    ) {
-      console.log('er zijn warnings');
-      this.showWarningModal = true;
-      this.validationWarnings = validationResult.warnings.details.reduce(
-        (warnings, detail) => {
-          warnings[detail.context.key] = detail.message;
-          return warnings;
-        },
-        {},
-      );
-      return;
-    }
-    // No errors and no warnings
-    await this.save();
-    this.reset();
-    this.router.transitionTo('sites.index');
-  });
-
-  @action
-  async handleWarningModalOK(event) {
-    event.preventDefault();
-    await this.save();
-    this.reset();
-    this.router.transitionTo('sites.index');
+  mapValidationDetailsToErrors(validationDetails) {
+    return validationDetails.reduce((accumulator, detail) => {
+      accumulator[detail.context.key] = detail.message;
+      return accumulator;
+    }, {});
   }
 
-  @action
-  handleWarningModalBack(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-  }
-
-  cancelTask = task(async (event) => {
-    event.preventDefault();
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-
-    address.deleteRecord();
-    await address.save();
-    primaryContact.deleteRecord();
-    await primaryContact.save();
-    secondaryContact.deleteRecord();
-    await secondaryContact.save();
-    site.deleteRecord();
-    await site.save();
-    if (adminUnit) {
-      adminUnit.rollbackAttributes();
-      adminUnit.save();
-    }
-    this.reset();
-    this.router.transitionTo('sites.index');
-  });
-
-  removeUnsavedRecords() {
-    let { site, address, primaryContact, secondaryContact } = this.model;
-
-    if (site.isNew) {
-      site.destroyRecord();
-    }
-
-    if (address.isNew) {
-      address.destroyRecord();
-    }
-
-    if (primaryContact.isNew) {
-      primaryContact.destroyRecord();
-    }
-
-    if (secondaryContact.isNew) {
-      secondaryContact.destroyRecord();
-    }
-  }
-
-  async save() {
+  async saveFormData() {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
     address.fullAddress = combineFullAddress(address);
@@ -181,5 +93,95 @@ export default class CreateSitesNewController extends Controller {
     }
 
     await adminUnit.save();
+  }
+
+  saveTask = task(async (event) => {
+    event.preventDefault();
+    const validationResult = await this.validateFormData();
+
+    if (
+      validationResult.errors &&
+      Object.keys(validationResult.errors).length > 0
+    ) {
+      this.validationErrors = this.mapValidationDetailsToErrors(
+        validationResult.errors.details,
+      );
+      console.log(validationResult.errors.details);
+      return;
+    }
+
+    if (
+      validationResult.warnings &&
+      validationResult.warnings.details.length > 0
+    ) {
+      console.log('There are warnings');
+      this.showWarningModal = true;
+      this.validationWarnings = this.mapValidationDetailsToErrors(
+        validationResult.warnings.details,
+      );
+      return;
+    }
+
+    // No errors and no warnings
+    await this.saveFormData();
+    this.reset();
+    this.router.transitionTo('sites.index');
+  });
+
+  @action
+  async handleWarningModalOK(event) {
+    event.preventDefault();
+    await this.saveFormData();
+    this.reset();
+    this.router.transitionTo('sites.index');
+  }
+
+  @action
+  handleWarningModalBack(event) {
+    event.preventDefault();
+    this.showWarningModal = false;
+  }
+
+  cancelTask = task(async (event) => {
+    event.preventDefault();
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+
+    address.deleteRecord();
+    await address.save();
+    primaryContact.deleteRecord();
+    await primaryContact.save();
+    secondaryContact.deleteRecord();
+    await secondaryContact.save();
+    site.deleteRecord();
+    await site.save();
+
+    if (adminUnit) {
+      adminUnit.rollbackAttributes();
+      adminUnit.save();
+    }
+
+    this.resetForm();
+    this.router.transitionTo('sites.index');
+  });
+
+  removeUnsavedRecords() {
+    let { site, address, primaryContact, secondaryContact } = this.model;
+
+    if (site.isNew) {
+      site.destroyRecord();
+    }
+
+    if (address.isNew) {
+      address.destroyRecord();
+    }
+
+    if (primaryContact.isNew) {
+      primaryContact.destroyRecord();
+    }
+
+    if (secondaryContact.isNew) {
+      secondaryContact.destroyRecord();
+    }
   }
 }
