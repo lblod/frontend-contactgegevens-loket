@@ -9,16 +9,15 @@ import {
   warningValidation,
 } from '../../../validations/site-validation';
 
+function assert(value, message) {
+  if (!value) throw new Error(message);
+}
+
 /**
  * Transforms a Joi validation error to a simple hash of keys and error massages
  * @param { import("joi").ValidationError['details'] } validationDetails
  * @returns { Record<string,string> }
  */
-
-function assert(value, message) {
-  if (!value) throw new Error(message);
-}
-
 function mapValidationDetailsToErrors(validationDetails) {
   return validationDetails.reduce((accumulator, detail) => {
     accumulator[detail.context.key] = detail.message;
@@ -49,8 +48,9 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   get isLoading() {
-    return this.saveTask.isRunning || this.cancelTask.isRunning;
+    return this.saveTask.isRunning;
   }
+
   validateFormData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
@@ -83,6 +83,7 @@ export default class ContactDataEditSiteController extends Controller {
         : {},
     };
   }
+
   saveTask = task(async () => {
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
@@ -156,21 +157,17 @@ export default class ContactDataEditSiteController extends Controller {
     this.showWarningModal = false;
   }
 
-  cancelTask = task(async () => {
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-
-    await address.rollbackAttributes();
-    await primaryContact.rollbackAttributes();
-    await secondaryContact.rollbackAttributes();
-    await site.rollbackAttributes();
-    await adminUnit.rollbackAttributes();
-    this.reset();
-    this.router.replaceWith('sites.site', site.id);
-  });
   @action
   handleCancel(event) {
     event.preventDefault();
-    this.cancelTask.perform();
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    site.rollbackAttributes();
+    adminUnit.rollbackAttributes();
+    this.reset();
+    this.router.replaceWith('sites.site', site.id);
   }
 }
