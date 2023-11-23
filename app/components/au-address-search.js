@@ -12,6 +12,7 @@ import { task, timeout } from 'ember-concurrency';
  * @property {string} street
  * @property {string} houseNumber
  * @property {string | null} boxNumber
+ * @property {boolean | undefined } completed
  */
 
 /**
@@ -73,6 +74,7 @@ export default class AuAddressSearchComponent extends Component {
   }
 
   set selectedAddress(value) {
+    value.completed = this.addressOk;
     this.args.onChange(value);
   }
 
@@ -85,6 +87,16 @@ export default class AuAddressSearchComponent extends Component {
     return address.boxNumber
       ? `${address.street} ${address.houseNumber} (Bus: ${address.boxNumber}), ${address.postalCode} ${address.municipality}`
       : `${address.street} ${address.houseNumber}, ${address.postalCode} ${address.municipality}`;
+  }
+
+  /**
+   * Simple 'or' helper functuon
+   * @param { any } arg1
+   * @param { any } arg2
+   * @returns { boolean }
+   */
+  or(arg1, arg2) {
+    return arg1 || arg2;
   }
 
   /** @type {AddressSearchMode | null} */
