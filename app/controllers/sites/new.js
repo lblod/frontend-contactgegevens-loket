@@ -37,7 +37,7 @@ export default class CreateSitesNewController extends Controller {
   }
 
   get isLoading() {
-    return this.saveTask.isRunning || this.cancelTask.isRunning;
+    return this.saveTask.isRunning;
   }
 
   validateFormData() {
@@ -155,6 +155,6 @@ export default class CreateSitesNewController extends Controller {
     site.rollbackAttributes();
     adminUnit.rollbackAttributes();
     this.reset();
-    this.router.replaceWith('sites.site', site.id);
+    this.router.transitionTo('sites.index');
   }
 }

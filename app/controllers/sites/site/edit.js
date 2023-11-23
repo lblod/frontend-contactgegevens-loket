@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
+import { action } from '@ember/object';
 import {
   errorValidation,
   warningValidation,
