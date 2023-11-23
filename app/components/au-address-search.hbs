@@ -104,7 +104,7 @@
     </:label>
     <:content>
         <PowerSelect
-          @disabled={{or this.isLoading (not this.selectedLocation)}}
+          @disabled={{this.or this.isLoading (not this.selectedLocation)}}
           @options={{this.addressSuggestionOptions}}
           @onChange={{this.handleAddressSuggestionChange}}
           @selected={{this.selectedAddressSuggestion}}
