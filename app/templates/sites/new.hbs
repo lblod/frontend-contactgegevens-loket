@@ -11,9 +11,8 @@
             @loadingMessage="Annuleren"
             @disabled={{this.isLoading}}
             @skin="secondary"
-            type="cancel"
             form="new-vestiging-form"
-            {{on "click" (perform this.cancelTask)}}
+            {{on "click" this.handleCancel}}
           >
             Annuleer
           </AuButton>
@@ -32,7 +31,7 @@
       </:action>
     </PageHeader>
 
-    <form id="new-vestiging-form" {{on "submit" (perform this.saveTask)}}>
+    <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
           <:title>Kerngegevens</:title>

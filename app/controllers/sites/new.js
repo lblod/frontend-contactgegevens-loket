@@ -9,6 +9,18 @@ import {
   warningValidation,
 } from '../../validations/site-validation';
 
+/**
+ * Transforms a Joi validation error to a simple hash of keys and error massages
+ * @param { import("joi").ValidationError['details'] } validationDetails
+ * @returns { Record<string,string> }
+ */
+function mapValidationDetailsToErrors(validationDetails) {
+  return validationDetails.reduce((accumulator, detail) => {
+    accumulator[detail.context.key] = detail.message;
+    return accumulator;
+  }, {});
+}
+
 export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
@@ -17,7 +29,6 @@ export default class CreateSitesNewController extends Controller {
   @tracked validationWarnings = {};
   @tracked showWarningModal = false;
 
-  @action
   reset() {
     this.isPrimarySite = false;
     this.validationErrors = {};
@@ -29,7 +40,7 @@ export default class CreateSitesNewController extends Controller {
     return this.saveTask.isRunning || this.cancelTask.isRunning;
   }
 
-  async validateFormData() {
+  validateFormData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
       siteType: site.siteType.get('label'),
@@ -53,19 +64,16 @@ export default class CreateSitesNewController extends Controller {
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
     return {
-      errors: errorValidationResult.error,
-      warnings: warningValidationResult.error,
+      errors: errorValidationResult.error
+        ? mapValidationDetailsToErrors(errorValidationResult.error.details)
+        : {},
+      warnings: warningValidationResult.error
+        ? mapValidationDetailsToErrors(warningValidationResult.error.details)
+        : {},
     };
   }
 
-  mapValidationDetailsToErrors(validationDetails) {
-    return validationDetails.reduce((accumulator, detail) => {
-      accumulator[detail.context.key] = detail.message;
-      return accumulator;
-    }, {});
-  }
-
-  async saveFormData() {
+  saveTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
     address.fullAddress = combineFullAddress(address);
@@ -93,47 +101,41 @@ export default class CreateSitesNewController extends Controller {
     }
 
     await adminUnit.save();
-  }
-
-  saveTask = task(async (event) => {
-    event.preventDefault();
-    const validationResult = await this.validateFormData();
-
-    if (
-      validationResult.errors &&
-      Object.keys(validationResult.errors).length > 0
-    ) {
-      this.validationErrors = this.mapValidationDetailsToErrors(
-        validationResult.errors.details,
-      );
-      console.log(validationResult.errors.details);
-      return;
-    }
-
-    if (
-      validationResult.warnings &&
-      validationResult.warnings.details.length > 0
-    ) {
-      console.log('There are warnings');
-      this.showWarningModal = true;
-      this.validationWarnings = this.mapValidationDetailsToErrors(
-        validationResult.warnings.details,
-      );
-      return;
-    }
-
-    // No errors and no warnings
-    await this.saveFormData();
+    // Saving is complete. Navigate away
     this.reset();
     this.router.transitionTo('sites.index');
   });
 
   @action
-  async handleWarningModalOK(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    await this.saveFormData();
-    this.reset();
-    this.router.transitionTo('sites.index');
+
+    this.validationErrors = {};
+    this.validationWarnings = {};
+
+    const validationResult = this.validateFormData();
+    if (Object.keys(validationResult.errors).length > 0) {
+      // Validation failed. Return
+      this.validationErrors = validationResult.errors;
+      return;
+    }
+
+    if (Object.keys(validationResult.warnings).length > 0) {
+      // There are warnings. Show modal and return;
+      this.showWarningModal = true;
+      this.validationWarnings = validationResult.warnings;
+      return;
+    }
+
+    // No errors and no warnings, we can save
+    this.saveTask.perform();
+  }
+
+  @action
+  handleWarningModalOK(event) {
+    event.preventDefault();
+    this.showWarningModal = false;
+    this.saveTask.perform();
   }
 
   @action
@@ -142,46 +144,24 @@ export default class CreateSitesNewController extends Controller {
     this.showWarningModal = false;
   }
 
-  cancelTask = task(async (event) => {
-    event.preventDefault();
+  cancelTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
 
-    address.deleteRecord();
-    await address.save();
-    primaryContact.deleteRecord();
-    await primaryContact.save();
-    secondaryContact.deleteRecord();
-    await secondaryContact.save();
-    site.deleteRecord();
-    await site.save();
+    await address.destroyRecord();
+    await primaryContact.destroyRecord();
+    await secondaryContact.destroyRecord();
+    await site.destroyRecord();
+    adminUnit.rollbackAttributes();
+    await adminUnit.save();
 
-    if (adminUnit) {
-      adminUnit.rollbackAttributes();
-      adminUnit.save();
-    }
-
-    this.resetForm();
+    this.reset();
     this.router.transitionTo('sites.index');
   });
 
-  removeUnsavedRecords() {
-    let { site, address, primaryContact, secondaryContact } = this.model;
-
-    if (site.isNew) {
-      site.destroyRecord();
-    }
-
-    if (address.isNew) {
-      address.destroyRecord();
-    }
-
-    if (primaryContact.isNew) {
-      primaryContact.destroyRecord();
-    }
-
-    if (secondaryContact.isNew) {
-      secondaryContact.destroyRecord();
-    }
+  @action
+  handleCancel(event) {
+    event.preventDefault();
+    this.cancelTask.perform();
   }
 }
