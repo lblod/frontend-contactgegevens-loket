@@ -12,11 +12,14 @@ export default class ContactDataEditSiteController extends Controller {
   @service router;
 
   // Varies with user select
-  @tracked selectedPrimaryStatus = this.currentIsPrimary;
+  @tracked selectedPrimaryStatus;
 
   // Quasi constant
   get currentIsPrimary() {
     return this.model.site.id === this.model.primarySite.id ? true : false;
+  }
+  setup() {
+    this.selectedPrimaryStatus = this.currentIsPrimary;
   }
 
   get isLoading() {
@@ -59,11 +62,10 @@ export default class ContactDataEditSiteController extends Controller {
     this.router.replaceWith('sites.site', site.id);
   });
   reset() {
-    this.currentIsPrimary = false;
+    this.selectedPrimaryStatus = false;
+    this.cancel();
   }
-  @action
-  cancel(event) {
-    event.preventDefault();
+  cancel() {
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
     site.rollbackAttributes();
