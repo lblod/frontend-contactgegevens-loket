@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 import {
@@ -33,11 +32,14 @@ export default class ContactDataEditSiteController extends Controller {
   @tracked validationWarnings = {};
   @tracked showWarningModal = false;
   // Varies with user select
-  @tracked selectedPrimaryStatus = this.currentIsPrimary;
+  @tracked selectedPrimaryStatus;
 
   // Quasi constant
   get currentIsPrimary() {
     return this.model.site.id === this.model.primarySite.id ? true : false;
+  }
+  setup() {
+    this.selectedPrimaryStatus = this.currentIsPrimary;
   }
 
   reset() {

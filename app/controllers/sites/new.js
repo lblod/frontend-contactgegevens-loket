@@ -144,24 +144,17 @@ export default class CreateSitesNewController extends Controller {
     this.showWarningModal = false;
   }
 
-  cancelTask = task(async () => {
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-
-    await address.destroyRecord();
-    await primaryContact.destroyRecord();
-    await secondaryContact.destroyRecord();
-    await site.destroyRecord();
-    adminUnit.rollbackAttributes();
-    await adminUnit.save();
-
-    this.reset();
-    this.router.transitionTo('sites.index');
-  });
-
   @action
   handleCancel(event) {
     event.preventDefault();
-    this.cancelTask.perform();
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    site.rollbackAttributes();
+    adminUnit.rollbackAttributes();
+    this.reset();
+    this.router.replaceWith('sites.site', site.id);
   }
 }
