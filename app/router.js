@@ -18,6 +18,10 @@ Router.map(function () {
     this.route('switch');
   });
 
+  this.route('legal', { path: '/legaal' }, function () {
+    this.route('accessibility', { path: '/toegangkelijkheidsverklaring' });
+  });
+
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
       this.route('index', { path: '/' });
