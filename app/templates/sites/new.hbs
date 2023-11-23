@@ -6,15 +6,20 @@
       <:title>Voeg vestiging toe</:title>
       <:action>
         <AuButtonGroup class="au-c-button-group--align-right">
-           <AuLink
-              @route="sites.index"
-              @skin="button-secondary"
-            >
-              Annuleer
-            </AuLink>
           <AuButton
-            @loading={{this.saveTask.isRunning}}
-            @disabled={{this.saveTask.isRunning}}
+            @loading={{this.isLoading}}
+            @loadingMessage="Annuleren"
+            @disabled={{this.isLoading}}
+            @skin="secondary"
+            form="new-vestiging-form"
+            {{on "click" this.handleCancel}}
+          >
+            Annuleer
+          </AuButton>
+          <AuButton
+            @loading={{this.isLoading}}
+            @loadingMessage="Toevoegen"
+            @disabled={{this.isLoading}}
             @icon="add"
             @iconAlignment="left"
             type="submit"
@@ -26,10 +31,7 @@
       </:action>
     </PageHeader>
 
-    <form
-      id="new-vestiging-form"
-      {{on "submit" (perform this.saveTask)}}
-    >
+    <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
           <:title>Kerngegevens</:title>
@@ -39,7 +41,7 @@
                 <Item
                   @labelFor="site-type"
                   @required={{true}}
-                  @errorMessage={{this.model.site.error.siteType.validation}}
+                  @errorMessage={{this.validationErrors.siteType}}
                 >
                   <:label>Type vestiging</:label>
                   <:content as |hasError|>
@@ -84,11 +86,27 @@
           }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
+          @errorMessage={{this.validationErrors}}
+          @warningMessage={{this.validationWarnings}}
         >
           <:title>Contactgegevens</:title>
 
         </ContactDataEditCard>
       </div>
     </form>
+    <AuModal @modalOpen={{this.showWarningModal}} @closable={{false}}>
+      <:title>There are warnings</:title>
+      <:body>Some fields in the form have warnings. Are you sure you want to
+        continue?</:body>
+      <:footer>
+        <AuButton @skin="primary" {{on "click" this.handleWarningModalOK}}>
+          Yes
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.handleWarningModalBack}}>
+          Back
+        </AuButton>
+      </:footer>
+    </AuModal>
+
   </div>
 </div>

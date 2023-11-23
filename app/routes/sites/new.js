@@ -21,6 +21,7 @@ export default class CreateSitesNewRoute extends Route {
   @action
   async model() {
     const address = this.store.createRecord('address');
+
     address.country = 'België';
     return {
       adminUnit: this.currentSession.group,

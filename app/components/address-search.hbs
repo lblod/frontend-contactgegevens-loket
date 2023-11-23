@@ -3,7 +3,7 @@
     <Item
       @labelFor="{{id}}-address-search"
       @required={{@required}}
-      @errorMessage={{if @error "Selecteer een adres"}}
+      @errorMessage={{@errorMessage}}
       @alignTop={{true}}
     >
       <:label>Adres</:label>
@@ -13,9 +13,9 @@
           @address={{@address}}
           @onChange={{this.handleAddressChange}}
           @noAddressFoundHook={{this.handleNoAddressFound}}
-          @error={{errorMessage}}
+          @error={{@errorMessage}}
         />
-        {{#if errorMessage}}
+        {{#if @errorMessage}}
           <AuHelpText @error={{true}}>{{errorMessage}}</AuHelpText>
         {{/if}}
         <p class="au-u-margin-top-tiny">

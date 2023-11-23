@@ -3,14 +3,34 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
-import { action } from '@ember/object';
+import {
+  errorValidation,
+  warningValidation,
+} from '../../../validations/site-validation';
+
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
 
+/**
+ * Transforms a Joi validation error to a simple hash of keys and error massages
+ * @param { import("joi").ValidationError['details'] } validationDetails
+ * @returns { Record<string,string> }
+ */
+function mapValidationDetailsToErrors(validationDetails) {
+  return validationDetails.reduce((accumulator, detail) => {
+    accumulator[detail.context.key] = detail.message;
+    return accumulator;
+  }, {});
+}
+
 export default class ContactDataEditSiteController extends Controller {
   @service router;
-
+  @service store;
+  @tracked isPrimarySite = false;
+  @tracked validationErrors = {};
+  @tracked validationWarnings = {};
+  @tracked showWarningModal = false;
   // Varies with user select
   @tracked selectedPrimaryStatus;
 
@@ -22,12 +42,51 @@ export default class ContactDataEditSiteController extends Controller {
     this.selectedPrimaryStatus = this.currentIsPrimary;
   }
 
-  get isLoading() {
-    return this.saveTask.isRunning || this.cancelTask.isRunning;
+  reset() {
+    this.isPrimarySite = false;
+    this.validationErrors = {};
+    this.validationWarnings = {};
+    this.showWarningModal = false;
   }
 
-  saveTask = task(async (event) => {
-    event.preventDefault();
+  get isLoading() {
+    return this.saveTask.isRunning;
+  }
+
+  validateFormData() {
+    const { address, primaryContact, secondaryContact, site } = this.model;
+    const validationData = {
+      siteType: site.siteType.get('label'),
+      street: address.street,
+      country: address.country,
+      number: address.number,
+      postcode: address.postcode,
+      municipality: address.municipality,
+      province: address.province,
+      fullAddress: address.fullAddress,
+      telephonePrimary: primaryContact.telephone
+        ? primaryContact.telephone.replace(/ /g, '')
+        : '',
+      emailPrimary: primaryContact.email,
+      websitePrimary: primaryContact.website,
+      telephoneSecondary: secondaryContact.telephone
+        ? secondaryContact.telephone.replace(/ /g, '')
+        : '',
+    };
+
+    const errorValidationResult = errorValidation.validate(validationData);
+    const warningValidationResult = warningValidation.validate(validationData);
+    return {
+      errors: errorValidationResult.error
+        ? mapValidationDetailsToErrors(errorValidationResult.error.details)
+        : {},
+      warnings: warningValidationResult.error
+        ? mapValidationDetailsToErrors(warningValidationResult.error.details)
+        : {},
+    };
+  }
+
+  saveTask = task(async () => {
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
 
@@ -61,17 +120,56 @@ export default class ContactDataEditSiteController extends Controller {
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
-  reset() {
-    this.selectedPrimaryStatus = false;
-    this.cancel();
+
+  @action
+  handleSubmit(event) {
+    event.preventDefault();
+
+    this.validationErrors = {};
+    this.validationWarnings = {};
+
+    const validationResult = this.validateFormData();
+    if (Object.keys(validationResult.errors).length > 0) {
+      // Validation failed. Return
+      this.validationErrors = validationResult.errors;
+      return;
+    }
+
+    if (Object.keys(validationResult.warnings).length > 0) {
+      // There are warnings. Show modal and return;
+      this.showWarningModal = true;
+      this.validationWarnings = validationResult.warnings;
+      return;
+    }
+
+    // No errors and no warnings, we can save
+    this.saveTask.perform();
   }
-  cancel() {
-    const { site, address, primaryContact, secondaryContact, adminUnit } =
+
+  @action
+  handleWarningModalOK(event) {
+    event.preventDefault();
+    this.showWarningModal = false;
+    this.saveTask.perform();
+  }
+
+  @action
+  handleWarningModalBack(event) {
+    event.preventDefault();
+    this.showWarningModal = false;
+  }
+
+  @action
+  handleCancel(event) {
+    event.preventDefault();
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
-    site.rollbackAttributes();
     address.rollbackAttributes();
     primaryContact.rollbackAttributes();
     secondaryContact.rollbackAttributes();
+    site.rollbackAttributes();
     adminUnit.rollbackAttributes();
+    this.reset();
+    this.router.replaceWith('sites.site', site.id);
   }
 }

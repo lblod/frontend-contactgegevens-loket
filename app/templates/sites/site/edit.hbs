@@ -20,13 +20,19 @@
           class="au-u-flex au-u-flex--column au-u-flex--nowrap au-u-flex--flex-end"
         >
           <AuButtonGroup>
-            <AuLink
-              @route="sites.site.index"
-              @skin="button-secondary"
-            >Annuleer</AuLink>
             <AuButton
-              @loading={{this.saveTask.isRunning}}
-              @disabled={{this.saveTask.isRunning}}
+              @loading={{this.isLoading}}
+              @loadingMessage="Annuleren"
+              @disabled={{this.isLoading}}
+              @skin="secondary"
+              form="edit-site-form"
+              {{on "click" this.handleCancel}}
+            >
+              Annuleer
+            </AuButton>
+            <AuButton
+              @loading={{this.isLoading}}
+              @disabled={{this.isLoading}}
               @skin="primary"
               type="submit"
               form="edit-site-form"
@@ -43,7 +49,7 @@
     <form
       id="edit-site-form"
       aria-label="Edit site"
-      {{on "submit" (perform this.saveTask)}}
+      {{on "submit" this.handleSubmit}}
     >
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
@@ -75,6 +81,7 @@
                     <AuRadioGroup
                       @name="is-primary-site"
                       @alignment="inline"
+                      @disabled={{this.currentIsPrimary}}
                       @onChange={{fn (mut this.selectedPrimaryStatus)}}
                       @selected={{this.currentIsPrimary}}
                       as |Group|
@@ -100,11 +107,27 @@
           }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
+          @errorMessage={{this.validationErrors}}
+          @warningMessage={{this.validationWarnings}}
         >
           <:title>Contactgegevens</:title>
 
         </ContactDataEditCard>
       </div>
     </form>
+    <AuModal @modalOpen={{this.showWarningModal}} @closable={{false}}>
+      <:title>There are warnings</:title>
+      <:body>Some fields in the form have warnings. Are you sure you want to
+        continue?</:body>
+      <:footer>
+        <AuButton @skin="primary" {{on "click" this.handleWarningModalOK}}>
+          Yes
+        </AuButton>
+        <AuButton @skin="secondary" {{on "click" this.handleWarningModalBack}}>
+          Back
+        </AuButton>
+      </:footer>
+    </AuModal>
+
   </div>
 </div>

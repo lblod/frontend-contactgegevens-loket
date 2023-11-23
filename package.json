@@ -89,6 +89,7 @@
     "ember-cli-sass": "^11.0.1",
     "ember-promise-modals": "^4.0.0",
     "ember-simple-auth": "^6.0.0",
+    "joi": "^17.11.0",
     "sass": "^1.66.1"
   },
   "overrides": {

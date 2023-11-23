@@ -10,12 +10,13 @@
           @required={{true}}
           @onChange={{this.automaticAddressSearchChanged}}
           @id={{concat @id "-address"}}
+          @errorMessage={{@errorMessage.fullAddress}}
         >
           <:manualAddressInputBeforeButton>
             <Item
               @labelFor={{concat @id "-country"}}
               @required={{true}}
-              @errorMessage={{@address.error.country.validation}}
+              @errorMessage={{@errorMessage.country}}
             >
               <:label>Land</:label>
               <:content as |hasError|>
@@ -31,7 +32,7 @@
             <Item
               @labelFor={{concat @id "-street"}}
               @required={{true}}
-              @errorMessage={{@address.error.street.validation}}
+              @errorMessage={{@errorMessage.street}}
             >
               <:label>Straat</:label>
               <:content as |hasError|>
@@ -49,7 +50,7 @@
             <Item
               @labelFor={{concat @id "-number"}}
               @required={{true}}
-              @errorMessage={{@address.error.number.validation}}
+              @errorMessage={{@errorMessage.number}}
             >
               <:label>Huisnummer</:label>
               <:content as |hasError|>
@@ -76,7 +77,7 @@
             <Item
               @labelFor={{concat @id "-postalcode"}}
               @required={{true}}
-              @errorMessage={{@address.error.postcode.validation}}
+              @errorMessage={{@errorMessage.postcode}}
             >
               <:label>Postcode</:label>
               <:content as |hasError|>
@@ -93,7 +94,7 @@
               <Item
                 @labelFor={{concat @id "-municipality"}}
                 @required={{true}}
-                @errorMessage={{@address.error.municipality.validation}}
+                @errorMessage={{@errorMessage.municipality}}
               >
                 <:label>Gemeente</:label>
                 <:content as |hasError|>
@@ -111,7 +112,7 @@
               <Item
                 @labelFor={{concat @id "-municipality"}}
                 @required={{true}}
-                @errorMessage={{@address.error.municipality.validation}}
+                @errorMessage={{@errorMessage.municipality}}
               >
                 <:label>Gemeente</:label>
                 <:content as |hasError|>
@@ -129,7 +130,7 @@
               <Item
                 @labelFor={{concat @id "-province"}}
                 @required={{true}}
-                @errorMessage={{@address.error.province.validation}}
+                @errorMessage={{@errorMessage.province}}
               >
                 <:label>Provincie</:label>
                 <:content as |hasError|>
@@ -150,10 +151,12 @@
         </AddressSearch>
       </:left>
       <:right as |Item|>
+
         <Item
           @required={{true}}
           @labelFor={{concat @id "-telPrimary"}}
-          @errorMessage={{@primaryContact.error.telephone.validation}}
+          @errorMessage={{@errorMessage.telephonePrimary}}
+          @warningMessage={{@warningMessage.telephonePrimary}}
         >
           <:label>Primair telefoonnummer</:label>
           <:content as |hasError|>
@@ -162,38 +165,56 @@
               @value={{@primaryContact.telephone}}
               @onUpdate={{fn (mut @primaryContact.telephone)}}
               @error={{hasError}}
+              @warning={{unless @errorMessage @warningMessage}}
               @id={{concat @id "-telPrimary"}}
               type="tel"
             />
+            {{#if @warningMessage}}
+              {{#if (has-block "warning")}}
+                {{yield @warningMessage to="warning"}}
+              {{else}}
+                <AuHelpText
+                  @warning={{true}}
+                >{{@warningMessage.telephonePrimary}}</AuHelpText>
+              {{/if}}
+            {{/if}}
           </:content>
           <:helpText>
             {{help-text "phone-number"}}
           </:helpText>
         </Item>
-
         <Item
           @labelFor={{concat @id "-telSecondary"}}
-          @errorMessage={{@secondaryContact.error.telephone.validation}}
+          @errorMessage={{@errorMessage.telephoneSecondary}}
+          @warningMessage={{@warningMessage.telephoneSecondary}}
         >
-          <:label>Secundair telefoonnummer</:label>
+          <:label>Secundaire telefoonnummer</:label>
           <:content as |hasError|>
             <TrimInput
               @width="block"
               @value={{@secondaryContact.telephone}}
               @onUpdate={{fn (mut @secondaryContact.telephone)}}
+              @warning={{unless @errorMessage @warningMessage}}
               @error={{hasError}}
-              @disabled={{not @secondaryContact}}
               @id={{concat @id "-telSecondary"}}
-              type="tel"
             />
+            {{#if @warningMessage.telephoneSecondary}}
+              {{#if (has-block "warning")}}
+                {{yield @warningMessage to="warning"}}
+              {{else}}
+                <AuHelpText
+                  @warning={{true}}
+                >{{@warningMessage.telephoneSecondary}}</AuHelpText>
+              {{/if}}
+            {{/if}}
           </:content>
           <:helpText>
-            {{help-text "phone-number"}}
+            {{help-text "url"}}
           </:helpText>
         </Item>
         <Item
           @labelFor={{concat @id "-emailPrimary"}}
-          @errorMessage={{@primaryContact.error.email.validation}}
+          @errorMessage={{@errorMessage.emailPrimary}}
         >
           <:label>E-mail</:label>
           <:content as |errorMessage|>
@@ -211,7 +232,7 @@
         </Item>
         <Item
           @labelFor={{concat @id "-webPrimary"}}
-          @errorMessage={{@primaryContact.error.website.validation}}
+          @errorMessage={{@errorMessage.websitePrimary}}
         >
           <:label>Website</:label>
           <:content as |hasError|>
