@@ -19,7 +19,9 @@ Router.map(function () {
   });
 
   this.route('legal', { path: '/legaal' }, function () {
-    this.route('accessibility', { path: '/toegangkelijkheidsverklaring' });
+    this.route('accessibilitystatement', {
+      path: '/toegangkelijkheidsverklaring',
+    });
   });
 
   this.route('core-data', { path: '/kerngegevens' }, function () {
