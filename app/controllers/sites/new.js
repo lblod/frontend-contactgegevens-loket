@@ -40,25 +40,6 @@ export default class CreateSitesNewController extends Controller {
     this.router.transitionTo('sites.index'); // Model does not reload?
   });
 
-  cancelTask = task(async (event) => {
-    event.preventDefault();
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-    // Destroy the newly created models
-    address.deleteRecord();
-    await address.save();
-    primaryContact.deleteRecord();
-    await primaryContact.save();
-    secondaryContact.deleteRecord();
-    await secondaryContact.save();
-    site.deleteRecord();
-    await site.save();
-    // Roll back the changes to admin unit if any
-    adminUnit.rollback();
-
-    this.router.transitionTo('sites.index'); // Model does not reload?
-  });
-
   reset() {
     this.isPrimarySite = false;
     this.removeUnsavedRecords();

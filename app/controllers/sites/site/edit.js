@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
+import { action } from '@ember/object';
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
@@ -12,11 +12,14 @@ export default class ContactDataEditSiteController extends Controller {
   @service router;
 
   // Varies with user select
-  @tracked selectedPrimaryStatus = this.currentIsPrimary;
+  @tracked selectedPrimaryStatus;
 
   // Quasi constant
   get currentIsPrimary() {
     return this.model.site.id === this.model.primarySite.id ? true : false;
+  }
+  setup() {
+    this.selectedPrimaryStatus = this.currentIsPrimary;
   }
 
   get isLoading() {
@@ -58,19 +61,17 @@ export default class ContactDataEditSiteController extends Controller {
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
-
-  @action
-  cancel(event) {
-    event.preventDefault();
+  reset() {
+    this.selectedPrimaryStatus = false;
+    this.cancel();
+  }
+  cancel() {
     const { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
-    // Undo any changes
-    site.rollback();
-    address.rollback();
-    primaryContact.rollback();
-    if (secondaryContact) secondaryContact.rollback();
-    adminUnit.rollback();
-    // Navigate away
-    this.router.transitionTo('sites.site.index');
+    site.rollbackAttributes();
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    adminUnit.rollbackAttributes();
   }
 }
