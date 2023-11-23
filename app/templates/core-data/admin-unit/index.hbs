@@ -30,6 +30,7 @@
               </Item>
             {{/if}}
             {{#if @model.isIgs}}
+            {{#if @model.adminUnit.expectedEndDate}} 
               <Item>
                 <:label>Geplande einddatum</:label>
                 <:content>
@@ -39,12 +40,15 @@
                   {{/if}}
                 </:content>
               </Item>
+              {{/if}}
+              {{#if @model.adminUnit.purpose }} 
               <Item>
                 <:label>Doel</:label>
                 <:content>
                   {{@model.adminUnit.purpose}}
                 </:content>
               </Item>
+              {{/if}}
             {{/if}}
           </:left>
           <:right as |Item|>
