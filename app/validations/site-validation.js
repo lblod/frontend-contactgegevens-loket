@@ -3,6 +3,7 @@ import Joi from 'joi';
 const belgiumPhoneNumberRegex = /^(?:\+32|0)[4-9][0-9]{8}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
+const phoneNumberRegex = /^(\+)?[0-9]+$/;
 
 export const errorValidation = Joi.object()
   .keys({
@@ -28,16 +29,25 @@ export const errorValidation = Joi.object()
     fullAddress: Joi.string()
       .required()
       .messages({ '*': 'Gelieve een adres in te vullen' }),
-    telephonePrimary: Joi.string().required().messages({
-      '*': 'Enkel een plusteken en cijfers zijn toegelaten',
-    }),
+    telephonePrimary: Joi.string()
+      .pattern(phoneNumberRegex)
+      .required()
+      .messages({
+        '*': 'Enkel een plusteken en cijfers zijn toegelaten',
+      }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
       .messages({ '*': 'Geef een geldig e-mailadres in' }),
     websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
       '*': 'Geef een geldig internetadres in',
     }),
-    telephoneSecondary: Joi.string().optional().allow(''),
+    telephoneSecondary: Joi.string()
+      .optional()
+      .pattern(phoneNumberRegex)
+      .allow('')
+      .messages({
+        '*': 'Enkel een plusteken en nummers zijn toegelaten',
+      }),
   })
   .options({ abortEarly: false });
 
@@ -56,13 +66,8 @@ export const warningValidation = Joi.object()
     fullAddress: Joi.optional(),
     emailPrimary: Joi.optional(),
     websitePrimary: Joi.string().optional(),
-    telephoneSecondary: Joi.string()
-      .optional()
-      .allow('')
-      .when(Joi.exist(), {
-        then: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-          '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-        }),
-      }),
+    telephoneSecondary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
+      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
+    }),
   })
   .options({ abortEarly: false });

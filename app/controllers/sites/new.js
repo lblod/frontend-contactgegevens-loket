@@ -50,14 +50,10 @@ export default class CreateSitesNewController extends Controller {
       municipality: address.municipality,
       province: address.province,
       fullAddress: address.fullAddress,
-      telephonePrimary: primaryContact.telephone
-        ? primaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
-      telephoneSecondary: secondaryContact.telephone
-        ? secondaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephoneSecondary: secondaryContact.telephone,
     };
 
     const errorValidationResult = errorValidation.validate(validationData);
