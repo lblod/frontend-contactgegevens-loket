@@ -8,36 +8,34 @@ export const errorValidation = Joi.object()
   .keys({
     siteType: Joi.string()
       .required()
-      .messages({ '*': 'Please choose a site type' }),
+      .messages({ '*': 'Gelieve een vestiginstype te kiezen' }),
     country: Joi.string()
       .required()
-      .messages({ '*': 'Please fill in a valid country' }),
+      .messages({ '*': 'Gelieve een land te kiezen' }),
     street: Joi.string()
       .required()
-      .messages({ '*': 'Please fill in a valid street name' }),
+      .messages({ '*': 'Geef een geldige straat naam in' }),
     number: Joi.string()
       .required()
-      .messages({ '*': 'Please fill in a valid housenumber' }),
-    postcode: Joi.string()
-      .required()
-      .messages({ '*': 'Please fill in a postalcode' }),
+      .messages({ '*': 'Geef een geldige huisnummer in' }),
+    postcode: Joi.string().required().messages({ '*': 'Geef een postcode in' }),
     municipality: Joi.string()
       .required()
-      .messages({ '*': 'Please fill in a valid municipality' }),
+      .messages({ '*': 'Geef een geldige gemeente in' }),
     province: Joi.string()
       .required()
-      .messages({ '*': 'Please fill in a valid province' }),
+      .messages({ '*': 'Geef een geldige provincie in' }),
     fullAddress: Joi.string()
       .required()
-      .messages({ '*': 'Please choose an address' }),
+      .messages({ '*': 'Gelieve een adres in te vullen' }),
     telephonePrimary: Joi.string().required().messages({
-      '*': 'Primary phone number is required',
+      '*': 'Enkel een plusteken en cijfers zijn toegelaten',
     }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
-      .messages({ '*': 'Please fill in a valid email' }),
+      .messages({ '*': 'Geef een geldig e-mailadres in' }),
     websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
-      '*': 'Please fill in a valid URL. Example: https://www.vlaanderen.be',
+      '*': 'Geef een geldig internetadres in',
     }),
     telephoneSecondary: Joi.string().optional().allow(''),
   })
@@ -53,22 +51,17 @@ export const warningValidation = Joi.object()
     municipality: Joi.optional(),
     province: Joi.optional(),
     telephonePrimary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Please fill in a valid Belgium phone number, are you sure to continue ?',
+      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
     }),
     fullAddress: Joi.optional(),
-    emailPrimary: Joi.string()
-      .pattern(emailRegex)
-      .optional()
-      .messages({ '*': 'Please fill in a valid email' }),
-    websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
-      '*': 'Please fill in a valid URL. Example: https://www.vlaanderen.be',
-    }),
+    emailPrimary: Joi.optional(),
+    websitePrimary: Joi.string().optional(),
     telephoneSecondary: Joi.string()
       .optional()
       .allow('')
       .when(Joi.exist(), {
         then: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-          '*': 'Please fill in a valid Belgium phone number, are you sure to continue?',
+          '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
         }),
       }),
   })

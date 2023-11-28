@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
+import { action } from '@ember/object';
 import {
   errorValidation,
   warningValidation,
@@ -30,7 +31,7 @@ export default class ContactDataEditSiteController extends Controller {
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
-  @tracked showWarningModal = false;
+  @tracked buttonCounter = 0;
   // Varies with user select
   @tracked selectedPrimaryStatus;
 
@@ -46,7 +47,6 @@ export default class ContactDataEditSiteController extends Controller {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
-    this.showWarningModal = false;
   }
 
   get isLoading() {
@@ -127,7 +127,6 @@ export default class ContactDataEditSiteController extends Controller {
 
     this.validationErrors = {};
     this.validationWarnings = {};
-
     const validationResult = this.validateFormData();
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
@@ -136,27 +135,16 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
-      // There are warnings. Show modal and return;
-      this.showWarningModal = true;
+      this.buttonCounter = this.buttonCounter + 1;
+      if (this.buttonCounter == 2) {
+        this.saveTask.perform();
+      }
       this.validationWarnings = validationResult.warnings;
       return;
     }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalOK(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-    this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalBack(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
   }
 
   @action

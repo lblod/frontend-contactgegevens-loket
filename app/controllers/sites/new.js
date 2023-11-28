@@ -27,17 +27,16 @@ export default class CreateSitesNewController extends Controller {
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
-  @tracked showWarningModal = false;
+  @tracked buttonCounter = 0;
 
   reset() {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
-    this.showWarningModal = false;
   }
 
   get isLoading() {
-    return this.saveTask.isRunning || this.cancelTask.isRunning;
+    return this.saveTask.isRunning;
   }
 
   validateFormData() {
@@ -112,7 +111,6 @@ export default class CreateSitesNewController extends Controller {
 
     this.validationErrors = {};
     this.validationWarnings = {};
-
     const validationResult = this.validateFormData();
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
@@ -121,27 +119,16 @@ export default class CreateSitesNewController extends Controller {
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
-      // There are warnings. Show modal and return;
-      this.showWarningModal = true;
+      this.buttonCounter = this.buttonCounter + 1;
+      if (this.buttonCounter == 2) {
+        this.saveTask.perform();
+      }
       this.validationWarnings = validationResult.warnings;
       return;
     }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalOK(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-    this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalBack(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
   }
 
   @action
