@@ -27,7 +27,7 @@ export default class CreateSitesNewController extends Controller {
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
-  @tracked buttonCounter = 0;
+  @tracked saveButtonPressed = 0;
 
   reset() {
     this.isPrimarySite = false;
@@ -115,8 +115,8 @@ export default class CreateSitesNewController extends Controller {
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
-      this.buttonCounter = this.buttonCounter + 1;
-      if (this.buttonCounter == 2) {
+      this.saveButtonPressed = this.saveButtonPressed + 1;
+      if (this.saveButtonPressed === 2) {
         this.saveTask.perform();
       }
       this.validationWarnings = validationResult.warnings;
