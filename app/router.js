@@ -10,7 +10,6 @@ Router.map(function () {
   this.route('mock-login');
   this.route('login');
   this.route('contact');
-  this.route('select-role');
 
   this.route('auth', { path: '/authorization' }, function () {
     this.route('callback');
