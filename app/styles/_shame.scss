@@ -74,3 +74,8 @@
 #primary-site-icon {
   color: var(--au-blue-700);
 }
+
+// Quick fix for the responsiveness issue for the report wrong data button in the site detail page
+.au-c-toolbar {
+  flex-wrap: nowrap;
+}
