@@ -51,6 +51,7 @@
                       @onChange={{fn (mut @model.site.siteType)}}
                       @id="site-type"
                       @error={{hasError}}
+                      @clearValidationError={{this.clearValidationError}}
                     />
                   </:content>
                 </Item>
@@ -78,6 +79,7 @@
         </EditCard>
 
         <ContactDataEditCard
+          @clearValidationError={{this.clearValidationError}}
           @address={{@model.address}}
           @isAddressSearchEnabledInitially={{if
             (or (not @model.address.id) @model.address.addressRegisterUri)

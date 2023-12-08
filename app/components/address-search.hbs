@@ -14,6 +14,7 @@
           @onChange={{this.handleAddressChange}}
           @noAddressFoundHook={{this.handleNoAddressFound}}
           @error={{@errorMessage}}
+          @onClose={{fn @clearValidationError "fullAddress"}}
         />
         {{#if @errorMessage}}
           <AuHelpText @error={{true}}>{{errorMessage}}</AuHelpText>
@@ -27,9 +28,7 @@
       <:error>{{! Disable the default error message}}</:error>
     </Item>
 
-    <Item
-      @labelFor="{{id}}-address-search-bus-select"
-    >
+    <Item @labelFor="{{id}}-address-search-bus-select">
       <:label>Busnummer</:label>
       <:content>
         <PowerSelect
@@ -43,18 +42,18 @@
           @allowClear={{true}}
           @loadingMessage="Aan het laden..."
           @placeholder="Kies busnummer"
-        as |addressSuggestion|
+          as |addressSuggestion|
         >
           {{#if addressSuggestion.busNumber}}
-          {{addressSuggestion.busNumber}}
+            {{addressSuggestion.busNumber}}
           {{else}}
-          Geen busnummer
+            Geen busnummer
           {{/if}}
         </PowerSelect>
-          <AuHelpText>
-            Staat het correcte busnummer niet in de lijst?
-            <AuLinkExternal href="mailto:{{config 'contactEmail'}}">Mail ons</AuLinkExternal>
-          </AuHelpText>
+        <AuHelpText>
+          Staat het correcte busnummer niet in de lijst?
+          <AuLinkExternal href="mailto:{{config 'contactEmail'}}">Mail ons</AuLinkExternal>
+        </AuHelpText>
       </:content>
     </Item>
     {{yield to="commonInput"}}

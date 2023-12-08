@@ -101,6 +101,21 @@ export default class CreateSitesNewController extends Controller {
     this.router.transitionTo('sites.index');
   });
 
+  // @action
+  // clearValidationError(field) {
+  //   console.log('Ik clear dit');
+  //   delete this.validationErrors[field];
+  //   delete this.validationWarnings[field];
+  // }
+
+  @action
+  clearValidationError(field) {
+    this.validationErrors = {
+      ...this.validationErrors,
+      [field]: undefined,
+    };
+  }
+
   @action
   handleSubmit(event) {
     event.preventDefault();
@@ -138,6 +153,6 @@ export default class CreateSitesNewController extends Controller {
     site.rollbackAttributes();
     adminUnit.rollbackAttributes();
     this.reset();
-    this.router.replaceWith('sites.site', site.id);
+    this.router.transitionTo('sites.index');
   }
 }

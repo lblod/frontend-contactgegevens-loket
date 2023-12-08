@@ -13,7 +13,9 @@
     @searchMessage="Typ om te zoeken"
     @disabled={{false}}
     @placeholder="Geef adres in"
+    @onClose={{@onClose}}
     as |suggestion|
+    
   >
     {{suggestion.fullAddress}}
   </PowerSelect>

@@ -144,6 +144,13 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   @action
+  clearValidationError(field) {
+    this.validationErrors = {
+      ...this.validationErrors,
+      [field]: undefined,
+    };
+  }
+  @action
   handleCancel(event) {
     event.preventDefault();
     const { address, primaryContact, secondaryContact, site, adminUnit } =

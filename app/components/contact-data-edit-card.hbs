@@ -11,6 +11,7 @@
           @onChange={{this.automaticAddressSearchChanged}}
           @id={{concat @id "-address"}}
           @errorMessage={{@errorMessage.fullAddress}}
+          @clearValidationError={{@clearValidationError}}
         >
           <:manualAddressInputBeforeButton>
             <Item
@@ -26,6 +27,7 @@
                   @error={{hasError}}
                   @disabled={{false}}
                   @id={{concat @id "-country"}}
+                  {{on "focusout" (fn @clearValidationError "country")}}
                 />
               </:content>
             </Item>
@@ -42,6 +44,7 @@
                   @onUpdate={{fn (mut @address.street)}}
                   @error={{hasError}}
                   @id={{concat @id "-street"}}
+                  {{on "focusout" (fn @clearValidationError "street")}}
                 />
               </:content>
             </Item>
@@ -60,6 +63,7 @@
                   @onUpdate={{fn (mut @address.number)}}
                   @error={{hasError}}
                   @id={{concat @id "-number"}}
+                  {{on "focusout" (fn @clearValidationError "number")}}
                 />
               </:content>
             </Item>
@@ -87,6 +91,7 @@
                   @onUpdate={{fn (mut @address.postcode)}}
                   @error={{hasError}}
                   id={{concat @id "-postalcode"}}
+                  {{on "focusout" (fn @clearValidationError "postcode")}}
                 />
               </:content>
             </Item>
@@ -105,6 +110,7 @@
                     @error={{hasError}}
                     @disabled={{false}}
                     @id={{concat @id "-municipality"}}
+                    {{on "focusout" (fn @clearValidationError "municipality")}}
                   />
                 </:content>
               </Item>
@@ -122,6 +128,7 @@
                     @onUpdate={{fn (mut @address.municipality)}}
                     @error={{hasError}}
                     id={{concat @id "-municipality"}}
+                    {{on "focusout" (fn @clearValidationError "municipality")}}
                   />
                 </:content>
               </Item>
@@ -141,6 +148,7 @@
                     @onChange={{fn (mut @address.province)}}
                     @error={{hasError}}
                     @id={{concat @id "-province"}}
+                    {{on "focusout" (fn @clearValidationError "province")}}
                   />
                 </:content>
               </Item>
@@ -168,6 +176,7 @@
               @warning={{unless @errorMessage @warningMessage}}
               @id={{concat @id "-telPrimary"}}
               type="tel"
+              {{on "focusout" (fn @clearValidationError "telephonePrimary")}}
             />
             {{#if @warningMessage}}
               {{#if (has-block "warning")}}
@@ -197,6 +206,7 @@
               @warning={{unless @errorMessage @warningMessage}}
               @error={{hasError}}
               @id={{concat @id "-telSecondary"}}
+              {{on "focusout" (fn @clearValidationError "telephoneSecondary")}}
             />
             {{#if @warningMessage.telephoneSecondary}}
               {{#if (has-block "warning")}}
@@ -224,6 +234,7 @@
               @onUpdate={{fn (mut @primaryContact.email)}}
               @error={{errorMessage}}
               @id={{concat @id "-emailPrimary"}}
+              {{on "focusout" (fn @clearValidationError "emailPrimary")}}
             />
           </:content>
           <:helpText>
@@ -242,6 +253,7 @@
               @onUpdate={{fn (mut @primaryContact.website)}}
               @error={{hasError}}
               @id={{concat @id "-webPrimary"}}
+              {{on "focusout" (fn @clearValidationError "websitePrimary")}}
             />
           </:content>
           <:helpText>
