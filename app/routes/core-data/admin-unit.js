@@ -3,10 +3,12 @@ import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from 'frontend-contactgegevens-loket/models/contact-point';
 import { ID_NAME } from 'frontend-contactgegevens-loket/models/identifier';
 import { findStructuredIdentifierByIdName, findContactByType } from './util';
+import { tracked } from '@glimmer/tracking';
 import {
   IGS_CLASSIFICATION_CODES,
   CLASSIFICATION_CODE,
 } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
+import { computed } from '@ember/object';
 
 /**
  * Just a little function which throws a readable error when a record is falsy.
@@ -23,7 +25,7 @@ function assert(record, source, modelName) {
 export default class AdminUnitRoute extends Route {
   @service store;
   @service currentSession;
-
+  @tracked isCity = false;
   async model() {
     // Re load the admin unit and make sure we get as moch data as possible right away
     const adminUnit = await this.store.findRecord(
@@ -35,7 +37,6 @@ export default class AdminUnitRoute extends Route {
           'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status,classification',
       },
     );
-
     assert(adminUnit, 'Current session', 'administrative-unit');
 
     const organizationStatus = await adminUnit.organizationStatus;
@@ -72,8 +73,15 @@ export default class AdminUnitRoute extends Route {
       identifiers,
       ID_NAME.SHAREPOINT,
     );
-
     const isIgs = IGS_CLASSIFICATION_CODES.includes(classification.id);
+    const isMunicipality =
+      adminUnit.classification.id === CLASSIFICATION_CODE.MUNICIPALITY;
+    const isOCMW = adminUnit.classification.id === CLASSIFICATION_CODE.OCMW;
+    const isAPB = adminUnit.classification.id === CLASSIFICATION_CODE.APB;
+    const isDistrict =
+      adminUnit.classification.id === CLASSIFICATION_CODE.DISTRICT;
+    const isProvince =
+      adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
@@ -118,6 +126,11 @@ export default class AdminUnitRoute extends Route {
       nis, // May be null
       sharepoint, // May be null
       region, // May be null
+      isMunicipality,
+      isOCMW,
+      isAPB,
+      isDistrict,
+      isProvince,
     };
     return result;
   }
