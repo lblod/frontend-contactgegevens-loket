@@ -3,12 +3,10 @@ import { inject as service } from '@ember/service';
 import { CONTACT_TYPE } from 'frontend-contactgegevens-loket/models/contact-point';
 import { ID_NAME } from 'frontend-contactgegevens-loket/models/identifier';
 import { findStructuredIdentifierByIdName, findContactByType } from './util';
-import { tracked } from '@glimmer/tracking';
 import {
   IGS_CLASSIFICATION_CODES,
   CLASSIFICATION_CODE,
 } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
-import { computed } from '@ember/object';
 
 /**
  * Just a little function which throws a readable error when a record is falsy.
@@ -25,7 +23,6 @@ function assert(record, source, modelName) {
 export default class AdminUnitRoute extends Route {
   @service store;
   @service currentSession;
-  @tracked isCity = false;
   async model() {
     // Re load the admin unit and make sure we get as moch data as possible right away
     const adminUnit = await this.store.findRecord(
