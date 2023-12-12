@@ -23,7 +23,6 @@ function assert(record, source, modelName) {
 export default class AdminUnitRoute extends Route {
   @service store;
   @service currentSession;
-
   async model() {
     // Re load the admin unit and make sure we get as moch data as possible right away
     const adminUnit = await this.store.findRecord(
@@ -35,7 +34,6 @@ export default class AdminUnitRoute extends Route {
           'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status,classification',
       },
     );
-
     assert(adminUnit, 'Current session', 'administrative-unit');
 
     const organizationStatus = await adminUnit.organizationStatus;
@@ -72,8 +70,15 @@ export default class AdminUnitRoute extends Route {
       identifiers,
       ID_NAME.SHAREPOINT,
     );
-
     const isIgs = IGS_CLASSIFICATION_CODES.includes(classification.id);
+    const isMunicipality =
+      adminUnit.classification.id === CLASSIFICATION_CODE.MUNICIPALITY;
+    const isOCMW = adminUnit.classification.id === CLASSIFICATION_CODE.OCMW;
+    const isAPB = adminUnit.classification.id === CLASSIFICATION_CODE.APB;
+    const isDistrict =
+      adminUnit.classification.id === CLASSIFICATION_CODE.DISTRICT;
+    const isProvince =
+      adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
@@ -118,6 +123,11 @@ export default class AdminUnitRoute extends Route {
       nis, // May be null
       sharepoint, // May be null
       region, // May be null
+      isMunicipality,
+      isOCMW,
+      isAPB,
+      isDistrict,
+      isProvince,
     };
     return result;
   }

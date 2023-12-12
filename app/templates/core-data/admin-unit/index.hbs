@@ -29,25 +29,42 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.isIgs}}
-            {{#if @model.adminUnit.expectedEndDate}}
+            {{#if @model.isMunicipality}}
               <Item>
-                <:label>Geplande einddatum</:label>
+                <:label>Stadstitel</:label>
                 <:content>
-                  {{date-format @model.adminUnit.expectedEndDate}}
-                  {{#if this.expiredExpectedEndDate}}
-                    <AuPill @skin="error">De geplande einddatum is overschreden</AuPill>
+                  {{#if @model.adminUnit.isCity}}
+                    Ja
+                  {{else}}
+                    Nee
                   {{/if}}
                 </:content>
               </Item>
-              {{/if}}
-              {{#if @model.adminUnit.purpose }}
-              <Item>
-                <:label>Doel</:label>
+              <Item><:label>Regio : </:label>
                 <:content>
-                  {{@model.adminUnit.purpose}}
-                </:content>
-              </Item>
+                  {{@model.region}}
+                </:content></Item>
+            {{/if}}
+            {{#if @model.isIgs}}
+              {{#if @model.adminUnit.expectedEndDate}}
+                <Item>
+                  <:label>Geplande einddatum</:label>
+                  <:content>
+                    {{date-format @model.adminUnit.expectedEndDate}}
+                    {{#if this.expiredExpectedEndDate}}
+                      <AuPill @skin="error">De geplande einddatum is
+                        overschreden</AuPill>
+                    {{/if}}
+                  </:content>
+                </Item>
+              {{/if}}
+              {{#if @model.adminUnit.purpose}}
+                <Item>
+                  <:label>Doel</:label>
+                  <:content>
+                    {{@model.adminUnit.purpose}}
+                  </:content>
+                </Item>
               {{/if}}
             {{/if}}
           </:left>
@@ -79,17 +96,17 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.ovo}}
+            {{#unless (or @model.isAPB @model.isDistrict)}}
               <Item>
                 <:label>OVO nummer</:label>
                 <:content>
                   {{@model.ovo.localId}}
                 </:content>
               </Item>
-            {{/if}}
+            {{/unless}}
             {{#if @model.nis}}
               <Item>
-                <:label>NIS</:label>
+                <:label>NIS nummer</:label>
                 <:content>
                   {{@model.nis.localId}}
                 </:content>
@@ -102,6 +119,30 @@
                 <:content>
 
                   {{@model.sharepoint.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.isMunicipality}}
+              <Item>
+                <:label>NIS </:label>
+                <:content>
+                  {{@model.nis.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.isOCMW}}
+              <Item>
+                <:label>NIS </:label>
+                <:content>
+                  {{@model.nis.localId}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if @model.isProvince}}
+              <Item>
+                <:label>NIS</:label>
+                <:content>
+                  {{@model.nis.localId}}
                 </:content>
               </Item>
             {{/if}}
