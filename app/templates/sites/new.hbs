@@ -5,29 +5,38 @@
     <PageHeader>
       <:title>Voeg vestiging toe</:title>
       <:action>
-        <AuButtonGroup class="au-c-button-group--align-right">
-          <AuButton
-            @loading={{this.isLoading}}
-            @loadingMessage="Annuleren"
-            @disabled={{this.isLoading}}
-            @skin="secondary"
-            form="new-vestiging-form"
-            {{on "click" this.handleCancel}}
-          >
-            Annuleer
-          </AuButton>
-          <AuButton
-            @loading={{this.isLoading}}
-            @loadingMessage="Toevoegen"
-            @disabled={{this.isLoading}}
-            @icon="add"
-            @iconAlignment="left"
-            type="submit"
-            form="new-vestiging-form"
-          >
-            Voeg toe
-          </AuButton>
-        </AuButtonGroup>
+        <div class="au-u-test-right">
+          <AuButtonGroup class="au-c-button-group--align-right">
+            <AuButton
+              @loading={{this.isLoading}}
+              @loadingMessage="Annuleren"
+              @disabled={{this.isLoading}}
+              @skin="secondary"
+              form="new-vestiging-form"
+              {{on "click" this.handleCancel}}
+            >
+              Annuleer
+            </AuButton>
+            <AuButton
+              @loading={{this.isLoading}}
+              @loadingMessage="Toevoegen"
+              @disabled={{this.isLoading}}
+              @icon="add"
+              @iconAlignment="left"
+              type="submit"
+              form="new-vestiging-form"
+            >
+              Voeg toe
+            </AuButton>
+          </AuButtonGroup>
+          {{#if this.hasError}}
+            <Error::Save @showSaveError={{this.hasError}} />
+          {{else if this.hasWarning }}
+            <Error::Warning @showSaveWarning={{this.hasWarning}} />
+
+          {{/if}}
+
+        </div>
       </:action>
     </PageHeader>
 
