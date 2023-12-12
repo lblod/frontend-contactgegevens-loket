@@ -18,15 +18,25 @@ Router.map(function () {
     this.route('switch');
   });
 
+  this.route('legal', { path: '/legaal' }, function () {
+    this.route('accessibilitystatement', {
+      path: '/toegangkelijkheidsverklaring',
+    });
+    this.route('cookiestatement', {
+      path: '/cookieverklaring',
+    });
+    this.route('disclaimer');
+  });
+
   this.route('core-data', { path: '/kerngegevens' }, function () {
     this.route('admin-unit', { path: '/bestuurseenheid' }, function () {
       this.route('index', { path: '/' });
     });
   });
   this.route('sites', { path: '/vestigingen' }, function () {
-    //   this.route('new', { path: '/nieuw' });
+    // this.route('new', { path: '/nieuw' });
     this.route('site', { path: '/:id' }, function () {
-      //     this.route('edit', { path: '/bewerk' });
+      // this.route('edit', { path: '/bewerk' });
     });
   });
 
