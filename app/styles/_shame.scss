@@ -78,3 +78,7 @@
 .au-c-button-group {
   justify-content: flex-end;
 }
+// Quick fix for the responsiveness issue for the report wrong data button in the site detail page
+.au-c-toolbar {
+  flex-wrap: nowrap;
+}

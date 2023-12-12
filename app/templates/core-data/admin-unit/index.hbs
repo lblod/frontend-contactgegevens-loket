@@ -30,7 +30,7 @@
               </Item>
             {{/if}}
             {{#if @model.isIgs}}
-            {{#if @model.adminUnit.expectedEndDate}} 
+            {{#if @model.adminUnit.expectedEndDate}}
               <Item>
                 <:label>Geplande einddatum</:label>
                 <:content>
@@ -41,7 +41,7 @@
                 </:content>
               </Item>
               {{/if}}
-              {{#if @model.adminUnit.purpose }} 
+              {{#if @model.adminUnit.purpose }}
               <Item>
                 <:label>Doel</:label>
                 <:content>
@@ -57,6 +57,7 @@
               <:content>
                 <OrganizationStatus
                   @label={{@model.organizationStatus.label}}
+                  @id={{@model.organizationStatus.id}}
                 />
               </:content>
             </Item>
