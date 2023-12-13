@@ -28,11 +28,16 @@ export default class CreateSitesNewController extends Controller {
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
   @tracked saveButtonPressed = 0;
+  @tracked hasError = false;
+  @tracked hasWarning = false;
 
   reset() {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
+    this.hasError = false;
+    this.hasWarning = false;
+    this.saveButtonPressed = 0;
   }
 
   get isLoading() {
@@ -101,13 +106,6 @@ export default class CreateSitesNewController extends Controller {
     this.router.transitionTo('sites.index');
   });
 
-  // @action
-  // clearValidationError(field) {
-  //   console.log('Ik clear dit');
-  //   delete this.validationErrors[field];
-  //   delete this.validationWarnings[field];
-  // }
-
   @action
   clearValidationError(field) {
     this.validationErrors = {
@@ -126,12 +124,15 @@ export default class CreateSitesNewController extends Controller {
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
       this.validationErrors = validationResult.errors;
+      this.hasError = true;
       this.saveButtonPressed = 0;
       return;
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
       this.saveButtonPressed = this.saveButtonPressed + 1;
+      this.hasError = false;
+      this.hasWarning = true;
       if (this.saveButtonPressed === 2) {
         this.saveTask.perform();
       }
