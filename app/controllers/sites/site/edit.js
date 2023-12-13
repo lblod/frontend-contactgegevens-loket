@@ -127,6 +127,7 @@ export default class ContactDataEditSiteController extends Controller {
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
       this.validationErrors = validationResult.errors;
+      this.saveButtonPressed = 0;
       return;
     }
 
