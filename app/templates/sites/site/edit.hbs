@@ -39,12 +39,6 @@
             >Opslaan</AuButton>
           </AuButtonGroup>
           <ReportWrongData />
-          {{#if this.hasError}}
-            <Error::Save @showSaveError={{this.hasError}} />
-          {{else if this.hasWarning}}
-            <Error::Warning @showSaveWarning={{this.hasWarning}} />
-
-          {{/if}}
         </div>
         {{! End of secured area }}
       </:action>

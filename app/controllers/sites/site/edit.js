@@ -32,8 +32,6 @@ export default class ContactDataEditSiteController extends Controller {
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
   @tracked saveButtonPressed = 0;
-  @tracked hasError = false;
-  @tracked hasWarning = false;
   // Varies with user select
   @tracked selectedPrimaryStatus;
 
@@ -49,7 +47,6 @@ export default class ContactDataEditSiteController extends Controller {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
-    this.saveButtonPressed = 0;
   }
 
   get isLoading() {
@@ -130,15 +127,11 @@ export default class ContactDataEditSiteController extends Controller {
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
       this.validationErrors = validationResult.errors;
-      this.hasError = true;
-      this.saveButtonPressed = 0;
       return;
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
       this.saveButtonPressed = this.saveButtonPressed + 1;
-      this.hasError = false;
-      this.hasWarning = true;
       if (this.saveButtonPressed === 2) {
         this.saveTask.perform();
       }
