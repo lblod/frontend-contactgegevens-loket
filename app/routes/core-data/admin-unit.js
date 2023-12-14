@@ -79,6 +79,8 @@ export default class AdminUnitRoute extends Route {
       adminUnit.classification.id === CLASSIFICATION_CODE.DISTRICT;
     const isProvince =
       adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
+    const isWorshipService =
+      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
@@ -128,6 +130,7 @@ export default class AdminUnitRoute extends Route {
       isAPB,
       isDistrict,
       isProvince,
+      isWorshipService
     };
     return result;
   }

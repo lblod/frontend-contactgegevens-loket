@@ -19,16 +19,9 @@
             </Item>
             <Item>
               <:label>Type bestuur</:label>
-              <:content>{{@model.classification.label}}</:content>
+              <:content>{{@model.adminUnit.classification.label}}</:content>
             </Item>
-            {{#if @model.region}}
-              <Item>
-                <:label>Regio</:label>
-                <:content>
-                  {{@model.region}}
-                </:content>
-              </Item>
-            {{/if}}
+
             {{#if @model.isMunicipality}}
               <Item>
                 <:label>Stadstitel</:label>
@@ -40,32 +33,66 @@
                   {{/if}}
                 </:content>
               </Item>
-              <Item><:label>Regio : </:label>
-                <:content>
-                  {{@model.region}}
-                </:content></Item>
             {{/if}}
+
+            {{#if @model.isWorshipService}}
+              <Item>
+                <:label>Soort eredienst</:label>
+                <:content
+                >{{@model.adminUnit.recognizedWorshipType.label}}</:content>
+              </Item>
+            {{/if}}
+            {{#if @model.adminUnit.denomination}}
+              <Item>
+                <:label>Strekking</:label>
+                <:content>{{@model.adminUnit.denomination}}</:content>
+              </Item>
+            {{/if}}
+            {{#if
+              (eq @model.adminUnit.constructor.modelName "worship-service")
+            }}
+              <Item>
+                <:label>Grensoverschrijdend</:label>
+                <:content>
+                  {{@model.adminUnit.crossBorderNominal}}
+                </:content>
+              </Item>
+            {{/if}}
+            {{#if
+              (and @model.adminUnit.scope.locatedWithin @model.isMunicipality)
+            }}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.adminUnit.scope.locatedWithin.label}}
+                </:content>
+              </Item>
+            {{/if}}
+
+
+            
             {{#if @model.isIgs}}
-              {{#if @model.adminUnit.expectedEndDate}}
-                <Item>
-                  <:label>Geplande einddatum</:label>
-                  <:content>
-                    {{date-format @model.adminUnit.expectedEndDate}}
-                    {{#if this.expiredExpectedEndDate}}
-                      <AuPill @skin="error">De geplande einddatum is
-                        overschreden</AuPill>
-                    {{/if}}
-                  </:content>
-                </Item>
-              {{/if}}
-              {{#if @model.adminUnit.purpose}}
-                <Item>
-                  <:label>Doel</:label>
-                  <:content>
-                    {{@model.adminUnit.purpose}}
-                  </:content>
-                </Item>
-              {{/if}}
+              <Item>
+                <:label>Regio</:label>
+                <:content>
+                  {{@model.igsRegio.label}}
+                </:content>
+              </Item>
+              <Item>
+                <:label>Geplande einddatum</:label>
+                <:content>
+                  {{date-format @model.adminUnit.expectedEndDate}}
+                  {{#if this.expiredExpectedEndDate}}
+                    <AuPill @skin="error">De geplande einddatum is overschreden</AuPill>
+                  {{/if}}
+                </:content>
+              </Item>
+              <Item>
+                <:label>Doel</:label>
+                <:content>
+                  <AuLabel @show="true" @value={{@model.adminUnit.purpose}} />
+                </:content>
+              </Item>
             {{/if}}
           </:left>
           <:right as |Item|>
@@ -112,7 +139,7 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.sharepoiint}}
+            {{#if @model.sharepoint}}
               <Item>
                 <:label>Sharepoint referentie
                 </:label>
