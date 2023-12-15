@@ -31,7 +31,9 @@ export default class ContactDataEditSiteController extends Controller {
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
-  @tracked showWarningModal = false;
+  @tracked saveButtonPressed = 0;
+  @tracked hasError = false;
+  @tracked hasWarning = false;
   // Varies with user select
   @tracked selectedPrimaryStatus;
 
@@ -47,7 +49,9 @@ export default class ContactDataEditSiteController extends Controller {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
-    this.showWarningModal = false;
+    this.saveButtonPressed = 0;
+    this.hasError = false;
+    this.hasWarning = false;
   }
 
   get isLoading() {
@@ -65,14 +69,10 @@ export default class ContactDataEditSiteController extends Controller {
       municipality: address.municipality,
       province: address.province,
       fullAddress: address.fullAddress,
-      telephonePrimary: primaryContact.telephone
-        ? primaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
-      telephoneSecondary: secondaryContact.telephone
-        ? secondaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephoneSecondary: secondaryContact.telephone,
     };
 
     const errorValidationResult = errorValidation.validate(validationData);
@@ -128,17 +128,22 @@ export default class ContactDataEditSiteController extends Controller {
 
     this.validationErrors = {};
     this.validationWarnings = {};
-
     const validationResult = this.validateFormData();
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
       this.validationErrors = validationResult.errors;
+      this.saveButtonPressed = 0;
+      this.hasError = true;
       return;
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
-      // There are warnings. Show modal and return;
-      this.showWarningModal = true;
+      this.saveButtonPressed = this.saveButtonPressed + 1;
+      this.hasError = false;
+      this.hasWarning = true;
+      if (this.saveButtonPressed === 2) {
+        this.saveTask.perform();
+      }
       this.validationWarnings = validationResult.warnings;
       return;
     }
@@ -148,18 +153,12 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   @action
-  handleWarningModalOK(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-    this.saveTask.perform();
+  clearValidationError(field) {
+    this.validationErrors = {
+      ...this.validationErrors,
+      [field]: undefined,
+    };
   }
-
-  @action
-  handleWarningModalBack(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-  }
-
   @action
   handleCancel(event) {
     event.preventDefault();

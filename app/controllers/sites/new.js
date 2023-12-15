@@ -27,13 +27,17 @@ export default class CreateSitesNewController extends Controller {
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
-  @tracked showWarningModal = false;
+  @tracked saveButtonPressed = 0;
+  @tracked hasError = false;
+  @tracked hasWarning = false;
 
   reset() {
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
-    this.showWarningModal = false;
+    this.hasError = false;
+    this.hasWarning = false;
+    this.saveButtonPressed = 0;
   }
 
   get isLoading() {
@@ -51,14 +55,10 @@ export default class CreateSitesNewController extends Controller {
       municipality: address.municipality,
       province: address.province,
       fullAddress: address.fullAddress,
-      telephonePrimary: primaryContact.telephone
-        ? primaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
-      telephoneSecondary: secondaryContact.telephone
-        ? secondaryContact.telephone.replace(/ /g, '')
-        : '',
+      telephoneSecondary: secondaryContact.telephone,
     };
 
     const errorValidationResult = errorValidation.validate(validationData);
@@ -107,41 +107,41 @@ export default class CreateSitesNewController extends Controller {
   });
 
   @action
+  clearValidationError(field) {
+    this.validationErrors = {
+      ...this.validationErrors,
+      [field]: undefined,
+    };
+  }
+
+  @action
   handleSubmit(event) {
     event.preventDefault();
 
     this.validationErrors = {};
     this.validationWarnings = {};
-
     const validationResult = this.validateFormData();
     if (Object.keys(validationResult.errors).length > 0) {
       // Validation failed. Return
       this.validationErrors = validationResult.errors;
+      this.hasError = true;
+      this.saveButtonPressed = 0;
       return;
     }
 
     if (Object.keys(validationResult.warnings).length > 0) {
-      // There are warnings. Show modal and return;
-      this.showWarningModal = true;
+      this.saveButtonPressed = this.saveButtonPressed + 1;
+      this.hasError = false;
+      this.hasWarning = true;
+      if (this.saveButtonPressed === 2) {
+        this.saveTask.perform();
+      }
       this.validationWarnings = validationResult.warnings;
       return;
     }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalOK(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
-    this.saveTask.perform();
-  }
-
-  @action
-  handleWarningModalBack(event) {
-    event.preventDefault();
-    this.showWarningModal = false;
   }
 
   @action
