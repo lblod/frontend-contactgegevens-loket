@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ENV from '../../../config/environment';
+import ENV from '../../../config/environment.js';
 
 export default class AuthLoginRoute extends Route {
   @service session;
