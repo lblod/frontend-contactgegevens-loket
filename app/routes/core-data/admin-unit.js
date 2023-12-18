@@ -115,6 +115,7 @@ export default class AdminUnitRoute extends Route {
       const eventTypeId = eventType.id;
       if (eventTypeId == 'e4c3d1ef-a34d-43b0-a18c-f4e60e2c8af3') {
         isCity = true;
+        break;
       }
     }
     const result = {
