@@ -15,6 +15,7 @@ export default class CurrentSessionService extends Service {
   @tracked roles = [];
 
   async load() {
+    console.log('this.session', this.session);
     if (this.session.isAuthenticated) {
       let accountId =
         this.session.data.authenticated.relationships.account.data.id;

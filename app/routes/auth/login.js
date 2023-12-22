@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import ENV from '../../../config/environment.js';
+import ENV from 'frontend-contactgegevens-loket/config/environment';
 
 export default class AuthLoginRoute extends Route {
   @service session;
