@@ -16,10 +16,10 @@ export default class AuthLoginRoute extends Route {
 function buildLoginUrl({ authUrl, clientId, authRedirectUrl, scope }) {
   let loginUrl = new URL(authUrl);
   let searchParams = loginUrl.searchParams;
-  searchParams.append('response_type', encodeURIComponent('code'));
-  searchParams.append('client_id', encodeURIComponent(clientId));
-  searchParams.append('redirect_uri', encodeURIComponent(authRedirectUrl));
-  searchParams.append('scope', encodeURIComponent(scope));
+  searchParams.append('response_type', 'code');
+  searchParams.append('client_id', clientId);
+  searchParams.append('redirect_uri', authRedirectUrl);
+  searchParams.append('scope', scope);
 
   return loginUrl.href;
 }
