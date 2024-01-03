@@ -7,7 +7,6 @@ export default class AuthLoginRoute extends Route {
 
   beforeModel() {
     if (this.session.prohibitAuthentication('index')) {
-      console.log(ENV.acmidm);
       window.location.replace(buildLoginUrl(ENV.acmidm));
     }
   }

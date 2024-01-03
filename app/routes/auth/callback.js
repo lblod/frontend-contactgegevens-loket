@@ -10,7 +10,6 @@ export default class AuthCallbackRoute extends Route {
   }
 
   async model({ code }) {
-    console.log('code', code);
     if (code) {
       try {
         await this.session.authenticate('authenticator:acm-idm', code);
