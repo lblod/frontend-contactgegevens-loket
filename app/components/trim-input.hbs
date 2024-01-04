@@ -1,7 +1,6 @@
 <AuInput
   @disabled={{@disabled}}
   @error={{@error}}
-  @warning={{@warning}}  {{!-- Pass the warning to AuInput --}}
   autocomplete={{@autocomplete}}
   @width={{@width}}
   @id={{@id}}
@@ -12,6 +11,3 @@
   {{on "focusout" (perform this.trimInput)}}
   ...attributes
 />
-{{#if @warning}}
-  <div class="warning-message">{{@warningMessage}}</div>
-{{/if}}

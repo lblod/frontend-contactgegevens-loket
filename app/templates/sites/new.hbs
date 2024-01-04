@@ -5,42 +5,35 @@
     <PageHeader>
       <:title>Voeg vestiging toe</:title>
       <:action>
-        <div class="au-u-test-right">
-          <AuButtonGroup class="au-c-button-group--align-right">
-            <AuButton
-              @loading={{this.isLoading}}
-              @loadingMessage="Annuleren"
-              @disabled={{this.isLoading}}
-              @skin="secondary"
-              form="new-vestiging-form"
-              {{on "click" this.handleCancel}}
-            >
-              Annuleer
-            </AuButton>
-            <AuButton
-              @loading={{this.isLoading}}
-              @loadingMessage="Toevoegen"
-              @disabled={{this.isLoading}}
-              @icon="add"
-              @iconAlignment="left"
-              type="submit"
-              form="new-vestiging-form"
-            >
-              Voeg toe
-            </AuButton>
-          </AuButtonGroup>
-          {{#if this.hasError}}
-            <Error::Save @showSaveError={{this.hasError}} />
-          {{else if this.hasWarning}}
-            <Error::Warning @showSaveWarning={{this.hasWarning}} />
-
-          {{/if}}
-
-        </div>
+        <AuButtonGroup class="au-c-button-group--align-right">
+          <AuButton
+            @loading={{this.isLoading}}
+            @disabled={{this.isLoading}}
+            @skin="secondary"
+            type="cancel"
+            form="new-vestiging-form"
+          >
+            Annuleer
+          </AuButton>
+          <AuButton
+            @loading={{this.isLoading}}
+            @disabled={{this.isLoading}}
+            @icon="add"
+            @iconAlignment="left"
+            type="submit"
+            form="new-vestiging-form"
+          >
+            Voeg toe
+          </AuButton>
+        </AuButtonGroup>
       </:action>
     </PageHeader>
 
-    <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
+    <form
+      id="new-vestiging-form"
+      {{on "submit" (perform this.saveTask)}}
+      {{on "cancel" (perform this.cancelTask)}}
+    >
       <div class="au-o-flow au-o-flow--large">
         <EditCard>
           <:title>Kerngegevens</:title>
@@ -50,7 +43,7 @@
                 <Item
                   @labelFor="site-type"
                   @required={{true}}
-                  @errorMessage={{this.validationErrors.siteType}}
+                  @errorMessage={{this.model.site.error.siteType.validation}}
                 >
                   <:label>Type vestiging</:label>
                   <:content as |hasError|>
@@ -60,7 +53,6 @@
                       @onChange={{fn (mut @model.site.siteType)}}
                       @id="site-type"
                       @error={{hasError}}
-                      @clearValidationError={{this.clearValidationError}}
                     />
                   </:content>
                 </Item>
@@ -92,8 +84,6 @@
           @onChangeAddress={{this.handleChangeAddress}}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
-          @errorMessage={{this.validationErrors}}
-          @warningMessage={{this.validationWarnings}}
         >
           <:title>Contactgegevens</:title>
 
