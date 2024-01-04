@@ -19,41 +19,17 @@
             </Item>
             <Item>
               <:label>Type bestuur</:label>
-              <:content>{{@model.adminUnit.classification.label}}</:content>
+              <:content>{{@model.classification.label}}</:content>
             </Item>
-
-            {{#if @model.isMunicipality}}
-              <Item>
-                <:label>Stadstitel</:label>
-                <:content>
-                  {{#if @model.isCity}}
-                    Ja
-                  {{else}}
-                    Nee
-                  {{/if}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if
-              (and @model.adminUnit.scope.locatedWithin @model.isMunicipality)
-            }}
-              <Item>
-                <:label>Regio</:label>
-                <:content>
-                  {{@model.adminUnit.scope.locatedWithin.label}}
-                </:content>
-              </Item>
-            {{/if}}
-
-
-
-            {{#if @model.isIgs}}
+            {{#if @model.region}}
               <Item>
                 <:label>Regio</:label>
                 <:content>
                   {{@model.region}}
                 </:content>
               </Item>
+            {{/if}}
+            {{#if @model.isIgs}}
               <Item>
                 <:label>Geplande einddatum</:label>
                 <:content>
@@ -66,7 +42,7 @@
               <Item>
                 <:label>Doel</:label>
                 <:content>
-                  <AuLabel @show="true" @value={{@model.adminUnit.purpose}} />
+                  {{@model.adminUnit.purpose}}
                 </:content>
               </Item>
             {{/if}}
@@ -77,7 +53,6 @@
               <:content>
                 <OrganizationStatus
                   @label={{@model.organizationStatus.label}}
-                  @id={{@model.organizationStatus.id}}
                 />
               </:content>
             </Item>
@@ -99,53 +74,29 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#unless (or @model.isAPB @model.isDistrict)}}
+            {{#if @model.ovo}}
               <Item>
                 <:label>OVO nummer</:label>
                 <:content>
                   {{@model.ovo.localId}}
                 </:content>
               </Item>
-            {{/unless}}
+            {{/if}}
             {{#if @model.nis}}
               <Item>
-                <:label>NIS nummer</:label>
+                <:label>NIS</:label>
                 <:content>
                   {{@model.nis.localId}}
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.sharepoint}}
+            {{#if @model.sharepoiint}}
               <Item>
                 <:label>Sharepoint referentie
                 </:label>
                 <:content>
 
                   {{@model.sharepoint.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isMunicipality}}
-              <Item>
-                <:label>NIS </:label>
-                <:content>
-                  {{@model.nis.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isOCMW}}
-              <Item>
-                <:label>NIS </:label>
-                <:content>
-                  {{@model.nis.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isProvince}}
-              <Item>
-                <:label>NIS</:label>
-                <:content>
-                  {{@model.nis.localId}}
                 </:content>
               </Item>
             {{/if}}

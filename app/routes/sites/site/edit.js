@@ -52,13 +52,4 @@ export default class ContactDataEditSiteRoute extends Route {
       primarySite,
     };
   }
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.setup();
-  }
-
-  resetController(controller) {
-    super.resetController(...arguments);
-    controller.reset();
-  }
 }

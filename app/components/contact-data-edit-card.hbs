@@ -14,72 +14,50 @@
         />
       </:left>
       <:right as |Item|>
-
         <Item
           @required={{true}}
           @labelFor={{concat @id "-telPrimary"}}
-          @errorMessage={{@errorMessage.telephonePrimary}}
-          @warningMessage={{@warningMessage.telephonePrimary}}
+          @errorMessage={{@primaryContact.error.telephone.validation}}
         >
           <:label>Primair telefoonnummer</:label>
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @value={{tel-format @primaryContact.telephone}}
+              @value={{@primaryContact.telephone}}
               @onUpdate={{fn (mut @primaryContact.telephone)}}
               @error={{hasError}}
-              @warning={{unless @errorMessage @warningMessage}}
               @id={{concat @id "-telPrimary"}}
               type="tel"
-              {{on "focusout" (fn @clearValidationError "telephonePrimary")}}
             />
-            {{#if @warningMessage}}
-              {{#if (has-block "warning")}}
-                {{yield @warningMessage to="warning"}}
-              {{else}}
-                <AuHelpText
-                  @warning={{true}}
-                >{{@warningMessage.telephonePrimary}}</AuHelpText>
-              {{/if}}
-            {{/if}}
+          </:content>
+          <:helpText>
+            {{help-text "phone-number"}}
+          </:helpText>
+        </Item>
+
+        <Item
+          @labelFor={{concat @id "-telSecondary"}}
+          @errorMessage={{@secondaryContact.error.telephone.validation}}
+        >
+          <:label>Secundair telefoonnummer</:label>
+          <:content as |hasError|>
+            <TrimInput
+              @width="block"
+              @value={{@secondaryContact.telephone}}
+              @onUpdate={{fn (mut @secondaryContact.telephone)}}
+              @error={{hasError}}
+              @disabled={{not @secondaryContact}}
+              @id={{concat @id "-telSecondary"}}
+              type="tel"
+            />
           </:content>
           <:helpText>
             {{help-text "phone-number"}}
           </:helpText>
         </Item>
         <Item
-          @labelFor={{concat @id "-telSecondary"}}
-          @errorMessage={{@errorMessage.telephoneSecondary}}
-          @warningMessage={{@warningMessage.telephoneSecondary}}
-        >
-          <:label>Secundair telefoonnummer</:label>
-          <:content as |hasError|>
-            <TrimInput
-              @width="block"
-              @value={{tel-format @secondaryContact.telephone}}
-              @onUpdate={{fn (mut @secondaryContact.telephone)}}
-              @warning={{unless @errorMessage @warningMessage}}
-              @error={{hasError}}
-              @id={{concat @id "-telSecondary"}}
-              {{on "focusout" (fn @clearValidationError "telephoneSecondary")}}
-            />
-            {{#if @warningMessage.telephoneSecondary}}
-              {{#if (has-block "warning")}}
-                {{yield @warningMessage to="warning"}}
-              {{else}}
-                <AuHelpText
-                  @warning={{true}}
-                >{{@warningMessage.telephoneSecondary}}</AuHelpText>
-              {{/if}}
-            {{/if}}
-          </:content>
-          <:helpText>
-            {{help-text "url"}}
-          </:helpText>
-        </Item>
-        <Item
           @labelFor={{concat @id "-emailPrimary"}}
-          @errorMessage={{@errorMessage.emailPrimary}}
+          @errorMessage={{@primaryContact.error.email.validation}}
         >
           <:label>E-mail</:label>
           <:content as |errorMessage|>
@@ -89,7 +67,6 @@
               @onUpdate={{fn (mut @primaryContact.email)}}
               @error={{errorMessage}}
               @id={{concat @id "-emailPrimary"}}
-              {{on "focusout" (fn @clearValidationError "emailPrimary")}}
             />
           </:content>
           <:helpText>
@@ -98,7 +75,7 @@
         </Item>
         <Item
           @labelFor={{concat @id "-webPrimary"}}
-          @errorMessage={{@errorMessage.websitePrimary}}
+          @errorMessage={{@primaryContact.error.website.validation}}
         >
           <:label>Website</:label>
           <:content as |hasError|>
@@ -108,7 +85,6 @@
               @onUpdate={{fn (mut @primaryContact.website)}}
               @error={{hasError}}
               @id={{concat @id "-webPrimary"}}
-              {{on "focusout" (fn @clearValidationError "websitePrimary")}}
             />
           </:content>
           <:helpText>
