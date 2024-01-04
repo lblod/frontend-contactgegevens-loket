@@ -5,12 +5,18 @@ import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/admin
 
 export default class SiteTypeSelectComponent extends Component {
   @service store;
-  siteTypes;
+
+  get siteTypes() {
+    return this.loadSiteTypesTask.last?.value ?? [];
+  }
 
   constructor(...args) {
     super(...args);
+    this.loadSiteTypesTask.perform();
+  }
 
-    this.siteTypes = this.loadSiteTypesTask.perform();
+  get disabled() {
+    return this.args.disabled || this.loadSiteTypesTask.isRunning;
   }
 
   get isWorshipAdministrativeUnit() {
@@ -78,9 +84,8 @@ export default class SiteTypeSelectComponent extends Component {
     );
   }
 
-  @task
-  *loadSiteTypesTask() {
-    let allTypes = yield this.store.findAll('site-type', { reload: true });
+  loadSiteTypesTask = task(async () => {
+    let allTypes = await this.store.findAll('site-type', { reload: true });
     let filteredTypes = [];
 
     filteredTypes.push(
@@ -115,5 +120,5 @@ export default class SiteTypeSelectComponent extends Component {
     }
 
     return filteredTypes;
-  }
+  });
 }

@@ -23,7 +23,6 @@ function assert(record, source, modelName) {
 export default class AdminUnitRoute extends Route {
   @service store;
   @service currentSession;
-
   async model() {
     // Re load the admin unit and make sure we get as moch data as possible right away
     const adminUnit = await this.store.findRecord(
@@ -35,7 +34,6 @@ export default class AdminUnitRoute extends Route {
           'primary-site,primary-site.address,identifiers,identifiers.structured-identifier,organization-status,classification',
       },
     );
-
     assert(adminUnit, 'Current session', 'administrative-unit');
 
     const organizationStatus = await adminUnit.organizationStatus;
@@ -72,8 +70,17 @@ export default class AdminUnitRoute extends Route {
       identifiers,
       ID_NAME.SHAREPOINT,
     );
-
     const isIgs = IGS_CLASSIFICATION_CODES.includes(classification.id);
+    const isMunicipality =
+      adminUnit.classification.id === CLASSIFICATION_CODE.MUNICIPALITY;
+    const isOCMW = adminUnit.classification.id === CLASSIFICATION_CODE.OCMW;
+    const isAPB = adminUnit.classification.id === CLASSIFICATION_CODE.APB;
+    const isDistrict =
+      adminUnit.classification.id === CLASSIFICATION_CODE.DISTRICT;
+    const isProvince =
+      adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
+    const isWorshipService =
+      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
@@ -103,7 +110,16 @@ export default class AdminUnitRoute extends Route {
           return (await scope.locatedWithin).label;
         })()
       : null;
-
+    const changeEvents = [...(await adminUnit.changedBy)]
+    let isCity = false;
+    for (const event of changeEvents) {
+      const eventType = await event.type;
+      const eventTypeId = eventType.id;
+      if (eventTypeId == 'e4c3d1ef-a34d-43b0-a18c-f4e60e2c8af3') {
+        isCity = true;
+        break;
+      }
+    }
     const result = {
       adminUnit,
       classification,
@@ -113,11 +129,18 @@ export default class AdminUnitRoute extends Route {
       primaryContact,
       secondaryContact, // May be null
       isIgs,
+      isCity,
       kbo, // May be null
       ovo, // May be null
       nis, // May be null
       sharepoint, // May be null
       region, // May be null
+      isMunicipality,
+      isOCMW,
+      isAPB,
+      isDistrict,
+      isProvince,
+      isWorshipService
     };
     return result;
   }
