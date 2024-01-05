@@ -79,6 +79,8 @@ export default class AdminUnitRoute extends Route {
       adminUnit.classification.id === CLASSIFICATION_CODE.DISTRICT;
     const isProvince =
       adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
+    const isWorshipService =
+      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
@@ -108,7 +110,16 @@ export default class AdminUnitRoute extends Route {
           return (await scope.locatedWithin).label;
         })()
       : null;
-
+    const changeEvents = [...(await adminUnit.changedBy)]
+    let isCity = false;
+    for (const event of changeEvents) {
+      const eventType = await event.type;
+      const eventTypeId = eventType.id;
+      if (eventTypeId == 'e4c3d1ef-a34d-43b0-a18c-f4e60e2c8af3') {
+        isCity = true;
+        break;
+      }
+    }
     const result = {
       adminUnit,
       classification,
@@ -118,6 +129,7 @@ export default class AdminUnitRoute extends Route {
       primaryContact,
       secondaryContact, // May be null
       isIgs,
+      isCity,
       kbo, // May be null
       ovo, // May be null
       nis, // May be null
@@ -128,6 +140,7 @@ export default class AdminUnitRoute extends Route {
       isAPB,
       isDistrict,
       isProvince,
+      isWorshipService
     };
     return result;
   }
