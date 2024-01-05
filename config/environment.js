@@ -22,6 +22,15 @@ module.exports = function (environment) {
     appName: 'Contactgegevens',
     contactEmail: 'LoketLokaalBestuur@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
+
+    acmidm: {
+      clientId: '{{OAUTH_API_KEY}}',
+      scope: '{{OAUTH_API_SCOPE}}',
+      authUrl: '{{OAUTH_API_BASE_URL}}',
+      logoutUrl: '{{OAUTH_API_LOGOUT_URL}}',
+      authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
+      switchRedirectUrl: '{{OAUTH_SWITCH_URL}}',
+    },
   };
 
   if (environment === 'development') {
