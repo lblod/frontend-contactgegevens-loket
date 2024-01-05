@@ -4,15 +4,15 @@
   <:subtitle>{{this.currentSession.fullName}}
     ({{this.currentSession.groupClassificationLabel}})</:subtitle>
   <:action>
-    {{! <AuLink
+    <AuLink
       @route="sites.new"
       @skin="button"
       @icon="plus"
       @iconAlignment="left"
     >
       Nieuwe vestiging toevoegen
-    </AuLink> }}
-    <ReportWrongData />
+    </AuLink>
+    {{! <ReportWrongData /> }}
   </:action>
 </PageHeader>
 <AuDataTable
