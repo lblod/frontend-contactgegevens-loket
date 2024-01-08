@@ -1,8 +1,5 @@
 <div ...attributes>
-  <AuContentHeader
-    @titlePartOne="Vlaanderen"
-    @titlePartTwo="Digitaal Loket"
-  >
+  <AuContentHeader @titlePartOne="Vlaanderen" @titlePartTwo="Digitaal Loket">
     <img
       sizes="50vw"
       src="/assets/images/loket-header-1600.jpg"
@@ -12,10 +9,9 @@
   </AuContentHeader>
 
   {{yield}}
-
-  <AuMainFooter>
+ <AuMainFooter>
     <AuHeading @level="3" @skin="4">
-      xxx.abb.vlaanderen.be is een officiële website van de Vlaamse
+      contactgegevens.lokaalbestuur.vlaanderen.be is een officiële website van de Vlaamse
       overheid
     </AuHeading>
     <AuContent @skin="small">
@@ -38,4 +34,6 @@
       </ul>
     </AuContent>
   </AuMainFooter>
+
+  <WithFooter />
 </div>

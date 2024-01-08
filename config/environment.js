@@ -20,7 +20,7 @@ module.exports = function (environment) {
       // when it is created
     },
     appName: 'Contactgegevens',
-    contactEmail: 'contactgegevens.abb@vlaanderen.be',
+    contactEmail: 'LoketLokaalBestuur@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
 
     acmidm: {
