@@ -239,7 +239,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
 
   fetchPostalNamesTask = task(async ({ postalCode, province }) => {
     const response = await fetch(
-      `http://localhost:9300/postal-names?${generateQueryString({
+      `/address-search-add-on/postal-names?${generateQueryString({
         postalCode,
         province,
       })}`,
@@ -275,7 +275,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
 
   fetchPostalCodesTask = task(async ({ postalName, province }) => {
     const response = await fetch(
-      `http://localhost:9300/postal-codes?${generateQueryString({
+      `/address-search-add-on/postal-codes?${generateQueryString({
         postalName,
         province,
       })}`,
@@ -311,7 +311,7 @@ export default class AuAddressSearchManualControlsBelgiumComponent extends Compo
 
   fetchProvincesTask = task(async ({ postalName, postalCode }) => {
     const response = await fetch(
-      `http://localhost:9300/provinces?${generateQueryString({
+      `/address-search-add-on/provinces?${generateQueryString({
         postalName,
         postalCode,
       })}`,
