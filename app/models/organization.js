@@ -46,12 +46,14 @@ export default class OrganizationModel extends Model {
     inverse: 'originalOrganizations',
     async: true,
     as: 'organization',
-    polymorphic: false
+    polymorphic: false,
   })
   changedBy;
   @hasMany('change-event', {
     inverse: 'resultingOrganizations',
     async: true,
+    polymorphic: true,
+    as: 'organization',
   })
   resultedFrom;
 }
