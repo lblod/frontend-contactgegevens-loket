@@ -143,15 +143,15 @@ export default class AuAddressSearchComponent extends Component {
 
   /** @type {Boolean} */
   get addressOk() {
-    return (
+    const result =
       this.selectedAddress.country &&
       this.selectedAddress.street &&
       this.selectedAddress.municipality &&
       this.selectedAddress.province &&
       this.selectedAddress.postalCode &&
       this.selectedAddress.houseNumber &&
-      this.selectedAddress.boxNumber !== undefined
-    );
+      this.selectedAddress.boxNumber !== undefined;
+    return result;
   }
 
   @action

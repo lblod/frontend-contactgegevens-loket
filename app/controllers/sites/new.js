@@ -4,6 +4,22 @@ import { combineFullAddress } from 'frontend-contactgegevens-loket/models/addres
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
+import {
+  errorValidation,
+  warningValidation,
+} from '../../validations/site-validation';
+
+/**
+ * Transforms a Joi validation error to a simple hash of keys and error massages
+ * @param { import("joi").ValidationError['details'] } validationDetails
+ * @returns { Record<string,string> }
+ */
+function mapValidationDetailsToErrors(validationDetails) {
+  return validationDetails.reduce((accumulator, detail) => {
+    accumulator[detail.context.key] = detail.message;
+    return accumulator;
+  }, {});
+}
 
 /**
  *
@@ -56,13 +72,17 @@ export default class CreateSitesNewController extends Controller {
   }
 
   get isLoading() {
-    return this.saveTask.isRunning || this.cancelTask.isRunning;
+    return this.saveTask.isRunning || this.handleCancel.isRunning;
   }
 
-  get isLoading() {
-    return this.saveTask.isRunning;
+  reset() {
+    this.isPrimarySite = false;
+    this.validationErrors = {};
+    this.validationWarnings = {};
+    this.saveButtonPressed = 0;
+    this.hasError = false;
+    this.hasWarning = false;
   }
-
   validateFormData() {
     const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
@@ -135,27 +155,27 @@ export default class CreateSitesNewController extends Controller {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.validationErrors = {};
-    this.validationWarnings = {};
-    const validationResult = this.validateFormData();
-    if (Object.keys(validationResult.errors).length > 0) {
-      // Validation failed. Return
-      this.validationErrors = validationResult.errors;
-      this.hasError = true;
-      this.saveButtonPressed = 0;
-      return;
-    }
+    // this.validationErrors = {};
+    // this.validationWarnings = {};
+    // const validationResult = this.validateFormData();
+    // if (Object.keys(validationResult.errors).length > 0) {
+    //   // Validation failed. Return
+    //   this.validationErrors = validationResult.errors;
+    //   this.hasError = true;
+    //   this.saveButtonPressed = 0;
+    //   return;
+    // }
 
-    if (Object.keys(validationResult.warnings).length > 0) {
-      this.saveButtonPressed = this.saveButtonPressed + 1;
-      this.hasError = false;
-      this.hasWarning = true;
-      if (this.saveButtonPressed === 2) {
-        this.saveTask.perform();
-      }
-      this.validationWarnings = validationResult.warnings;
-      return;
-    }
+    // if (Object.keys(validationResult.warnings).length > 0) {
+    //   this.saveButtonPressed = this.saveButtonPressed + 1;
+    //   this.hasError = false;
+    //   this.hasWarning = true;
+    //   if (this.saveButtonPressed === 2) {
+    //     this.saveTask.perform();
+    //   }
+    //   this.validationWarnings = validationResult.warnings;
+    //   return;
+    // }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();

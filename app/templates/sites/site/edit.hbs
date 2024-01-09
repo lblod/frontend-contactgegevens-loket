@@ -107,11 +107,20 @@
 
         <ContactDataEditCard
           @address={{this.addressSearchAddress}}
-          @onChangeAddress={{this.handleChangeAddress}}
+          @isAddressSearchEnabledInitially={{if
+            (or (not @model.address.id) @model.address.addressRegisterUri)
+            true
+            false
+          }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
+          @errorMessage={{this.validationErrors}}
+          @warningMessage={{this.validationWarnings}}
+          @clearValidationError={{this.clearValidationError}}
+          @onChangeAddress={{this.handleChangeAddress}}
         >
           <:title>Contactgegevens</:title>
+
         </ContactDataEditCard>
       </div>
     </form>

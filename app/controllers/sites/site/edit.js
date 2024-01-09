@@ -4,22 +4,38 @@ import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 import { action } from '@ember/object';
+import {
+  errorValidation,
+  warningValidation,
+} from '../../../validations/site-validation';
 
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
 
 /**
+ * Transforms a Joi validation error to a simple hash of keys and error massages
+ * @param { import("joi").ValidationError['details'] } validationDetails
+ * @returns { Record<string,string> }
+ */
+function mapValidationDetailsToErrors(validationDetails) {
+  return validationDetails.reduce((accumulator, detail) => {
+    accumulator[detail.context.key] = detail.message;
+    return accumulator;
+  }, {});
+}
+
+/**
  *
- * @param { import('../../../models/address').AddressModel } addressModel
- * @param { import('../../../components/au-address-search').Address } addressSearchAddress
+ * @param { import('../../models/address').AddressModel } addressModel
+ * @param { import('../../components/au-address-search').Address } addressSearchAddress
  */
 function copyAddressSearchAddressToAddressModel(
   addressModel,
   addressSearchAddress,
 ) {
   addressModel.number = addressSearchAddress.houseNumber;
-  addressModel.boxNumber = addressSearchAddress.boxNumber;
+  addressModel.boxNumber = addressSearchAddress.boxNumber ?? null;
   addressModel.street = addressSearchAddress.street;
   addressModel.postcode = addressSearchAddress.postalCode;
   addressModel.municipality = addressSearchAddress.municipality;
@@ -30,13 +46,13 @@ function copyAddressSearchAddressToAddressModel(
 
 /**
  *
- * @param { import('../../../models/address').AddressModel } addressModel
- * @returns { import('../../../components/au-address-search').Address }
+ * @param { import('../../models/address').AddressModel } addressModel
+ * @returns { import('../../components/au-address-search').Address }
  */
 function createAddressSearchAddressFromAddressModel(addressModel) {
   return {
     houseNumber: addressModel?.number,
-    boxNumber: addressModel?.boxNumber ?? null,
+    boxNumber: addressModel?.boxNumber,
     street: addressModel?.street,
     postalCode: addressModel?.postcode,
     municipality: addressModel?.municipality,
@@ -57,17 +73,6 @@ export default class ContactDataEditSiteController extends Controller {
   // Varies with user select
   @tracked selectedPrimaryStatus;
 
-  get addressSearchAddress() {
-    const newAddress = createAddressSearchAddressFromAddressModel(
-      this.model.address,
-    );
-    return newAddress;
-  }
-
-  set addressSearchAddress(value) {
-    copyAddressSearchAddressToAddressModel(this.model.address, value);
-  }
-
   // Quasi constant
   get currentIsPrimary() {
     return this.model.site.id === this.model.primarySite.id ? true : false;
@@ -87,6 +92,10 @@ export default class ContactDataEditSiteController extends Controller {
 
   get isLoading() {
     return this.saveTask.isRunning;
+  }
+
+  get addressSearchAddress() {
+    return createAddressSearchAddressFromAddressModel(this.model.address);
   }
 
   validateFormData() {
@@ -143,11 +152,9 @@ export default class ContactDataEditSiteController extends Controller {
       adminUnit.primarySite = site;
     }
 
-    // The address search component has a different structure to the address search model
-    copyAddressSearchAddressToAddressModel(address, this.addressSearchAddress);
-
     // Save the models.
     await site.save();
+    address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
     await primaryContact.save();
     if (secondaryContact) await secondaryContact.save();
@@ -159,27 +166,27 @@ export default class ContactDataEditSiteController extends Controller {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.validationErrors = {};
-    this.validationWarnings = {};
-    const validationResult = this.validateFormData();
-    if (Object.keys(validationResult.errors).length > 0) {
-      // Validation failed. Return
-      this.validationErrors = validationResult.errors;
-      this.saveButtonPressed = 0;
-      this.hasError = true;
-      return;
-    }
+    // this.validationErrors = {};
+    // this.validationWarnings = {};
+    // const validationResult = this.validateFormData();
+    // if (Object.keys(validationResult.errors).length > 0) {
+    //   // Validation failed. Return
+    //   this.validationErrors = validationResult.errors;
+    //   this.saveButtonPressed = 0;
+    //   this.hasError = true;
+    //   return;
+    // }
 
-    if (Object.keys(validationResult.warnings).length > 0) {
-      this.saveButtonPressed = this.saveButtonPressed + 1;
-      this.hasError = false;
-      this.hasWarning = true;
-      if (this.saveButtonPressed === 2) {
-        this.saveTask.perform();
-      }
-      this.validationWarnings = validationResult.warnings;
-      return;
-    }
+    // if (Object.keys(validationResult.warnings).length > 0) {
+    //   this.saveButtonPressed = this.saveButtonPressed + 1;
+    //   this.hasError = false;
+    //   this.hasWarning = true;
+    //   if (this.saveButtonPressed === 2) {
+    //     this.saveTask.perform();
+    //   }
+    //   this.validationWarnings = validationResult.warnings;
+    //   return;
+    // }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();
