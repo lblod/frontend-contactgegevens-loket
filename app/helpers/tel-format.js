@@ -1,8 +1,10 @@
 import { helper } from '@ember/component/helper';
 
-export default helper(function telFormat(tel) {
-  if (tel.includes('tel:')) {
-    tel = tel.split(':')[1];
+export default helper(function telFormat([tel]) {
+  if (tel) {
+    if (tel.includes('tel:')) {
+      tel = tel.split(':')[1];
+    }
+    return tel;
   }
-  return tel;
 });

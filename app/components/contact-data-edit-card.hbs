@@ -61,6 +61,7 @@
               @warning={{unless @errorMessage @warningMessage}}
               @error={{hasError}}
               @id={{concat @id "-telSecondary"}}
+              type="tel"
               {{!-- {{on "focusout" (fn @clearValidationError "telephoneSecondary")}} --}}
             />
             {{#if @warningMessage.telephoneSecondary}}
