@@ -1,7 +1,11 @@
 import Component from '@glimmer/component';
 import config from 'frontend-contactgegevens-loket/config/environment';
+import { inject as service } from '@ember/service';
 
 export default class ReportWrongDataComponent extends Component {
+  @service currentSession;
+  @service store;
+
   get contactEmail() {
     return config.contactEmail;
   }
@@ -11,6 +15,6 @@ export default class ReportWrongDataComponent extends Component {
   }
   get body() {
     const url = encodeURIComponent(window.location.href);
-    return `URL met onvolledige of foutieve data: ${url}`;
+    return `URL met onvolledige of foutieve data: ${url} ID : ${this.currentSession.group.id} - ${this.currentSession.groupClassificationLabel} - ${this.currentSession.group.name}`;
   }
 }
