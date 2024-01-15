@@ -15,6 +15,8 @@ export default class ReportWrongDataComponent extends Component {
   }
   get body() {
     const url = encodeURIComponent(window.location.href);
-    return `URL met onvolledige of foutieve data: ${url} ID : ${this.currentSession.group.id} - ${this.currentSession.groupClassificationLabel} - ${this.currentSession.group.name}`;
+    return `URL met onvolledige of foutieve data: ${url}
+    \n ID : ${this.currentSession.group.id}
+    \n ${this.currentSession.group.name} (${this.currentSession.groupClassificationLabel})`;
   }
 }
