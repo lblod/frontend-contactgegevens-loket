@@ -99,19 +99,20 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#unless (or @model.isAPB @model.isDistrict)}}
+            {{#unless @model.isAPB}}
               <Item>
                 <:label>OVO nummer</:label>
                 <:content>
                   {{@model.ovo.localId}}
-                </:content>
+              </:content>
               </Item>
             {{/unless}}
             {{#if @model.nis}}
               <Item>
                 <:label>NIS nummer</:label>
                 <:content>
-                  {{@model.nis.localId}}
+                  {{@model.adminUnit.scope.exactMatch.notation}}
+                  {{!-- data missing --}}
                 </:content>
               </Item>
             {{/if}}
