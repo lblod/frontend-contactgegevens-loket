@@ -45,8 +45,6 @@
               </Item>
             {{/if}}
 
-
-
             {{#if @model.isIgs}}
               <Item>
                 <:label>Regio</:label>
@@ -95,7 +93,11 @@
               <Item>
                 <:label>KBO nummer</:label>
                 <:content>
-                  {{kbo-format @model.kbo.localId}}
+                  {{#if @model.kbo.localId}}
+                    {{kbo-format @model.kbo.localId}}
+                  {{else}}
+                    Geen KBO nummer
+                  {{/if}}
                 </:content>
               </Item>
             {{/if}}
