@@ -25,7 +25,11 @@
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @value={{tel-format @primaryContact.telephone}}
+              @value={{(if
+                @primaryContact.telephone
+                (tel-format @primaryContact.telephone)
+                ""
+              )}}
               @onUpdate={{fn (mut @primaryContact.telephone)}}
               @error={{hasError}}
               @warning={{unless @errorMessage @warningMessage}}
@@ -56,7 +60,11 @@
           <:content as |hasError|>
             <TrimInput
               @width="block"
-              @value={{tel-format @secondaryContact.telephone}}
+              @value={{(if
+                @secondaryContact.telephone
+                (tel-format @secondaryContact.telephone)
+                ""
+              )}}
               @onUpdate={{fn (mut @secondaryContact.telephone)}}
               @warning={{unless @errorMessage @warningMessage}}
               @error={{hasError}}
