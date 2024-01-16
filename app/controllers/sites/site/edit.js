@@ -8,21 +8,14 @@ import {
   errorValidation,
   warningValidation,
 } from '../../../validations/site-validation';
+import {
+  copyAddressSearchAddressToAddressModel,
+  createAddressSearchAddressFromAddressModel,
+  mapValidationDetailsToErrors,
+} from 'frontend-contactgegevens-loket/helpers/address-helpers';
 
 function assert(value, message) {
   if (!value) throw new Error(message);
-}
-
-/**
- * Transforms a Joi validation error to a simple hash of keys and error massages
- * @param { import("joi").ValidationError['details'] } validationDetails
- * @returns { Record<string,string> }
- */
-function mapValidationDetailsToErrors(validationDetails) {
-  return validationDetails.reduce((accumulator, detail) => {
-    accumulator[detail.context.key] = detail.message;
-    return accumulator;
-  }, {});
 }
 
 export default class ContactDataEditSiteController extends Controller {
@@ -56,6 +49,10 @@ export default class ContactDataEditSiteController extends Controller {
 
   get isLoading() {
     return this.saveTask.isRunning;
+  }
+
+  get addressSearchAddress() {
+    return createAddressSearchAddressFromAddressModel(this.model.address);
   }
 
   validateFormData() {
@@ -126,27 +123,27 @@ export default class ContactDataEditSiteController extends Controller {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.validationErrors = {};
-    this.validationWarnings = {};
-    const validationResult = this.validateFormData();
-    if (Object.keys(validationResult.errors).length > 0) {
-      // Validation failed. Return
-      this.validationErrors = validationResult.errors;
-      this.saveButtonPressed = 0;
-      this.hasError = true;
-      return;
-    }
+    // this.validationErrors = {};
+    // this.validationWarnings = {};
+    // const validationResult = this.validateFormData();
+    // if (Object.keys(validationResult.errors).length > 0) {
+    //   // Validation failed. Return
+    //   this.validationErrors = validationResult.errors;
+    //   this.saveButtonPressed = 0;
+    //   this.hasError = true;
+    //   return;
+    // }
 
-    if (Object.keys(validationResult.warnings).length > 0) {
-      this.saveButtonPressed = this.saveButtonPressed + 1;
-      this.hasError = false;
-      this.hasWarning = true;
-      if (this.saveButtonPressed === 2) {
-        this.saveTask.perform();
-      }
-      this.validationWarnings = validationResult.warnings;
-      return;
-    }
+    // if (Object.keys(validationResult.warnings).length > 0) {
+    //   this.saveButtonPressed = this.saveButtonPressed + 1;
+    //   this.hasError = false;
+    //   this.hasWarning = true;
+    //   if (this.saveButtonPressed === 2) {
+    //     this.saveTask.perform();
+    //   }
+    //   this.validationWarnings = validationResult.warnings;
+    //   return;
+    // }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();
@@ -171,5 +168,13 @@ export default class ContactDataEditSiteController extends Controller {
     adminUnit.rollbackAttributes();
     this.reset();
     this.router.replaceWith('sites.site', site.id);
+  }
+
+  @action
+  handleChangeAddress(addressSearchAddress) {
+    copyAddressSearchAddressToAddressModel(
+      this.model.address,
+      addressSearchAddress,
+    );
   }
 }

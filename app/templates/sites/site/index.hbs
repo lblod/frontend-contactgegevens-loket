@@ -9,7 +9,7 @@
       <:title>Vestiging: {{@model.site.address.fullAddress}}</:title>
       <:subtitle>{{@model.adminUnit.name}}</:subtitle>
       <:action>
-        {{!-- <AuLink
+        <AuLink
           @route="sites.site.edit"
           @model={{@model.site.id}}
           @skin="button-secondary"
@@ -17,8 +17,8 @@
           @iconAlignment="left"
         >
           Bewerk
-        </AuLink> --}}
-        <ReportWrongData />
+        </AuLink>
+        {{! <ReportWrongData /> }}
       </:action>
     </PageHeader>
 

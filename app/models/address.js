@@ -45,6 +45,7 @@ export function combineFullAddress(address) {
 }
 
 export function createAddress(store) {
+  /** @type { AddressModel } */
   let record = store.createRecord('address');
   return record;
 }

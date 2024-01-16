@@ -39,7 +39,7 @@
             >Opslaan</AuButton>
           </AuButtonGroup>
           <ReportWrongData />
-           {{#if this.hasError}}
+          {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
           {{else if this.hasWarning}}
             <Error::Warning @showSaveWarning={{this.hasWarning}} />
@@ -106,7 +106,7 @@
         {{! Contactgegevens }}
 
         <ContactDataEditCard
-          @address={{@model.address}}
+          @address={{this.addressSearchAddress}}
           @isAddressSearchEnabledInitially={{if
             (or (not @model.address.id) @model.address.addressRegisterUri)
             true
@@ -117,6 +117,7 @@
           @errorMessage={{this.validationErrors}}
           @warningMessage={{this.validationWarnings}}
           @clearValidationError={{this.clearValidationError}}
+          @onChangeAddress={{this.handleChangeAddress}}
         >
           <:title>Contactgegevens</:title>
 
