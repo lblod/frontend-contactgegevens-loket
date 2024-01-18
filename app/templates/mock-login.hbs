@@ -11,7 +11,13 @@
         <p class="au-u-margin-top-small au-u-margin-bottom">
           {{#let (unique-id) as |id|}}
             <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
-            <input class="au-c-input au-c-input--block js-js-input-pattern-bound" id={{id}} placeholder="Aalst, Berchem, ..." value={{this.gemeente}} oninput={{perform this.updateSearch value='target.value'}}>
+            <input
+              class="au-c-input au-c-input--block js-js-input-pattern-bound"
+              id={{id}}
+              placeholder="Aalst, Berchem, ..."
+              value={{this.gemeente}}
+              oninput={{perform this.updateSearch value="target.value"}}
+            />
           {{/let}}
         </p>
         <ul>
@@ -20,13 +26,7 @@
               <div
                 class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
               >
-                <AuButton
-                  @skin="link"
-                  {{on
-                    "click"
-                    (fn this.login account)
-                  }}
-                >
+                <AuButton @skin="link" {{on "click" (fn this.login account)}}>
                   <strong>
                     {{account.user.firstName}}
                     {{account.user.familyName}}
@@ -38,7 +38,13 @@
           {{/each}}
         </ul>
       {{/if}}
-      <NumberPagination @page={{this.page}} @size={{this.size}} @nbOfItems={{this.model.length}} @total={{this.model.meta.count}} @links={{this.model.meta.pagination}} />
+      <AuDataTableNumberPagination
+        @page={{this.page}}
+        @size={{this.size}}
+        @nbOfItems={{this.model.length}}
+        @total={{this.model.meta.count}}
+        @links={{this.model.meta.pagination}}
+      />
     </MockLogin>
   </div>
 </StaticPage>
