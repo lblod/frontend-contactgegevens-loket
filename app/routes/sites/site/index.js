@@ -6,10 +6,19 @@ import {
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ContactDataViewSiteRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
+
+  @action
+  error() {
+    this.router.transitionTo('page-not-found', {
+      wildcard: 'pagina-niet-gevonden',
+    });
+  }
 
   async model() {
     const params = this.paramsFor('sites.site');
