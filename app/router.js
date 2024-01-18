@@ -44,5 +44,7 @@ Router.map(function () {
     });
   });
 
-  this.route('page-not-found', { path: '/*path' });
+  this.route('page-not-found', {
+    path: '/*wildcard',
+  });
 });
