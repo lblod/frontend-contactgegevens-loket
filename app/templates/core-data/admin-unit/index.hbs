@@ -90,13 +90,16 @@
               </Item>
             {{/if}}
             {{#if @model.kbo}}
+
               <Item>
                 <:label>KBO nummer</:label>
                 <:content>
                   {{#if @model.kbo.localId}}
                     {{kbo-format @model.kbo.localId}}
                   {{else}}
-                    Zie KBO-nummer Gemeente
+                    {{#if @model.isDistrict}}
+                      Zie KBO-nummer Gemeente
+                    {{/if}}
                   {{/if}}
                 </:content>
               </Item>
