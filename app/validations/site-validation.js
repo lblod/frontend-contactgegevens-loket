@@ -1,9 +1,44 @@
 import Joi from 'joi';
-
+import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
+import { SITE_CODE } from '../models/site';
 const belgiumPhoneNumberRegex = /^(?:\+32|0)[4-9][0-9]{8}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
 const phoneNumberRegex = /^(\+)?[0-9]+$/;
+
+export const allowedSiteMatrix = {
+  [CLASSIFICATION_CODE.MUNICIPALITY]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+    [SITE_CODE.GEMEENTEHUIS]: 1,
+  },
+  [CLASSIFICATION_CODE.OCMW]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.DISTRICT]: {
+    [SITE_CODE.DISTRICTHUIS]: 1,
+  },
+  [CLASSIFICATION_CODE.PROVINCE]: {
+    [SITE_CODE.PROVINCIEHUIS]: 1,
+  },
+  [CLASSIFICATION_CODE.AGB]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.APB]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.DIENSTVERLENENDE_VERENIGING]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.PROJECTVERENIGING]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+};
 
 export const errorValidation = Joi.object()
   .keys({
