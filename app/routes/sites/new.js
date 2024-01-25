@@ -56,7 +56,6 @@ export default class CreateSitesNewRoute extends Route {
       acc[key]++;
       return acc;
     }, initialObject);
-    console.log('siteTypeCount', siteTypeCount);
     address.country = 'België';
     return {
       adminUnit: this.currentSession.group,
