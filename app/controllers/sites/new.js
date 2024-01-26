@@ -69,7 +69,7 @@ export default class CreateSitesNewController extends Controller {
     const key = Object.keys(SITE_CODE).find(
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
-    if (this.model.siteTypeCount[key] > max) {
+    if (this.model.siteTypeCount[key] >= max) {
       maxReachedMessage = 'Je hebt je maximum bereikt';
     }
     let errors = {};
@@ -90,6 +90,7 @@ export default class CreateSitesNewController extends Controller {
     // Voeg de maxReachedMessage toe aan de foutmeldingen als het aantal site types dat wordt ingevoerd niet groter is dan het maximum
     if (maxReachedMessage) {
       errors['siteType'] = maxReachedMessage;
+      console.log('Ik ben er');
     }
 
     return {
