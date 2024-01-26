@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import {
+  allowedSiteMatrix,
   errorValidation,
   warningValidation,
 } from '../../validations/site-validation';
@@ -12,7 +13,7 @@ import {
   createAddressSearchAddressFromAddressModel,
   mapValidationDetailsToErrors,
 } from 'frontend-contactgegevens-loket/helpers/address-helpers';
-
+import { SITE_CODE } from '../../models/site';
 export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
@@ -22,7 +23,6 @@ export default class CreateSitesNewController extends Controller {
   @tracked saveButtonPressed = 0;
   @tracked hasError = false;
   @tracked hasWarning = false;
-
   get addressSearchAddress() {
     return createAddressSearchAddressFromAddressModel(this.model.address);
   }
@@ -40,7 +40,9 @@ export default class CreateSitesNewController extends Controller {
     this.hasWarning = false;
   }
   validateFormData() {
-    const { address, primaryContact, secondaryContact, site } = this.model;
+    let maxReachedMessage = '';
+    const { address, primaryContact, secondaryContact, site, siteTypeCount } =
+      this.model;
     const validationData = {
       siteType: site.siteType.get('label'),
       street: address.street,
@@ -58,13 +60,41 @@ export default class CreateSitesNewController extends Controller {
 
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
+
+    const max =
+      allowedSiteMatrix[this.model.adminUnit.classification.id][
+        this.model.site.siteType.id
+      ];
+
+    const key = Object.keys(SITE_CODE).find(
+      (key) => SITE_CODE[key] === this.model.site.siteType.id,
+    );
+    if (this.model.siteTypeCount[key] > max) {
+      maxReachedMessage = 'Je hebt je maximum bereikt';
+    }
+    let errors = {};
+    let warnings = {};
+
+    if (errorValidationResult && errorValidationResult.error) {
+      errors = mapValidationDetailsToErrors(
+        errorValidationResult.error.details,
+      );
+    }
+
+    if (warningValidationResult && warningValidationResult.error) {
+      warnings = mapValidationDetailsToErrors(
+        warningValidationResult.error.details,
+      );
+    }
+
+    // Voeg de maxReachedMessage toe aan de foutmeldingen als het aantal site types dat wordt ingevoerd niet groter is dan het maximum
+    if (maxReachedMessage) {
+      errors['siteType'] = maxReachedMessage;
+    }
+
     return {
-      errors: errorValidationResult.error
-        ? mapValidationDetailsToErrors(errorValidationResult.error.details)
-        : {},
-      warnings: warningValidationResult.error
-        ? mapValidationDetailsToErrors(warningValidationResult.error.details)
-        : {},
+      errors: errors,
+      warnings: warnings,
     };
   }
 
@@ -111,27 +141,29 @@ export default class CreateSitesNewController extends Controller {
   handleSubmit(event) {
     event.preventDefault();
 
-    // this.validationErrors = {};
-    // this.validationWarnings = {};
-    // const validationResult = this.validateFormData();
-    // if (Object.keys(validationResult.errors).length > 0) {
-    //   // Validation failed. Return
-    //   this.validationErrors = validationResult.errors;
-    //   this.hasError = true;
-    //   this.saveButtonPressed = 0;
-    //   return;
-    // }
+    this.validationErrors = {};
+    this.validationWarnings = {};
+    //ToDO Check if there are not to many sitetypes the same
 
-    // if (Object.keys(validationResult.warnings).length > 0) {
-    //   this.saveButtonPressed = this.saveButtonPressed + 1;
-    //   this.hasError = false;
-    //   this.hasWarning = true;
-    //   if (this.saveButtonPressed === 2) {
-    //     this.saveTask.perform();
-    //   }
-    //   this.validationWarnings = validationResult.warnings;
-    //   return;
-    // }
+    const validationResult = this.validateFormData();
+    if (Object.keys(validationResult.errors).length > 0) {
+      // Validation failed. Return
+      this.validationErrors = validationResult.errors;
+      this.hasError = true;
+      this.saveButtonPressed = 0;
+      return;
+    }
+
+    if (Object.keys(validationResult.warnings).length > 0) {
+      this.saveButtonPressed = this.saveButtonPressed + 1;
+      this.hasError = false;
+      this.hasWarning = true;
+      if (this.saveButtonPressed === 2) {
+        this.saveTask.perform();
+      }
+      this.validationWarnings = validationResult.warnings;
+      return;
+    }
 
     // No errors and no warnings, we can save
     this.saveTask.perform();

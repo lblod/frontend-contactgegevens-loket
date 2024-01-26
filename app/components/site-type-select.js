@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
-
+import { allowedSiteMatrix } from '../validations/site-validation';
 export default class SiteTypeSelectComponent extends Component {
   @service store;
 
@@ -83,7 +83,6 @@ export default class SiteTypeSelectComponent extends Component {
       CLASSIFICATION_CODE.APB
     );
   }
-
   loadSiteTypesTask = task(async () => {
     let allTypes = await this.store.findAll('site-type', { reload: true });
     let filteredTypes = [];
