@@ -104,7 +104,7 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#unless (or @model.isAPB @model.isDistrict)}}
+            {{#unless @model.isAPB}}
               <Item>
                 <:label>OVO nummer</:label>
                 <:content>
@@ -116,7 +116,8 @@
               <Item>
                 <:label>NIS nummer</:label>
                 <:content>
-                  {{@model.nis.localId}}
+                  {{@model.adminUnit.scope.exactMatch.notation}}
+                  {{! data missing }}
                 </:content>
               </Item>
             {{/if}}
