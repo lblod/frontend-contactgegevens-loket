@@ -45,8 +45,6 @@
               </Item>
             {{/if}}
 
-
-
             {{#if @model.isIgs}}
               <Item>
                 <:label>Regio</:label>
@@ -104,7 +102,7 @@
                 <:label>OVO nummer</:label>
                 <:content>
                   {{@model.ovo.localId}}
-              </:content>
+                </:content>
               </Item>
             {{/unless}}
             {{#if @model.nis}}
@@ -112,7 +110,7 @@
                 <:label>NIS nummer</:label>
                 <:content>
                   {{@model.adminUnit.scope.exactMatch.notation}}
-                  {{!-- data missing --}}
+                  {{! data missing }}
                 </:content>
               </Item>
             {{/if}}
