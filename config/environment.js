@@ -31,6 +31,10 @@ module.exports = function (environment) {
       authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
       switchRedirectUrl: '{{OAUTH_SWITCH_URL}}',
     },
+    features: {
+      'edit-feature': '{{ENABLE_EDIT_FEATURE}}',
+      'new-feature': '{{ENABLE_NEW_FEATURE}}',
+    },
   };
 
   if (environment === 'development') {

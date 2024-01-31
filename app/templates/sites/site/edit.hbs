@@ -51,78 +51,79 @@
     </PageHeader>
 
     {{! Kerngegevens }}
+    {{#if (is-feature-enabled "edit-feature")}}
+      <form
+        id="edit-site-form"
+        aria-label="Edit site"
+        {{on "submit" this.handleSubmit}}
+      >
+        <div class="au-o-flow au-o-flow--large">
+          <EditCard>
+            <:title>Kerngegevens</:title>
+            <:card as |Card|>
+              <Card.Columns>
+                <:left as |Item|>
+                  <Item
+                    @labelFor="site-type"
+                    @required={{true}}
+                    @errorMessage={{this.validationErrors.siteType}}
+                  >
+                    <:label>Type vestiging</:label>
+                    <:content as |hasError|>
+                      <SiteTypeSelect
+                        @selected={{@model.site.siteType}}
+                        @administrativeUnitClassification={{this.model.adminUnit.classification}}
+                        @onChange={{fn (mut @model.site.siteType)}}
+                        @id="site-type"
+                        @error={{hasError}}
+                        @clearValidationError={{this.clearValidationError}}
+                      />
+                    </:content>
+                  </Item>
+                </:left>
+                <:right as |Item|>
+                  <Item @errorMessage={{this.isNoPrimarySiteErrorMessage}}>
+                    <:label>Primair correspondentieadres</:label>
+                    <:content>
+                      <AuRadioGroup
+                        @name="is-primary-site"
+                        @alignment="inline"
+                        @disabled={{this.currentIsPrimary}}
+                        @onChange={{fn (mut this.selectedPrimaryStatus)}}
+                        @selected={{this.currentIsPrimary}}
+                        as |Group|
+                      >
+                        <Group.Radio @value={{true}}>Ja</Group.Radio>
+                        <Group.Radio @value={{false}}>Neen</Group.Radio>
+                      </AuRadioGroup>
+                    </:content>
+                  </Item>
+                </:right>
+              </Card.Columns>
+            </:card>
+          </EditCard>
 
-    <form
-      id="edit-site-form"
-      aria-label="Edit site"
-      {{on "submit" this.handleSubmit}}
-    >
-      <div class="au-o-flow au-o-flow--large">
-        <EditCard>
-          <:title>Kerngegevens</:title>
-          <:card as |Card|>
-            <Card.Columns>
-              <:left as |Item|>
-                <Item
-                  @labelFor="site-type"
-                  @required={{true}}
-                  @errorMessage={{this.validationErrors.siteType}}
-                >
-                  <:label>Type vestiging</:label>
-                  <:content as |hasError|>
-                    <SiteTypeSelect
-                      @selected={{@model.site.siteType}}
-                      @administrativeUnitClassification={{this.model.adminUnit.classification}}
-                      @onChange={{fn (mut @model.site.siteType)}}
-                      @id="site-type"
-                      @error={{hasError}}
-                      @clearValidationError={{this.clearValidationError}}
-                    />
-                  </:content>
-                </Item>
-              </:left>
-              <:right as |Item|>
-                <Item @errorMessage={{this.isNoPrimarySiteErrorMessage}}>
-                  <:label>Primair correspondentieadres</:label>
-                  <:content>
-                    <AuRadioGroup
-                      @name="is-primary-site"
-                      @alignment="inline"
-                      @disabled={{this.currentIsPrimary}}
-                      @onChange={{fn (mut this.selectedPrimaryStatus)}}
-                      @selected={{this.currentIsPrimary}}
-                      as |Group|
-                    >
-                      <Group.Radio @value={{true}}>Ja</Group.Radio>
-                      <Group.Radio @value={{false}}>Neen</Group.Radio>
-                    </AuRadioGroup>
-                  </:content>
-                </Item>
-              </:right>
-            </Card.Columns>
-          </:card>
-        </EditCard>
+          {{! Contactgegevens }}
 
-        {{! Contactgegevens }}
+          <ContactDataEditCard
+            @address={{this.addressSearchAddress}}
+            @isAddressSearchEnabledInitially={{if
+              (or (not @model.address.id) @model.address.addressRegisterUri)
+              true
+              false
+            }}
+            @primaryContact={{@model.primaryContact}}
+            @secondaryContact={{@model.secondaryContact}}
+            @errorMessage={{this.validationErrors}}
+            @warningMessage={{this.validationWarnings}}
+            @clearValidationError={{this.clearValidationError}}
+            @onChangeAddress={{this.handleChangeAddress}}
+          >
+            <:title>Contactgegevens</:title>
 
-        <ContactDataEditCard
-          @address={{this.addressSearchAddress}}
-          @isAddressSearchEnabledInitially={{if
-            (or (not @model.address.id) @model.address.addressRegisterUri)
-            true
-            false
-          }}
-          @primaryContact={{@model.primaryContact}}
-          @secondaryContact={{@model.secondaryContact}}
-          @errorMessage={{this.validationErrors}}
-          @warningMessage={{this.validationWarnings}}
-          @clearValidationError={{this.clearValidationError}}
-          @onChangeAddress={{this.handleChangeAddress}}
-        >
-          <:title>Contactgegevens</:title>
-
-        </ContactDataEditCard>
-      </div>
-    </form>
+          </ContactDataEditCard>
+        </div>
+      </form>
+    {{/if}}
   </div>
 </div>
