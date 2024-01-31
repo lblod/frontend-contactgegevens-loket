@@ -1,19 +1,23 @@
 {{page-title "Vestigingen"}}
 <PageHeader class="au-o-box">
+
   <:title>Vestigingen</:title>
   <:subtitle>{{this.currentSession.group.name}}
     ({{this.currentSession.groupClassificationLabel}})</:subtitle>
   <:action>
-    <AuLink
-      @route="sites.new"
-      @skin="button"
-      @icon="plus"
-      @iconAlignment="left"
-    >
-      Nieuwe vestiging toevoegen
-    </AuLink>
-    {{! <ReportWrongData /> }}
+    {{#if (is-feature-enabled "edit-feature")}}
+      <AuLink
+        @route="sites.new"
+        @skin="button"
+        @icon="plus"
+        @iconAlignment="left"
+      >
+        Nieuwe vestiging toevoegen
+      </AuLink>
+      {{! <ReportWrongData /> }}
+    {{/if}}
   </:action>
+
 </PageHeader>
 <AuDataTable
   @content={{@model.allSites}}

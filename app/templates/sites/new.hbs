@@ -38,7 +38,7 @@
         </div>
       </:action>
     </PageHeader>
-    {{#if (is-feature-enabled "new-feature")}}
+    {{#if (is-feature-enabled "edit-feature")}}
       <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
         <div class="au-o-flow au-o-flow--large">
           <EditCard>

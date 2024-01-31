@@ -33,7 +33,6 @@ module.exports = function (environment) {
     },
     features: {
       'edit-feature': '{{ENABLE_EDIT_FEATURE}}',
-      'new-feature': '{{ENABLE_NEW_FEATURE}}',
     },
   };
 
