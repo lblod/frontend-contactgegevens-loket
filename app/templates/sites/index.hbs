@@ -49,11 +49,13 @@
         </AuLink>
       </td>
       <td>{{site.siteType.label}}</td>
-      <td>
-        <AuLink @model={{site.id}} @route="sites.site.edit">
-          Bewerk
-        </AuLink>
-      </td>
+      {{#if (is-feature-enabled "edit-feature")}}
+        <td>
+          <AuLink @model={{site.id}} @route="sites.site.edit">
+            Bewerk
+          </AuLink>
+        </td>
+      {{/if}}
     </c.body>
   </t.content>
 </AuDataTable>
