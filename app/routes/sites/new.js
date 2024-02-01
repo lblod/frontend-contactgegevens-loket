@@ -7,14 +7,18 @@ import {
 } from 'frontend-contactgegevens-loket/models/contact-point';
 import { tracked } from '@glimmer/tracking';
 import { SITE_CODE } from '../../models/site';
+import config from 'frontend-contactgegevens-loket/config/environment';
 export default class CreateSitesNewRoute extends Route {
   @service store;
   @service currentSession;
   @service router;
   @tracked selectCountSite = 0;
-
+  get editFeature() {
+    return config.features['edit-feature'];
+  }
   beforeModel() {
-    if (!this.currentSession.canEdit) {
+    console.log('testL', this.editFeature);
+    if (!this.currentSession.canEdit || this.editFeature) {
       this.router.transitionTo('page-not-found', {
         wildcard: 'pagina-niet-gevonden',
       });
