@@ -17,7 +17,6 @@ export default class ContactDataEditSiteRoute extends Route {
     return config.features['edit-feature'];
   }
   beforeModel() {
-    console.log('testL', this.editFeature);
     if (!this.currentSession.canEdit || this.editFeature) {
       this.router.transitionTo('page-not-found', {
         wildcard: 'pagina-niet-gevonden',

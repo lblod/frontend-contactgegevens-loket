@@ -38,67 +38,66 @@
         </div>
       </:action>
     </PageHeader>
-    {{#if (is-feature-enabled "edit-feature")}}
-      <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
-        <div class="au-o-flow au-o-flow--large">
-          <EditCard>
-            <:title>Kerngegevens</:title>
-            <:card as |Card|>
-              <Card.Columns>
-                <:left as |Item|>
-                  <Item
-                    @labelFor="site-type"
-                    @required={{true}}
-                    @errorMessage={{this.validationErrors.siteType}}
-                  >
-                    <:label>Type vestiging</:label>
-                    <:content as |hasError|>
-                      <SiteTypeSelect
-                        @selected={{@model.site.siteType}}
-                        @administrativeUnitClassification={{this.model.adminUnit.classification}}
-                        @onChange={{fn (mut @model.site.siteType)}}
-                        @id="site-type"
-                        @error={{hasError}}
-                        @clearValidationError={{this.clearValidationError}}
-                      />
-                    </:content>
-                  </Item>
-                </:left>
-                <:right as |Item|>
-                  <Item>
-                    <:label>Primair correspondentieadres</:label>
-                    <:content>
-                      <AuRadioGroup
-                        @name="is-primary-site"
-                        @alignment="inline"
-                        @onChange={{fn (mut this.isPrimarySite)}}
-                        @selected={{this.isPrimarySite}}
-                        as |Group|
-                      >
-                        <Group.Radio @value={{true}}>Ja</Group.Radio>
-                        <Group.Radio @value={{false}}>Nee</Group.Radio>
-                      </AuRadioGroup>
 
-                    </:content>
-                  </Item>
-                </:right>
-              </Card.Columns>
-            </:card>
-          </EditCard>
+    <form id="new-vestiging-form" {{on "submit" this.handleSubmit}}>
+      <div class="au-o-flow au-o-flow--large">
+        <EditCard>
+          <:title>Kerngegevens</:title>
+          <:card as |Card|>
+            <Card.Columns>
+              <:left as |Item|>
+                <Item
+                  @labelFor="site-type"
+                  @required={{true}}
+                  @errorMessage={{this.validationErrors.siteType}}
+                >
+                  <:label>Type vestiging</:label>
+                  <:content as |hasError|>
+                    <SiteTypeSelect
+                      @selected={{@model.site.siteType}}
+                      @administrativeUnitClassification={{this.model.adminUnit.classification}}
+                      @onChange={{fn (mut @model.site.siteType)}}
+                      @id="site-type"
+                      @error={{hasError}}
+                      @clearValidationError={{this.clearValidationError}}
+                    />
+                  </:content>
+                </Item>
+              </:left>
+              <:right as |Item|>
+                <Item>
+                  <:label>Primair correspondentieadres</:label>
+                  <:content>
+                    <AuRadioGroup
+                      @name="is-primary-site"
+                      @alignment="inline"
+                      @onChange={{fn (mut this.isPrimarySite)}}
+                      @selected={{this.isPrimarySite}}
+                      as |Group|
+                    >
+                      <Group.Radio @value={{true}}>Ja</Group.Radio>
+                      <Group.Radio @value={{false}}>Nee</Group.Radio>
+                    </AuRadioGroup>
 
-          <ContactDataEditCard
-            @address={{this.addressSearchAddress}}
-            @onChangeAddress={{this.handleChangeAddress}}
-            @primaryContact={{@model.primaryContact}}
-            @secondaryContact={{@model.secondaryContact}}
-            @errorMessage={{this.validationErrors}}
-            @warningMessage={{this.validationWarnings}}
-          >
-            <:title>Contactgegevens</:title>
+                  </:content>
+                </Item>
+              </:right>
+            </Card.Columns>
+          </:card>
+        </EditCard>
 
-          </ContactDataEditCard>
-        </div>
-      </form>
-    {{/if}}
+        <ContactDataEditCard
+          @address={{this.addressSearchAddress}}
+          @onChangeAddress={{this.handleChangeAddress}}
+          @primaryContact={{@model.primaryContact}}
+          @secondaryContact={{@model.secondaryContact}}
+          @errorMessage={{this.validationErrors}}
+          @warningMessage={{this.validationWarnings}}
+        >
+          <:title>Contactgegevens</:title>
+
+        </ContactDataEditCard>
+      </div>
+    </form>
   </div>
 </div>
