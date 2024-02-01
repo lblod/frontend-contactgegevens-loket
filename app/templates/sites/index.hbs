@@ -42,7 +42,9 @@
           {{site.address.fullAddress}}
         </AuLink>
       </td>
-      <td>{{site.siteType.label}}</td>
+      <td>
+        <SiteTypeWithName @site={{site}} />
+      </td>
       <td>
         <AuLink @model={{site.id}} @route="sites.site.edit">
           Bewerk
