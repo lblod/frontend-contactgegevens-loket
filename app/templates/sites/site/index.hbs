@@ -9,16 +9,20 @@
       <:title>Vestiging: {{@model.site.address.fullAddress}}</:title>
       <:subtitle>{{@model.adminUnit.name}}</:subtitle>
       <:action>
-        <AuLink
-          @route="sites.site.edit"
-          @model={{@model.site.id}}
-          @skin="button-secondary"
-          @icon="pencil"
-          @iconAlignment="left"
-        >
-          Bewerk
-        </AuLink>
-        {{! <ReportWrongData /> }}
+        {{#if (is-feature-enabled "edit-feature")}}
+          <AuLink
+            @route="sites.site.edit"
+            @model={{@model.site.id}}
+            @skin="button-secondary"
+            @icon="pencil"
+            @iconAlignment="left"
+          >
+            Bewerk
+          </AuLink>
+        {{else}}
+          <ReportWrongData />
+        {{/if}}
+
       </:action>
     </PageHeader>
 

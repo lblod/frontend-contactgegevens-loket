@@ -31,14 +31,13 @@ module.exports = function (environment) {
       authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
       switchRedirectUrl: '{{OAUTH_SWITCH_URL}}',
     },
+    features: {
+      'edit-feature': '{{ENABLE_EDIT_FEATURE}}',
+    },
   };
 
   if (environment === 'development') {
-    // ENV.APP.LOG_RESOLVER = true;
-    // ENV.APP.LOG_ACTIVE_GENERATION = true;
-    // ENV.APP.LOG_TRANSITIONS = true;
-    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.features["edit-feature"] = true
   }
 
   if (environment === 'test') {

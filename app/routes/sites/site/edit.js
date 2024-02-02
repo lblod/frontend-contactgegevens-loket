@@ -7,13 +7,18 @@ import {
   findSecondaryContact,
 } from 'frontend-contactgegevens-loket/models/contact-point';
 import { SITE_CODE } from '../../../models/site';
+import config from 'frontend-contactgegevens-loket/config/environment';
 export default class ContactDataEditSiteRoute extends Route {
   @service currentSession;
   @service router;
   @service store;
 
+  get editFeature() {
+    const editFeature = config.features['edit-feature']
+    return editFeature === true || editFeature === 'true';
+  }
   beforeModel() {
-    if (!this.currentSession.canEdit) {
+    if (!this.currentSession.canEdit || !this.editFeature) {
       this.router.transitionTo('page-not-found', {
         wildcard: 'pagina-niet-gevonden',
       });
