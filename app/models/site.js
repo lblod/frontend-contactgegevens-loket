@@ -1,4 +1,4 @@
-import Model, { hasMany, belongsTo } from '@ember-data/model';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 
 export default class SiteModel extends Model {
   @belongsTo('address', {
@@ -25,11 +25,19 @@ export default class SiteModel extends Model {
   })
   organization;
 
+  @attr siteTypeName;
+
   // Maybe await and get primary site if not loaded?
   isPrimaryOf(adminUnit) {
     if (!adminUnit.primarySite)
       throw new Error('Admin unit primary site not loaded.');
     return this.id === adminUnit.primarySite.id;
+  }
+  get isOtherSite() {
+    return (
+      this.siteType &&
+      this.siteType.get('id') === 'dcc01338-842c-4fbd-ba68-3ca6f3af975c'
+    );
   }
 }
 export const SITE_CODE = {

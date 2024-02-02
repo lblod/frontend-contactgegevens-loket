@@ -206,4 +206,8 @@ export default class ContactDataEditSiteController extends Controller {
       addressSearchAddress,
     );
   }
+  @action
+  setSiteTypeName(e) {
+    this.model.site.siteTypeName = e.target.value;
+  }
 }

@@ -190,4 +190,8 @@ export default class CreateSitesNewController extends Controller {
       addressSearchAddress,
     );
   }
+  @action
+  setSiteTypeName(e) {
+    this.model.site.siteTypeName = e.target.value;
+  }
 }

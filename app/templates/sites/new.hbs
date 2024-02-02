@@ -63,6 +63,22 @@
                     />
                   </:content>
                 </Item>
+                {{#if @model.site.isOtherSite}}
+                  <Item
+                    @labelFor="site-type-name"
+                  >
+                    <:label>Name</:label>
+                    <:content>
+                     <AuInput
+                      @selected={{@model.site.siteTypeName}}
+                      {{on "input" this.setSiteTypeName}}
+                      value={{@model.site.siteTypeName}}
+                      @width="block"
+                      maxlength="50"
+                     />
+                    </:content>
+                  </Item>
+                {{/if}}
               </:left>
               <:right as |Item|>
                 <Item>
