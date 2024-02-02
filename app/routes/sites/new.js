@@ -14,7 +14,8 @@ export default class CreateSitesNewRoute extends Route {
   @service router;
   @tracked selectCountSite = 0;
   get editFeature() {
-    return config.features['edit-feature'];
+    const editFeature = config.features['edit-feature']
+    return editFeature === true || editFeature === 'true';
   }
   beforeModel() {
     if (!this.currentSession.canEdit || !this.editFeature) {
