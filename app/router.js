@@ -15,6 +15,7 @@ Router.map(function () {
 
   this.route('auth', { path: '/authorization' }, function () {
     this.route('callback');
+    this.route('callback-error');
     this.route('login');
     this.route('logout');
     this.route('switch');

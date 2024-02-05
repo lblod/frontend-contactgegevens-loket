@@ -17,7 +17,7 @@ export default class ContactDataViewSiteRoute extends Route {
         primarySiteId: primarySite.id,
       };
     } catch (error) {
-      this.router.transitionTo('auth.logout');
+      this.router.transitionTo('auth.callback-error');
     }
   }
 }
