@@ -87,7 +87,9 @@ export default class ContactDataEditSiteController extends Controller {
     const key = Object.keys(SITE_CODE).find(
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
-    if (this.model.siteTypeCount[key] >= max) {
+    const siteTypeExists = this.model.siteTypeCount[key] > 0;
+
+    if (!siteTypeExists && this.model.siteTypeCount[key] >= max) {
       maxReachedMessage = 'Je hebt je maximum bereikt';
     }
     let errors = {};
