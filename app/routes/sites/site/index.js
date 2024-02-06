@@ -15,9 +15,7 @@ export default class ContactDataViewSiteRoute extends Route {
 
   @action
   error() {
-    this.router.transitionTo('page-not-found', {
-      wildcard: 'pagina-niet-gevonden',
-    });
+    this.router.transitionTo('index');
   }
 
   async model() {
