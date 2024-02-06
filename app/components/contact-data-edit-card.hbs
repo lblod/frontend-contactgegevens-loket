@@ -35,7 +35,7 @@
               @warning={{unless @errorMessage @warningMessage}}
               @id={{concat @id "-telPrimary"}}
               type="tel"
-              {{!-- {{on "focusout" (fn @clearValidationError "telephonePrimary")}} --}}
+              {{on "focusout" (fn @clearValidationError "telephonePrimary")}}
             />
             {{#if @warningMessage}}
               {{#if (has-block "warning")}}
@@ -70,7 +70,7 @@
               @error={{hasError}}
               @id={{concat @id "-telSecondary"}}
               type="tel"
-              {{!-- {{on "focusout" (fn @clearValidationError "telephoneSecondary")}} --}}
+              {{on "focusout" (fn @clearValidationError "telephoneSecondary")}}
             />
             {{#if @warningMessage.telephoneSecondary}}
               {{#if (has-block "warning")}}
@@ -83,7 +83,7 @@
             {{/if}}
           </:content>
           <:helpText>
-            {{help-text "url"}}
+            {{help-text "phone-number"}}
           </:helpText>
         </Item>
         <Item
@@ -98,7 +98,7 @@
               @onUpdate={{fn (mut @primaryContact.email)}}
               @error={{errorMessage}}
               @id={{concat @id "-emailPrimary"}}
-              {{!-- {{on "focusout" (fn @clearValidationError "emailPrimary")}} --}}
+              {{on "focusout" (fn @clearValidationError "emailPrimary")}}
             />
           </:content>
           <:helpText>
@@ -117,7 +117,7 @@
               @onUpdate={{fn (mut @primaryContact.website)}}
               @error={{hasError}}
               @id={{concat @id "-webPrimary"}}
-              {{!-- {{on "focusout" (fn @clearValidationError "websitePrimary")}} --}}
+              {{on "focusout" (fn @clearValidationError "websitePrimary")}}
             />
           </:content>
           <:helpText>
