@@ -1,18 +1,16 @@
+<NavigationBar />
+
 <SidebarContainer>
   <:sidebar>
     <div class="au-c-sidebar">
       <ul class="au-c-list-navigation">
         <li class="au-c-list-navigation__item">
-          <AuNavigationNestedLink
-            @route="sites"
-          >
+          <AuNavigationNestedLink @route="sites">
             Vestigingen
           </AuNavigationNestedLink>
         </li>
         <li class="au-c-list-navigation__item">
-          <AuNavigationNestedLink
-            @route="core-data.admin-unit"
-          >
+          <AuNavigationNestedLink @route="core-data.admin-unit">
             Kerngegevens
           </AuNavigationNestedLink>
         </li>
@@ -20,7 +18,6 @@
     </div>
   </:sidebar>
   <:content>
-    <NavigationBar />
     {{yield}}
   </:content>
 </SidebarContainer>
