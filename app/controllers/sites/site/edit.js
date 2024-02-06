@@ -59,8 +59,14 @@ export default class ContactDataEditSiteController extends Controller {
 
   validateFormData() {
     let maxReachedMessage = '';
-    const { address, primaryContact, secondaryContact, site, siteTypeCount } =
-      this.model;
+    const { address, primaryContact, secondaryContact, site } = this.model;
+
+    /** @type {Record<keyof SITE_CODE,number>} */
+    const siteTypeCountBeforeSave = this.model.siteTypeCount;
+
+    /** @type {keyof SITE_CODE} */
+    const siteTypeKeyBeforeSave = this.model.siteTypeKeyBeforeSave;
+
     const validationData = {
       siteType: site.siteType.get('label'),
       street: address.street,
@@ -79,17 +85,30 @@ export default class ContactDataEditSiteController extends Controller {
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
 
-    const max =
-      allowedSiteMatrix[this.model.adminUnit.classification.id][
-        this.model.site.siteType.id
-      ];
+    const currentAdminUnitClassificationId =
+      this.model.adminUnit.classification.id;
+    const currentSiteTypeId = this.model.site.siteType.id;
 
-    const key = Object.keys(SITE_CODE).find(
-      (key) => SITE_CODE[key] === this.model.site.siteType.id,
+    const maxAllowedSitesOfThisType =
+      allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
+
+    const siteTypeKeyAfterSave = Object.keys(SITE_CODE).find(
+      (key) => SITE_CODE[key] === currentSiteTypeId,
     );
-    const siteTypeExists = this.model.siteTypeCount[key] > 0;
+    if (!siteTypeKeyAfterSave)
+      throw new Error(
+        `Impossible. Cannot find site type id in site type data structure.`,
+      );
 
-    if (!siteTypeExists && this.model.siteTypeCount[key] >= max) {
+    const siteTypeCountAfterSave = { ...siteTypeCountBeforeSave };
+    siteTypeCountAfterSave[siteTypeKeyBeforeSave] =
+      siteTypeCountBeforeSave[siteTypeKeyBeforeSave] - 1;
+    siteTypeCountAfterSave[siteTypeKeyAfterSave] =
+      siteTypeCountBeforeSave[siteTypeKeyAfterSave] + 1;
+
+    if (
+      siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
+    ) {
       maxReachedMessage = 'Je hebt je maximum bereikt';
     }
     let errors = {};
@@ -207,9 +226,5 @@ export default class ContactDataEditSiteController extends Controller {
       this.model.address,
       addressSearchAddress,
     );
-  }
-  @action
-  setSiteTypeName(e) {
-    this.model.site.siteTypeName = e.target.value;
   }
 }
