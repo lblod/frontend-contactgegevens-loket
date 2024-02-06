@@ -88,7 +88,7 @@ export default class ContactDataEditSiteController extends Controller {
     const currentAdminUnitClassificationId =
       this.model.adminUnit.classification.id;
     const currentSiteTypeId = this.model.site.siteType.id;
-
+    console.log(currentSiteTypeId);
     const maxAllowedSitesOfThisType =
       allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
 
@@ -104,12 +104,17 @@ export default class ContactDataEditSiteController extends Controller {
     siteTypeCountAfterSave[siteTypeKeyBeforeSave] =
       siteTypeCountBeforeSave[siteTypeKeyBeforeSave] - 1;
     siteTypeCountAfterSave[siteTypeKeyAfterSave] =
-      siteTypeCountBeforeSave[siteTypeKeyAfterSave] + 1;
-
+      siteTypeCountAfterSave[siteTypeKeyAfterSave] + 1;
+    console.log({
+      siteTypeCountBeforeSave,
+      siteTypeCountAfterSave,
+      siteTypeKeyBeforeSave,
+      siteTypeKeyAfterSave,
+    });
     if (
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
-      maxReachedMessage = 'Je hebt je maximum bereikt';
+      maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};
     let warnings = {};

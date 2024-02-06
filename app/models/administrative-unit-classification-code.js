@@ -23,6 +23,10 @@ export const CLASSIFICATION = {
     id: '5ab0e9b8a3b2ca7c5e000001',
     label: 'Gemeente',
   },
+  POLITIEZONE: {
+    id: 'a3922c6d-425b-474f-9a02-ffb71a436bfc',
+    label: 'PolitieZone',
+  },
   PROVINCE: {
     id: '5ab0e9b8a3b2ca7c5e000000',
     label: 'Provincie',
