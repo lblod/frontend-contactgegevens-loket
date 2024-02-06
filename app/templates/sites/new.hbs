@@ -64,18 +64,16 @@
                   </:content>
                 </Item>
                 {{#if @model.site.isOtherSite}}
-                  <Item
-                    @labelFor="site-type-name"
-                  >
+                  <Item @labelFor="site-type-name">
                     <:label>Name</:label>
                     <:content>
-                     <AuInput
-                      @selected={{@model.site.siteTypeName}}
-                      {{on "input" this.setSiteTypeName}}
-                      value={{@model.site.siteTypeName}}
-                      @width="block"
-                      maxlength="50"
-                     />
+                      <AuInput
+                        @selected={{@model.site.siteTypeName}}
+                        {{on "input" this.setSiteTypeName}}
+                        value={{@model.site.siteTypeName}}
+                        @width="block"
+                        maxlength="50"
+                      />
                     </:content>
                   </Item>
                 {{/if}}
@@ -109,6 +107,7 @@
           @secondaryContact={{@model.secondaryContact}}
           @errorMessage={{this.validationErrors}}
           @warningMessage={{this.validationWarnings}}
+          @clearValidationError={{this.clearValidationError}}
         >
           <:title>Contactgegevens</:title>
 
