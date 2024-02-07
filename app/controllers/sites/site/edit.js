@@ -88,7 +88,6 @@ export default class ContactDataEditSiteController extends Controller {
     const currentAdminUnitClassificationId =
       this.model.adminUnit.classification.id;
     const currentSiteTypeId = this.model.site.siteType.id;
-    console.log(currentSiteTypeId);
     const maxAllowedSitesOfThisType =
       allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
 
@@ -105,12 +104,6 @@ export default class ContactDataEditSiteController extends Controller {
       siteTypeCountBeforeSave[siteTypeKeyBeforeSave] - 1;
     siteTypeCountAfterSave[siteTypeKeyAfterSave] =
       siteTypeCountAfterSave[siteTypeKeyAfterSave] + 1;
-    console.log({
-      siteTypeCountBeforeSave,
-      siteTypeCountAfterSave,
-      siteTypeKeyBeforeSave,
-      siteTypeKeyAfterSave,
-    });
     if (
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
