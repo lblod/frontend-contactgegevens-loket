@@ -19,7 +19,7 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    appName: 'Contactgegevens',
+    appName: 'Contact- en Organisatiegegevens',
     contactEmail: 'LoketLokaalBestuur@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
 
@@ -37,7 +37,7 @@ module.exports = function (environment) {
   };
 
   if (environment === 'development') {
-    ENV.features["edit-feature"] = true
+    ENV.features['edit-feature'] = true;
   }
 
   if (environment === 'test') {
