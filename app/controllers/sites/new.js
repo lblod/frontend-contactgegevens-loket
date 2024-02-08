@@ -70,7 +70,7 @@ export default class CreateSitesNewController extends Controller {
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
     if (this.model.siteTypeCount[key] >= max) {
-      maxReachedMessage = 'Je hebt je maximum bereikt';
+      maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};
     let warnings = {};

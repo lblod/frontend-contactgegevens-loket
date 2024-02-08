@@ -14,7 +14,7 @@ export default class ContactDataEditSiteRoute extends Route {
   @service store;
 
   get editFeature() {
-    const editFeature = config.features['edit-feature']
+    const editFeature = config.features['edit-feature'];
     return editFeature === true || editFeature === 'true';
   }
   beforeModel() {
@@ -46,6 +46,7 @@ export default class ContactDataEditSiteRoute extends Route {
       acc[curr] = 0;
       return acc;
     }, {});
+    /** @type {Record<keyof SITE_CODE,number>} */
     const siteTypeCount = siteTypeIds.reduce((acc, current) => {
       const key = Object.keys(SITE_CODE).find(
         (key) => SITE_CODE[key] === current,
@@ -79,6 +80,14 @@ export default class ContactDataEditSiteRoute extends Route {
       findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
     const secondaryContact =
       findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
+
+    const siteTypeKeyBeforeSave = Object.keys(SITE_CODE).find(
+      (key) => SITE_CODE[key] === site.siteType.id,
+    );
+    if (!siteTypeKeyBeforeSave)
+      throw new Error(
+        `Impossible. Cannot find site type id in site type data structure.`,
+      );
     return {
       site,
       address,
@@ -88,6 +97,7 @@ export default class ContactDataEditSiteRoute extends Route {
       adminUnit,
       primarySite,
       siteTypeCount,
+      siteTypeKeyBeforeSave,
     };
   }
   setupController(controller) {
