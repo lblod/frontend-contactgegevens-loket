@@ -96,23 +96,24 @@
                   {{#if @model.kbo.localId}}
                     {{kbo-format @model.kbo.localId}}
                   {{else}}
+                  {{!--When the kbo sturctured identifier has no localId this is actually a data quality issue --}}
                     {{#if @model.isDistrict}}
                       Zie KBO-nummer gemeente
+                    {{else}}
+                      Data niet ingevuld
                     {{/if}}
                   {{/if}}
                 </:content>
               </Item>
             {{/if}}
-            {{#unless @model.kbo}}
-              {{#if @model.isDistrict}}
-                <Item>
-                  <:label>KBO nummer</:label>
-                  <:content>
-                      Zie KBO-nummer gemeente
-                  </:content>
-                </Item>
-              {{/if}}
-            {{/unless}}
+            {{#if this.adminUnitNoKboAndDistrict}}
+              <Item>
+                <:label>KBO nummer</:label>
+                <:content>
+                    Zie KBO-nummer gemeente
+                </:content>
+              </Item>
+            {{/if}}
             {{#unless @model.isAPB}}
               <Item>
                 <:label>OVO nummer</:label>
