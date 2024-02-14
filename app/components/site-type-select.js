@@ -64,6 +64,12 @@ export default class SiteTypeSelectComponent extends Component {
       CLASSIFICATION_CODE.AGB
     );
   }
+  get isPoliceZone() {
+    return (
+      this.args.administrativeUnitClassification.get('id') ===
+      CLASSIFICATION_CODE.POLICE_ZONE
+    );
+  }
 
   get isIGS() {
     const typesThatAreIGS = [
@@ -115,6 +121,12 @@ export default class SiteTypeSelectComponent extends Component {
     } else if (this.isDistrict) {
       filteredTypes.push(
         allTypes.find((type) => type.id == 'db13a289b78e42d19d8d1d269b61b18f'), // Districtshuis
+      );
+    } else if (this.isPoliceZone) {
+      filteredTypes.push(
+        allTypes.find(
+          (type) => type.id == '0ed15289-1f3d-4172-8c46-0506de5aa2a3',
+        ), // Hoofdcommissariaat
       );
     }
 
