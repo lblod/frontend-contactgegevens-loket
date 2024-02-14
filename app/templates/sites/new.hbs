@@ -31,7 +31,12 @@
           {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
           {{else if this.hasWarning}}
-            <Error::Warning @showSaveWarning={{this.hasWarning}} />
+            <Error::Warning
+              @showSaveWarning={{this.hasWarning}}
+              @warningText="Kijk na of de gegevens bij de
+    waarschuwingsmelding(en) juist zijn ingevuld. Indien de gegevens correct
+    zijn, klik nogmaals op ‘Voeg toe’."
+            />
 
           {{/if}}
 
