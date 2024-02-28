@@ -34,6 +34,27 @@
                 </:content>
               </Item>
             {{/if}}
+            {{#if @model.isWorshipService}}
+              <Item>
+                <:label>Soort eredienst</:label>
+                <:content
+                >{{@model.adminUnit.recognizedWorshipType.label}}</:content>
+              </Item>
+            {{/if}}
+            {{#if @model.adminUnit.denomination}}
+              <Item>
+                <:label>Strekking</:label>
+                <:content>{{@model.adminUnit.denomination}}</:content>
+              </Item>
+            {{/if}}
+            {{#if @model.isWorshipService}}
+              <Item>
+                <:label>Grensoverschrijdend</:label>
+                <:content>
+                  {{@model.adminUnit.crossBorderNominal}}
+                </:content>
+              </Item>
+            {{/if}}
             {{#if
               (and @model.adminUnit.scope.locatedWithin @model.isMunicipality)
             }}
