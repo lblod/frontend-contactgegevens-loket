@@ -80,7 +80,7 @@ export default class AdminUnitRoute extends Route {
     const isProvince =
       adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
     const isWorshipService =
-      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE || adminUnit.classification.id === CLASSIFICATION_CODE.CENTRAL_WORSHIP_SERVICE;
+      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;
