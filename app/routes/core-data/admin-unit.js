@@ -15,7 +15,7 @@ import {
  */
 function assert(record, source, modelName) {
   if (!record)
-    throw new Error(
+    console.error(
       `${source} did not have an associated ${modelName}. Did not get ${modelName} from database;`,
     );
 }
@@ -35,7 +35,7 @@ export default class AdminUnitRoute extends Route {
       },
     );
     assert(adminUnit, 'Current session', 'administrative-unit');
-
+    
     const organizationStatus = await adminUnit.organizationStatus;
     const classification = await adminUnit.classification;
     const primarySite = await adminUnit.primarySite;
@@ -80,7 +80,7 @@ export default class AdminUnitRoute extends Route {
     const isProvince =
       adminUnit.classification.id === CLASSIFICATION_CODE.PROVINCE;
     const isWorshipService =
-      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE;
+      adminUnit.classification.id === CLASSIFICATION_CODE.WORSHIP_SERVICE || adminUnit.classification.id === CLASSIFICATION_CODE.CENTRAL_WORSHIP_SERVICE;
     const region = isIgs
       ? await (async () => {
           const municipality = address.municipality;

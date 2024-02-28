@@ -18,11 +18,13 @@ export async function findStructuredIdentifierByIdName(identifiers, idName) {
   const resultIdentifier = identifiers.find(
     (identifier) => identifier.idName === idName,
   );
+
   if (!resultIdentifier) return null;
   const structuredIdentifier = await resultIdentifier.structuredIdentifier;
+
   if (!structuredIdentifier)
-    throw new Error(
-      `Identifier with id ${identifier.id} does not have an associated structuredIdentifier. Is not possible.`,
+    console.error(
+      `Identifier with id ${resultIdentifier.id} does not have an associated structuredIdentifier. Is not possible.`,
     );
   return structuredIdentifier;
 }
