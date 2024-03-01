@@ -38,7 +38,6 @@
               form="edit-site-form"
             >Opslaan</AuButton>
           </AuButtonGroup>
-          <ReportWrongData />
           {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
           {{else if this.hasWarning}}
