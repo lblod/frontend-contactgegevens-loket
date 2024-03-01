@@ -14,6 +14,9 @@ import {
   mapValidationDetailsToErrors,
 } from 'frontend-contactgegevens-loket/helpers/address-helpers';
 import { SITE_CODE } from '../../models/site';
+
+import { transformPhoneNumbers } from '../../utils/transform-phone-numbers';
+
 export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
@@ -101,6 +104,8 @@ export default class CreateSitesNewController extends Controller {
   saveTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
+    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone)
+    secondaryContact.telephone = transformPhoneNumbers(secondaryContact.telephone)
     await primaryContact.save();
     await secondaryContact.save();
     await address.save();

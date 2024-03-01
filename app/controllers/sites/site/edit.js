@@ -16,6 +16,8 @@ import {
 } from 'frontend-contactgegevens-loket/helpers/address-helpers';
 import { SITE_CODE } from '../../../models/site';
 
+import { transformPhoneNumbers } from '../../../utils/transform-phone-numbers';
+
 function assert(value, message) {
   if (!value) throw new Error(message);
 }
@@ -163,8 +165,12 @@ export default class ContactDataEditSiteController extends Controller {
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
+    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone)
     await primaryContact.save();
-    if (secondaryContact) await secondaryContact.save();
+    if (secondaryContact) {
+      secondaryContact.telephone = transformPhoneNumbers(secondaryContact.telephone);
+      await secondaryContact.save();
+    } 
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
@@ -224,5 +230,9 @@ export default class ContactDataEditSiteController extends Controller {
       this.model.address,
       addressSearchAddress,
     );
+  }
+  @action
+  setSiteTypeName(e) {
+    this.model.site.siteTypeName = e.target.value;
   }
 }
