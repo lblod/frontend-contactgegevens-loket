@@ -5,7 +5,7 @@ export default class UserModel extends Model {
   @attr firstName;
   @attr familyName;
   @hasMany('account', { inverse: null, async: true }) account;
-  @hasMany('administrative-unit', { inverse: null, async: true }) groups;
+  @hasMany('administrative-unit', { inverse: null, async: true, polymorphic: true}) groups;
 
   get group() {
     return this.get('groups.firstObject');
