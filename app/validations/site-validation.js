@@ -1,10 +1,10 @@
 import Joi from 'joi';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 import { SITE_CODE } from '../models/site';
-const belgiumPhoneNumberRegex = /^(?:\+32|0)[4-9][0-9]{8}$/;
+const belgiumPhoneNumberRegex = /^(tel:)?(\+32|04)[1-9][0-9]{7,8}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
-const phoneNumberRegex = /^(\+)?[0-9]+$/;
+const phoneNumberRegex = /^(tel:)?\+?[0-9]*$/;
 
 export const allowedSiteMatrix = {
   [CLASSIFICATION_CODE.MUNICIPALITY]: {

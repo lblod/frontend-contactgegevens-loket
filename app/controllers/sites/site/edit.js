@@ -109,7 +109,8 @@ export default class ContactDataEditSiteController extends Controller {
     if (
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
-      maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
+      maxReachedMessage =
+        'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};
     let warnings = {};
@@ -165,12 +166,12 @@ export default class ContactDataEditSiteController extends Controller {
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
-    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone)
+    primaryContact.telephone = primaryContact.telephone;
     await primaryContact.save();
     if (secondaryContact) {
-      secondaryContact.telephone = transformPhoneNumbers(secondaryContact.telephone);
-      await secondaryContact.save();
-    } 
+      (secondaryContact.telephone = secondaryContact.telephone),
+        await secondaryContact.save();
+    }
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });

@@ -7,7 +7,9 @@ export default class ContactDataEditCard extends Component {
   }
 
   @action
-  handleAddressUpdate(newAddress) {
-    this.args.onChangeAddress(newAddress);
+  updateCountry(value) {
+    this.args.address.country = value;
+    this.args.address.municipality = null;
+    this.args.address.province = null;
   }
 }

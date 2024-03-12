@@ -1,0 +1,86 @@
+{{#let @itemComponent (unique-id) as |Item id|}}
+  {{#if this.isAddressSearchMode}}
+    <Item
+      @labelFor="{{id}}-address-search"
+      @required={{@required}}
+      @errorMessage={{@errorMessage.fullAddress}}
+      @alignTop={{true}}
+    >
+      <:label>Adres</:label>
+      <:content as |hasError|>
+        <AddressRegisterSelector
+          @id="{{id}}-address-search"
+          @address={{@address}}
+          @onChange={{this.handleAddressChange}}
+          @noAddressFoundHook={{this.handleNoAddressFound}}
+          @error={{hasError}}
+          @onClose={{fn @clearValidationError "fullAddress"}}
+        />
+        {{#if hasError}}
+          <AuHelpText @error={{true}}>{{@errorMessage.fullAddress}}</AuHelpText>
+        {{/if}}
+        <p class="au-u-margin-top-tiny">
+          <AuButton @skin="link" {{on "click" this.toggleInputMode}}>
+            Vul adres manueel in
+          </AuButton>
+        </p>
+      </:content>
+      <:error>{{! Disable the default error message}}</:error>
+    </Item>
+
+    <Item @labelFor="{{id}}-address-search-bus-select">
+      <:label>Busnummer</:label>
+      <:content>
+        <PowerSelect
+          @id="{{id}}-address-search-bus-select"
+          @options={{this.addressSuggestionsWithBusNumber}}
+          @onChange={{this.handleBusNumberChange}}
+          @selected={{this.selectedAddressSuggestion}}
+          @disabled={{this.hasNoBusNumbers}}
+          @renderInPlace={{false}}
+          @searchEnabled={{false}}
+          @allowClear={{true}}
+          @loadingMessage="Aan het laden..."
+          @placeholder="Kies busnummer"
+          as |addressSuggestion|
+        >
+          {{#if addressSuggestion.busNumber}}
+            {{addressSuggestion.busNumber}}
+          {{else}}
+            Geen busnummer
+          {{/if}}
+        </PowerSelect>
+      </:content>
+    </Item>
+    <Item
+      @labelFor={{concat @id "-province"}}
+      @required={{true}}
+      @errorMessage={{@errorMessage.province}}
+    >
+      <:label>Provincie</:label>
+      <:content as |hasError|>
+        <ProvinceSelect
+          @selected={{@address.province}}
+          @selectedMunicipality={{@address.municipality}}
+          @disabled={{@address.municipality}}
+          @onChange={{fn (mut @address.province)}}
+          @error={{hasError}}
+          @id={{concat @id "-province"}}
+          @onClose={{fn @clearValidationError "province"}}
+        />
+      </:content>
+    </Item>
+    {{yield to="commonInput"}}
+  {{else}}
+    {{yield to="manualAddressInputBeforeButton"}}
+    <Item>
+      <:content>
+        <AuButton @skin="link" {{on "click" this.toggleInputMode}}>
+          Vind adres in lijst
+        </AuButton>
+      </:content>
+    </Item>
+    {{yield to="manualAddressInput"}}
+    {{yield to="commonInput"}}
+  {{/if}}
+{{/let}}
