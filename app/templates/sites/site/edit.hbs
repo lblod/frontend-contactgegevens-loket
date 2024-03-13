@@ -6,7 +6,6 @@
 {{breadcrumb "Bewerk"}}
 <div class="au-c-body-container au-c-body-container--scroll">
   <div class="au-o-box au-o-flow au-o-flow--large">
-
     <PageHeader>
       <:title>Bewerk vestiging</:title>
       <:subtitle>
@@ -41,9 +40,12 @@
           {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
           {{else if this.hasWarning}}
-            <Error::Warning @showSaveWarning={{this.hasWarning}} @warningText="Kijk na of de gegevens bij de
+            <Error::Warning
+              @showSaveWarning={{this.hasWarning}}
+              @warningText="Kijk na of de gegevens bij de
                waarschuwingsmelding(en) juist zijn ingevuld. Indien de gegevens correct
-               zijn, klik nogmaals op ‘Opslaan’." />
+               zijn, klik nogmaals op ‘Opslaan’."
+            />
 
           {{/if}}
         </div>
@@ -81,18 +83,16 @@
                   </:content>
                 </Item>
                 {{#if @model.site.isOtherSite}}
-                  <Item
-                    @labelFor="site-type-name"
-                  >
+                  <Item @labelFor="site-type-name">
                     <:label>Name</:label>
                     <:content>
-                     <AuInput
-                      @selected={{@model.site.siteTypeName}}
-                      {{on "input" this.setSiteTypeName}}
-                      value={{@model.site.siteTypeName}}
-                      @width="block"
-                      maxlength="50"
-                     />
+                      <AuInput
+                        @selected={{@model.site.siteTypeName}}
+                        {{on "input" this.setSiteTypeName}}
+                        value={{@model.site.siteTypeName}}
+                        @width="block"
+                        maxlength="50"
+                      />
                     </:content>
                   </Item>
                 {{/if}}
@@ -120,9 +120,8 @@
         </EditCard>
 
         {{! Contactgegevens }}
-
         <ContactDataEditCard
-          @address={{this.addressSearchAddress}}
+          @address={{@model.address}}
           @isAddressSearchEnabledInitially={{if
             (or (not @model.address.id) @model.address.addressRegisterUri)
             true

@@ -14,7 +14,7 @@ export default class CreateSitesNewRoute extends Route {
   @service router;
   @tracked selectCountSite = 0;
   get editFeature() {
-    const editFeature = config.features['edit-feature']
+    const editFeature = config.features['edit-feature'];
     return editFeature === true || editFeature === 'true';
   }
   beforeModel() {
@@ -64,7 +64,7 @@ export default class CreateSitesNewRoute extends Route {
     return {
       adminUnit: this.currentSession.group,
       site: this.store.createRecord('site'),
-      address,
+      address: address,
       primaryContact: createPrimaryContact(this.store),
       secondaryContact: createSecondaryContact(this.store),
       siteTypeCount,

@@ -106,8 +106,12 @@
         </EditCard>
 
         <ContactDataEditCard
-          @address={{this.addressSearchAddress}}
-          @onChangeAddress={{this.handleChangeAddress}}
+          @address={{@model.address}}
+          @isAddressSearchEnabledInitially={{if
+            (or (not @model.address.id) @model.address.addressRegisterUri)
+            true
+            false
+          }}
           @primaryContact={{@model.primaryContact}}
           @secondaryContact={{@model.secondaryContact}}
           @errorMessage={{this.validationErrors}}
