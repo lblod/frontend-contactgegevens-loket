@@ -166,11 +166,13 @@ export default class ContactDataEditSiteController extends Controller {
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
-    primaryContact.telephone = primaryContact.telephone;
+    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
     await primaryContact.save();
     if (secondaryContact) {
-      (secondaryContact.telephone = secondaryContact.telephone),
-        await secondaryContact.save();
+      secondaryContact.telephone = transformPhoneNumbers(
+        secondaryContact.telephone,
+      );
+      await secondaryContact.save();
     }
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
