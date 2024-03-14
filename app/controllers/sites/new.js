@@ -72,7 +72,7 @@ export default class CreateSitesNewController extends Controller {
     const key = Object.keys(SITE_CODE).find(
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
-    if (max && this.model.siteTypeCount[key] >= max) {
+    if ((max || max === 0) && this.model.siteTypeCount[key] >= max) {
       maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};

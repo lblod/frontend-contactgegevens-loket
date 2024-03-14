@@ -107,7 +107,7 @@ export default class ContactDataEditSiteController extends Controller {
     siteTypeCountAfterSave[siteTypeKeyAfterSave] =
       siteTypeCountAfterSave[siteTypeKeyAfterSave] + 1;
     if (
-      maxAllowedSitesOfThisType &&
+      (maxAllowedSitesOfThisType || maxAllowedSitesOfThisType === 0) &&
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
       maxReachedMessage =
