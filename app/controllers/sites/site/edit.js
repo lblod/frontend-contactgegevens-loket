@@ -90,7 +90,7 @@ export default class ContactDataEditSiteController extends Controller {
     const currentAdminUnitClassificationId =
       this.model.adminUnit.classification.id;
     const currentSiteTypeId = this.model.site.siteType.id;
-    const maxAllowedSitesOfThisType =
+    const maxAllowedSitesOfThisType = allowedSiteMatrix[currentAdminUnitClassificationId] &&
       allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
 
     const siteTypeKeyAfterSave = Object.keys(SITE_CODE).find(
@@ -107,6 +107,7 @@ export default class ContactDataEditSiteController extends Controller {
     siteTypeCountAfterSave[siteTypeKeyAfterSave] =
       siteTypeCountAfterSave[siteTypeKeyAfterSave] + 1;
     if (
+      maxAllowedSitesOfThisType &&
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
       maxReachedMessage =
