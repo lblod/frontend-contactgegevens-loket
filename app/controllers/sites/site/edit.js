@@ -43,6 +43,13 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   reset() {
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    site.rollbackAttributes();
+    adminUnit.rollbackAttributes();
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
@@ -216,13 +223,6 @@ export default class ContactDataEditSiteController extends Controller {
   @action
   handleCancel(event) {
     event.preventDefault();
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-    address.rollbackAttributes();
-    primaryContact.rollbackAttributes();
-    secondaryContact.rollbackAttributes();
-    site.rollbackAttributes();
-    adminUnit.rollbackAttributes();
     this.reset();
     this.router.replaceWith('sites.site', site.id);
   }
