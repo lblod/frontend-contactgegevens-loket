@@ -39,9 +39,15 @@ export default class ContactDataEditSiteRoute extends Route {
     const siteTypeIds = [];
 
     for (let i = 0; i < sites.length; i++) {
-      siteTypeIds.push((await sites[i].siteType).id);
+      const siteType = await sites[i].siteType;
+      if(siteType) {
+        siteTypeIds.push(siteType.id);
+      }
     }
-    siteTypeIds.push((await primarySite.siteType).id);
+    const primarySiteType = await primarySite.siteType 
+    if(primarySiteType) {
+      siteTypeIds.push(primarySiteType.id);
+    }
     const initialObject = Object.keys(SITE_CODE).reduce((acc, curr) => {
       acc[curr] = 0;
       return acc;
@@ -85,7 +91,7 @@ export default class ContactDataEditSiteRoute extends Route {
       (key) => SITE_CODE[key] === site.siteType.id,
     );
     if (!siteTypeKeyBeforeSave)
-      throw new Error(
+      console.error(
         `Impossible. Cannot find site type id in site type data structure.`,
       );
     return {
