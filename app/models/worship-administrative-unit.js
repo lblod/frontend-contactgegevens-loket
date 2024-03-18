@@ -8,9 +8,4 @@ export default class WorshipAdministrativeUnitModel extends AdministrativeUnitMo
   })
   recognizedWorshipType;
 
-  @hasMany('local-involvement', {
-    inverse: 'worshipAdministrativeUnit',
-    async: true,
-  })
-  involvements;
 }

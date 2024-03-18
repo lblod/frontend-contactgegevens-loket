@@ -56,6 +56,10 @@ export const CLASSIFICATION = {
     id: '4b8450cf-a326-4c66-9e63-b4ec10acc7f6',
     label: 'Opdrachthoudende vereniging met private deelname',
   },
+  ASSISTANCE_ZONE: {
+    id: 'ea446861-2c51-45fa-afd3-4e4a37b71562',
+    label: 'Hulpverleningszone',
+  },
 };
 export const CLASSIFICATION_CODE = {
   MUNICIPALITY: CLASSIFICATION.MUNICIPALITY.id,
@@ -72,6 +76,7 @@ export const CLASSIFICATION_CODE = {
   OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME:
     CLASSIFICATION.OPDRACHTHOUDENDE_VERENIGING_MET_PRIVATE_DEELNAME.id,
   POLICE_ZONE: CLASSIFICATION.POLICE_ZONE.id,
+  ASSISTANCE_ZONE: CLASSIFICATION.ASSISTANCE_ZONE.id
 };
 
 /** @type { string[] } */

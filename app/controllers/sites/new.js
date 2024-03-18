@@ -64,7 +64,7 @@ export default class CreateSitesNewController extends Controller {
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
 
-    const max =
+    const max = allowedSiteMatrix[this.model.adminUnit.classification.id] &&
       allowedSiteMatrix[this.model.adminUnit.classification.id][
         this.model.site.siteType.id
       ];
@@ -72,7 +72,7 @@ export default class CreateSitesNewController extends Controller {
     const key = Object.keys(SITE_CODE).find(
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
-    if (this.model.siteTypeCount[key] >= max) {
+    if ((max || max === 0) && this.model.siteTypeCount[key] >= max) {
       maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};

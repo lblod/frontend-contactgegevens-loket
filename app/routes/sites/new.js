@@ -40,9 +40,15 @@ export default class CreateSitesNewRoute extends Route {
     const siteTypeIds = [];
 
     for (let i = 0; i < sites.length; i++) {
-      siteTypeIds.push((await sites[i].siteType).id);
+      const siteType = await sites[i].siteType;
+      if(siteType) {
+        siteTypeIds.push(siteType.id);
+      }
     }
-    siteTypeIds.push((await primarySite.siteType).id);
+    const primarySiteType = await primarySite.siteType 
+    if(primarySiteType) {
+      siteTypeIds.push(primarySiteType.id);
+    }
     const initialObject = Object.keys(SITE_CODE).reduce((acc, curr) => {
       acc[curr] = 0;
       return acc;
