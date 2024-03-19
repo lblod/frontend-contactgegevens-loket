@@ -88,8 +88,9 @@ export const errorValidation = Joi.object()
     websitePrimary: Joi.string()
       .optional()
       .pattern(websiteRegex)
+      .allow('')
       .messages({
-        '*': 'Geef een geldig internetadres in'.allow(''),
+        '*': 'Geef een geldig internetadres in',
       }),
     telephoneSecondary: Joi.string()
       .optional()
