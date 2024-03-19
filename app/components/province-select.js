@@ -51,6 +51,11 @@ export default class ProvinceSelectComponent extends Component {
     this.prevProvinces = result;
     this.prevSelectedMunicipality = this.args.selectedMunicipality;
     // From the provinces get their names and make them options
+    if (provinces.slice().length === 1) {
+      this.previousMunicipality = this.args.selectedMunicipality;
+      this.previousProvince = result.slice()[0];
+      this.args.onChange(this.previousProvince);
+    }
     return provinces.map((item) => item.name);
   });
 
