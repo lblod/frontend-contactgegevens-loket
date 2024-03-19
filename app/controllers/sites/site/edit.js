@@ -225,7 +225,7 @@ export default class ContactDataEditSiteController extends Controller {
   handleCancel(event) {
     event.preventDefault();
     this.reset();
-    this.router.replaceWith('sites.site', site.id);
+    this.router.replaceWith('sites.site', this.model.site.id);
   }
 
   @action
