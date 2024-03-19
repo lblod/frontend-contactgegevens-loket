@@ -82,10 +82,15 @@ export const errorValidation = Joi.object()
       }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
-      .messages({ '*': 'Geef een geldig e-mailadres in' }),
-    websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
-      '*': 'Geef een geldig internetadres in',
-    }),
+      .optional()
+      .messages({ '*': 'Geef een geldig e-mailadres in' })
+      .allow(''),
+    websitePrimary: Joi.string()
+      .optional()
+      .pattern(websiteRegex)
+      .messages({
+        '*': 'Geef een geldig internetadres in'.allow(''),
+      }),
     telephoneSecondary: Joi.string()
       .optional()
       .pattern(phoneNumberRegex)
