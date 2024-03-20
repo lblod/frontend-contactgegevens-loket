@@ -17,6 +17,7 @@ import {
 import { SITE_CODE } from '../../../models/site';
 
 import { transformPhoneNumbers } from '../../../utils/transform-phone-numbers';
+import { setEmptyStringsToNull } from '../../../utils/empty-string-to-null';
 
 function assert(value, message) {
   if (!value) throw new Error(message);
@@ -146,7 +147,7 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   saveTask = task(async () => {
-    const { site, address, primaryContact, secondaryContact, adminUnit } =
+    let { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
 
     const nonPrimarySites = await adminUnit.sites;
@@ -171,17 +172,30 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     // Save the models.
+    
+    if (primaryContact.hasDirtyAttributes) {
+      primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
+      if (primaryContact.isNew) {
+        (await site.contacts).push(primaryContact);
+      }
+      primaryContact = setEmptyStringsToNull(primaryContact);
+
+      await primaryContact.save();
+    }
+    if (secondaryContact.hasDirtyAttributes) {
+      secondaryContact.telephone = transformPhoneNumbers(
+        secondaryContact.telephone
+      );
+      if (secondaryContact.isNew) {
+        (await site.contacts).push(secondaryContact);
+      }
+      secondaryContact = setEmptyStringsToNull(secondaryContact);
+
+      await secondaryContact.save();
+    }
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
-    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
-    await primaryContact.save();
-    if (secondaryContact) {
-      secondaryContact.telephone = transformPhoneNumbers(
-        secondaryContact.telephone,
-      );
-      await secondaryContact.save();
-    }
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
