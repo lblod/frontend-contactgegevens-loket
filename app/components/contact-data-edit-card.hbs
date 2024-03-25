@@ -108,7 +108,6 @@
                     @selectedProvince={{@address.province}}
                     @onChange={{fn (mut @address.municipality)}}
                     @error={{hasError}}
-                    @disabled={{false}}
                     @id={{concat @id "-municipality"}}
                     {{on "focusout" (fn @clearValidationError "municipality")}}
                   />
@@ -135,7 +134,7 @@
             {{/if}}
             {{#if this.isCountryBelgium}}
               <Item
-                @labelFor={{concat @id "-province"}}
+                @labelFor="site-address-province"
                 @required={{true}}
                 @errorMessage={{@errorMessage.province}}
               >
@@ -144,10 +143,9 @@
                   <ProvinceSelect
                     @selected={{@address.province}}
                     @selectedMunicipality={{@address.municipality}}
-                    @disabled={{@address.municipality}}
                     @onChange={{fn (mut @address.province)}}
+                    @id="site-address-province"
                     @error={{hasError}}
-                    @id={{concat @id "-province"}}
                     {{on "focusout" (fn @clearValidationError "province")}}
                   />
                 </:content>

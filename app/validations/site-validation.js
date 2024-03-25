@@ -18,10 +18,6 @@ export const allowedSiteMatrix = {
     [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
     [SITE_CODE.DISTRICTHUIS]: 1,
   },
-  [CLASSIFICATION_CODE.POLITIE]: {
-    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
-    [SITE_CODE.DISTRICTHUIS]: 1,
-  },
   [CLASSIFICATION_CODE.PROVINCE]: {
     [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
     [SITE_CODE.PROVINCIEHUIS]: 1,
@@ -48,6 +44,15 @@ export const allowedSiteMatrix = {
     [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
     [SITE_CODE.HOOFDCOMMISARIAAT]: 1,
   },
+  [CLASSIFICATION_CODE.ASSISTANCE_ZONE]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.WORSHIP_SERVICE]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
+  [CLASSIFICATION_CODE.CENTRAL_WORSHIP_SERVICE]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  }
 };
 
 export const errorValidation = Joi.object()
@@ -82,10 +87,16 @@ export const errorValidation = Joi.object()
       }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
-      .messages({ '*': 'Geef een geldig e-mailadres in' }),
-    websitePrimary: Joi.string().optional().pattern(websiteRegex).messages({
-      '*': 'Geef een geldig internetadres in',
-    }),
+      .optional()
+      .messages({ '*': 'Geef een geldig e-mailadres in' })
+      .allow(''),
+    websitePrimary: Joi.string()
+      .optional()
+      .pattern(websiteRegex)
+      .allow('')
+      .messages({
+        '*': 'Geef een geldig internetadres in',
+      }),
     telephoneSecondary: Joi.string()
       .optional()
       .pattern(phoneNumberRegex)

@@ -17,6 +17,7 @@ import {
 import { SITE_CODE } from '../../../models/site';
 
 import { transformPhoneNumbers } from '../../../utils/transform-phone-numbers';
+import { setEmptyStringsToNull } from '../../../utils/empty-string-to-null';
 
 function assert(value, message) {
   if (!value) throw new Error(message);
@@ -43,6 +44,13 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   reset() {
+    const { address, primaryContact, secondaryContact, site, adminUnit } =
+      this.model;
+    address.rollbackAttributes();
+    primaryContact.rollbackAttributes();
+    secondaryContact.rollbackAttributes();
+    site.rollbackAttributes();
+    adminUnit.rollbackAttributes();
     this.isPrimarySite = false;
     this.validationErrors = {};
     this.validationWarnings = {};
@@ -90,7 +98,7 @@ export default class ContactDataEditSiteController extends Controller {
     const currentAdminUnitClassificationId =
       this.model.adminUnit.classification.id;
     const currentSiteTypeId = this.model.site.siteType.id;
-    const maxAllowedSitesOfThisType =
+    const maxAllowedSitesOfThisType = allowedSiteMatrix[currentAdminUnitClassificationId] &&
       allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
 
     const siteTypeKeyAfterSave = Object.keys(SITE_CODE).find(
@@ -107,6 +115,7 @@ export default class ContactDataEditSiteController extends Controller {
     siteTypeCountAfterSave[siteTypeKeyAfterSave] =
       siteTypeCountAfterSave[siteTypeKeyAfterSave] + 1;
     if (
+      (maxAllowedSitesOfThisType || maxAllowedSitesOfThisType === 0) &&
       siteTypeCountAfterSave[siteTypeKeyAfterSave] > maxAllowedSitesOfThisType
     ) {
       maxReachedMessage =
@@ -138,7 +147,7 @@ export default class ContactDataEditSiteController extends Controller {
   }
 
   saveTask = task(async () => {
-    const { site, address, primaryContact, secondaryContact, adminUnit } =
+    let { site, address, primaryContact, secondaryContact, adminUnit } =
       this.model;
 
     const nonPrimarySites = await adminUnit.sites;
@@ -163,17 +172,30 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     // Save the models.
+    
+    if (primaryContact.hasDirtyAttributes) {
+      primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
+      if (primaryContact.isNew) {
+        (await site.contacts).push(primaryContact);
+      }
+      primaryContact = setEmptyStringsToNull(primaryContact);
+
+      await primaryContact.save();
+    }
+    if (secondaryContact.hasDirtyAttributes) {
+      secondaryContact.telephone = transformPhoneNumbers(
+        secondaryContact.telephone
+      );
+      if (secondaryContact.isNew) {
+        (await site.contacts).push(secondaryContact);
+      }
+      secondaryContact = setEmptyStringsToNull(secondaryContact);
+
+      await secondaryContact.save();
+    }
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();
-    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
-    await primaryContact.save();
-    if (secondaryContact) {
-      secondaryContact.telephone = transformPhoneNumbers(
-        secondaryContact.telephone,
-      );
-      await secondaryContact.save();
-    }
     await adminUnit.save();
     this.router.replaceWith('sites.site', site.id);
   });
@@ -216,15 +238,8 @@ export default class ContactDataEditSiteController extends Controller {
   @action
   handleCancel(event) {
     event.preventDefault();
-    const { address, primaryContact, secondaryContact, site, adminUnit } =
-      this.model;
-    address.rollbackAttributes();
-    primaryContact.rollbackAttributes();
-    secondaryContact.rollbackAttributes();
-    site.rollbackAttributes();
-    adminUnit.rollbackAttributes();
     this.reset();
-    this.router.replaceWith('sites.site', site.id);
+    this.router.replaceWith('sites.site', this.model.site.id);
   }
 
   @action
