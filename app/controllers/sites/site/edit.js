@@ -48,7 +48,11 @@ export default class ContactDataEditSiteController extends Controller {
       this.model;
     address.rollbackAttributes();
     primaryContact.rollbackAttributes();
-    secondaryContact.rollbackAttributes();
+    
+    if(!secondaryContact.isDestroyed) {
+      secondaryContact.rollbackAttributes();
+    }
+    
     site.rollbackAttributes();
     adminUnit.rollbackAttributes();
     this.isPrimarySite = false;
