@@ -181,6 +181,7 @@ export default class CreateSitesNewController extends Controller {
       this.model;
     address.rollbackAttributes();
     primaryContact.rollbackAttributes();
+    console.log(secondaryContact)
     secondaryContact.rollbackAttributes();
     site.rollbackAttributes();
     adminUnit.rollbackAttributes();
