@@ -16,7 +16,7 @@ import {
 import { SITE_CODE } from '../../models/site';
 
 import { transformPhoneNumbers } from '../../utils/transform-phone-numbers';
-
+import { combineFullAddress } from '../../models/address';
 export default class CreateSitesNewController extends Controller {
   @service router;
   @service store;
@@ -54,7 +54,7 @@ export default class CreateSitesNewController extends Controller {
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
-      fullAddress: address.fullAddress,
+      fullAddress: combineFullAddress(address),
       telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
@@ -73,7 +73,8 @@ export default class CreateSitesNewController extends Controller {
       (key) => SITE_CODE[key] === this.model.site.siteType.id,
     );
     if ((max || max === 0) && this.model.siteTypeCount[key] >= max) {
-      maxReachedMessage = 'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
+      maxReachedMessage =
+        'Deze vestiging is al eerder aangemaakt. Als je wijzigingen wilt aanbrengen, bewerk dan de reeds geregistreerde vestiging.';
     }
     let errors = {};
     let warnings = {};
@@ -104,14 +105,19 @@ export default class CreateSitesNewController extends Controller {
   saveTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
-    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone)
-    secondaryContact.telephone = transformPhoneNumbers(secondaryContact.telephone)
+    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
+    secondaryContact.telephone = transformPhoneNumbers(
+      secondaryContact.telephone,
+    );
     await primaryContact.save();
     await secondaryContact.save();
+    address.fullAddress = combineFullAddress(address);
+
     await address.save();
 
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
+
     await site.save();
 
     const nonPrimarySites = await adminUnit.sites;
