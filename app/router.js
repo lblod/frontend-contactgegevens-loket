@@ -1,24 +1,27 @@
 import EmberRouter from '@ember/routing/router';
-import config from 'frontend-contactgegevens-loket/config/environment';
-
+import ENV from 'frontend-contactgegevens-loket/config/environment';
 export default class Router extends EmberRouter {
-  location = config.locationType;
-  rootURL = config.rootURL;
+  location = ENV.locationType;
+  rootURL = ENV.rootURL;
 }
-
 Router.map(function () {
   this.route('login');
-  this.route('mock-login');
-  this.route('switch-login');
+  if (ENV.controllerLogin !== 'true') {
+    this.route('mock-login');
+    this.route('switch-login');
+  } else {
+    this.route('controller-login');
+  }
 
   this.route('contact');
-
   this.route('auth', { path: '/authorization' }, function () {
     this.route('callback');
     this.route('callback-error');
     this.route('login');
     this.route('logout');
-    this.route('switch');
+    if (ENV.controllerLogin !== 'true') {
+      this.route('switch');
+    }
   });
 
   this.route('index', { path: '/' });

@@ -19,9 +19,11 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
+    controllerLogin: '{{CONTROLLER_LOGIN}}',
     appName: 'Contact- en Organisatiegegevens',
     contactEmail: 'LoketLokaalBestuur@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
+    roleClaim: '{{CONTROLLER_ROLECLAIM}}',
 
     acmidm: {
       clientId: '{{OAUTH_API_KEY}}',
