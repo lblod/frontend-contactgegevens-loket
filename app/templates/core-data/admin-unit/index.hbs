@@ -130,7 +130,7 @@
                 </:content>
               </Item>
             {{/unless}}
-            {{#if @model.nis}}
+            {{#if @model.adminUnit.scope.exactMatch.notation}}
               <Item>
                 <:label>NIS nummer</:label>
                 <:content>
@@ -146,30 +146,6 @@
                 <:content>
 
                   {{@model.sharepoint.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isMunicipality}}
-              <Item>
-                <:label>NIS </:label>
-                <:content>
-                  {{@model.nis.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isOCMW}}
-              <Item>
-                <:label>NIS </:label>
-                <:content>
-                  {{@model.nis.localId}}
-                </:content>
-              </Item>
-            {{/if}}
-            {{#if @model.isProvince}}
-              <Item>
-                <:label>NIS</:label>
-                <:content>
-                  {{@model.nis.localId}}
                 </:content>
               </Item>
             {{/if}}
