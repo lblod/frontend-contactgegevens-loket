@@ -48,11 +48,11 @@ export default class ContactDataEditSiteController extends Controller {
       this.model;
     address.rollbackAttributes();
     primaryContact.rollbackAttributes();
-    
+
     if(!secondaryContact.isDestroyed) {
       secondaryContact.rollbackAttributes();
     }
-    
+
     site.rollbackAttributes();
     adminUnit.rollbackAttributes();
     this.isPrimarySite = false;
@@ -61,6 +61,7 @@ export default class ContactDataEditSiteController extends Controller {
     this.saveButtonPressed = 0;
     this.hasError = false;
     this.hasWarning = false;
+
   }
 
   get isLoading() {
@@ -175,8 +176,9 @@ export default class ContactDataEditSiteController extends Controller {
       adminUnit.primarySite = site;
     }
 
+    this.model.site.modified = new Date();
     // Save the models.
-    
+
     if (primaryContact.hasDirtyAttributes) {
       primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
       if (primaryContact.isNew) {
@@ -197,6 +199,7 @@ export default class ContactDataEditSiteController extends Controller {
 
       await secondaryContact.save();
     }
+
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
     await address.save();

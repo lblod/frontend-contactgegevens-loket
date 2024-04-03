@@ -114,7 +114,7 @@ export default class CreateSitesNewController extends Controller {
     address.fullAddress = combineFullAddress(address);
 
     await address.save();
-
+    this.model.site.modified = new Date();
     site.contacts = [primaryContact, secondaryContact];
     site.address = address;
 
