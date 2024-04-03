@@ -122,7 +122,7 @@ export const warningValidation = Joi.object()
     fullAddress: Joi.optional(),
     emailPrimary: Joi.optional(),
     websitePrimary: Joi.string().optional(),
-    telephoneSecondary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
+    telephoneSecondary: Joi.string().pattern(belgiumPhoneNumberRegex).optional().allow('').messages({
       '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
     }),
   })
