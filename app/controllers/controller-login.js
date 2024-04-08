@@ -35,8 +35,6 @@ export default class ControllerLoginController extends Controller {
     const user = await account.user;
     const group = (await user.groups)[0];
     const groupId = (await group).id;
-    console.log('gid', groupId);
-    console.log('accountId', account.id);
 
     this.errorMessage = '';
     try {
@@ -47,7 +45,6 @@ export default class ControllerLoginController extends Controller {
       );
       this.router.replaceWith('index');
     } catch (response) {
-      console.log('error', response);
       if (response instanceof Response)
         this.errorMessage = `Something went wrong, please try again later (status: ${response.status} ${response.statusText})`;
       else this.errorMessage = response.message;
