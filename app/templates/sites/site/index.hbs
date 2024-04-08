@@ -26,6 +26,16 @@
       </:action>
     </PageHeader>
 
+    <div class="au-u-flex--column">
+      {{#unless @model.site.modified}}
+        <AuPill @icon="clock-rewind">
+          Laatst Gewijzigd op
+          {{date-format @model.site.modified}}
+        </AuPill>
+      {{/unless}}
+      <ReportWrongData />
+    </div>
+
     <DataCard>
       <:title>Kerngegevens</:title>
       <:card as |Card|>
@@ -36,7 +46,7 @@
               <:label>Type vestiging</:label>
               <:content>{{@model.site.siteType.label}}</:content>
             </Item>
-            {{#if  (and @model.site.isOtherSite @model.site.siteTypeName)}}
+            {{#if (and @model.site.isOtherSite @model.site.siteTypeName)}}
               <Item>
                 <:label>Name</:label>
                 <:content>{{@model.site.siteTypeName}}</:content>
