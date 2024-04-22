@@ -2,6 +2,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class OrganizationModel extends Model {
   @attr name;
+  @attr legalName;
   @attr alternativeName;
   @attr('date') expectedEndDate;
   @attr purpose;
@@ -57,4 +58,20 @@ export default class OrganizationModel extends Model {
     as: 'organization',
   })
   resultedFrom;
+
+  get abbName() {
+    return this.legalName ?? this.name;
+  }
+
+  setAbbName(name) {
+    this.name = name;
+    this.legalName = name;
+  }
+
+  setAlternativeName(names) {
+    this.alternativeName = names
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s !== '');
+  }
 }
