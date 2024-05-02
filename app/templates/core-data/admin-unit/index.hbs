@@ -17,22 +17,18 @@
               <:label>Naam</:label>
               <:content>{{@model.adminUnit.name}}</:content>
             </Item>
-               <Item>
-                  <:label>Naam</:label>
-                  <:content>{{@model.adminUnit.abbName}}</:content>
-                </Item>
-                <Item>
-                  <:label>Juridische naam</:label>
-                  <:content>{{@model.adminUnit.legalName}}</:content>
-                </Item>
-                {{#if (gt @model.adminUnit.alternativeName.length 0)}}
-                  <Item>
-                    <:label>Alternatieve naam</:label>
-                    <:content>
-                      {{@model.administrativeUnit.alternativeName}}
-                    </:content>
-                  </Item>
-                {{/if}}
+            <Item>
+              <:label>Juridische naam</:label>
+              <:content>{{@model.adminUnit.legalName}}</:content>
+            </Item>
+            {{#if (gt @model.adminUnit.alternativeName.length 0)}}
+              <Item>
+                <:label>Alternatieve naam</:label>
+                <:content>
+                  {{@model.administrativeUnit.alternativeName}}
+                </:content>
+              </Item>
+            {{/if}}
             <Item>
               <:label>Type bestuur</:label>
               <:content>{{@model.adminUnit.classification.label}}</:content>
@@ -133,8 +129,8 @@
                   {{kbo-format @model.kbo.localId}}
                 {{else}}
                   {{#if @model.isDistrict}}
-                      Zie KBO-nummer gemeente
-                    {{/if}}
+                    Zie KBO-nummer gemeente
+                  {{/if}}
                 {{/if}}
               </:content>
             </Item>
