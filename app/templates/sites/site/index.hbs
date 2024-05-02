@@ -27,12 +27,12 @@
     </PageHeader>
 
     <div class="au-u-flex--column">
-      {{#unless @model.site.modified}}
+      {{#if @model.site.modified}}
         <AuPill @icon="clock-rewind">
           Laatst Gewijzigd op
           {{date-format @model.site.modified}}
         </AuPill>
-      {{/unless}}
+      {{/if}}
       <ReportWrongData />
     </div>
 
