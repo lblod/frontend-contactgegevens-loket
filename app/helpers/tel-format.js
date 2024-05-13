@@ -65,7 +65,7 @@ export default function formatTel(...args) {
 
   if (typeof input !== 'string') throw new Error('Parameter must be a string');
 
-  const stripped = input.replace(/[\s\t\n]+/g, '').replace(/[^\d+]/g, '');
+  const stripped = input.replace(/[\s\t\n]+/g, '').replace(TEL_PREFIX, '');
   if (SHORT_NR.test(stripped)) return stripped;
   if (FREE_NR.test(stripped)) {
     const match = stripped.match(FREE_NR);
