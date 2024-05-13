@@ -1,59 +1,93 @@
-import { helper } from '@ember/component/helper';
+const NR_WITH_COUNTRY = /^(?:\+|00)(\d\d)(\d{8,9})$/;
+const NR_WITHOUT_COUNTY = /^0(\d{8,9})$/;
+const SHORT_NR = /^\d{4}$/;
+const FREE_NR = /^0800(\d{4,9})$/;
+const TEL_PREFIX = /^tel\:/;
 
-export default helper(function telFormat([tel]) {
-  if (!tel) throw new Error('Tel format helper requires one parameter');
-
-  if (typeof tel !== 'string')
-    throw new Error('Tel format helper expects a string as a parameter.');
-
-  let formattedTel = '';
-
-  // Remove 'tel:' if present
-  if (tel.includes('tel:')) {
-    tel = tel.split(':')[1];
+/**
+ *
+ * @param {string} digits
+ */
+export function formatSeriesDigitsFree(digits) {
+  if (digits.length < 4) throw new Error('Stopping because of less numbers then 4');
+  const even = digits.length % 2 === 0;
+  let input = digits;
+  const output = [];
+  // Takes bites of 2
+  while (input.length > 3) {
+    output.push(input.slice(0, 2));
+    input = input.slice(2);
   }
-  console.log('before', tel);
-
-  // Remove all non-numeric characters
-  tel = tel.replace(/[^\d+]/g, '');
-  console.log('tel:', tel);
-  // Format according to specifications
-  if (tel.startsWith('0800')) {
-    // Special case: 0800 numbers
-    formattedTel += '0800 ';
-    tel = tel.slice(4);
+  // Take last bite of 2 or 3
+  if (even) {
+    output.push(input.slice(0, 2));
+    input = input.slice(2);
   } else {
-    // Normal numbers
-    if (tel.startsWith('00')) {
-      formattedTel += '+';
-      tel = tel.slice(2);
-    } else if (tel.startsWith('+')) {
-      formattedTel += '+';
-      tel = tel.slice(1);
-    }
-
-    if (tel.length >= 2) {
-      formattedTel += tel.slice(0, 2) + ' ';
-      tel = tel.slice(2);
-    }
-
-    if (tel.length === 4) {
-      formattedTel += tel;
-      return formattedTel;
-    }
-
-    if (tel.length % 2 !== 0) {
-      formattedTel += tel.slice(0, 3) + ' ';
-      tel = tel.slice(3);
-    }
-
-    while (tel.length > 2) {
-      formattedTel += tel.slice(0, 2) + ' ';
-      tel = tel.slice(2);
-    }
+    output.push(input.slice(0, 3));
+    input = input.slice(3);
   }
+  return output.join(' ');
+}
 
-  formattedTel += tel;
+/**
+ *
+ * @param {string} digits
+ */
+export function formatSeriesDigitsNormal(digits) {
+  if (digits.length < 4)
+    throw new Error('Stopping because of less numbers then 4');
+  const even = digits.length % 2 === 0;
+  let input = digits;
+  const output = [];
+  // Take first bite of 3 or 2
+  if (even) {
+    output.push(input.slice(0, 2));
+    input = input.slice(2);
+  } else {
+    output.push(input.slice(0, 3));
+    input = input.slice(3);
+  }
+  // Takes bites of 2
+  while (input.length > 0) {
+    output.push(input.slice(0, 2));
+    input = input.slice(2);
+  }
+  return output.join(' ');
+}
 
-  return formattedTel.trim();
-});
+export default function formatTel(...args) {
+  if (args.length !== 1) throw new Error('Exactly 1 parameter expected');
+
+  const input = args[0];
+
+  // If input is empty, return an empty string
+  if (input === '') return '';
+
+  if (typeof input !== 'string') throw new Error('Parameter must be a string');
+
+  const stripped = input.replace(/[\s\t\n]+/g, '').replace(/[^\d+]/g, '');
+  if (SHORT_NR.test(stripped)) return stripped;
+  if (FREE_NR.test(stripped)) {
+    const match = stripped.match(FREE_NR);
+    const rest = match[1];
+    return `0800 ${formatSeriesDigitsFree(rest)}`;
+  }
+  const { country, rest } = (() => {
+    const match1 = stripped.match(NR_WITH_COUNTRY);
+    if (match1) {
+      return {
+        country: match1[1],
+        rest: match1[2],
+      };
+    }
+    const match2 = stripped.match(NR_WITHOUT_COUNTY);
+    if (match2) {
+      return {
+        country: '32',
+        rest: match2[1],
+      };
+    }
+    throw new Error('Could not match any telnr regex.');
+  })();
+  return `+${country} ${formatSeriesDigitsNormal(rest)}`;
+}
