@@ -21,6 +21,7 @@
   </:action>
 
 </PageHeader>
+
 <AuDataTable
   @content={{@model.allSites}}
   @noDataMessage="Geen vestigingen"
@@ -31,6 +32,9 @@
       <th class="au-c-data-table__header-title"></th>
       <th class="au-c-data-table__header-title">Locatie</th>
       <th class="au-c-data-table__header-title">Type vestiging</th>
+      <th class="au-c-data-table__header-title">Primair telefoonnummer</th>
+      <th class="au-c-data-table__header-title">Email</th>
+      <th class="au-c-data-table__header-title">Laatste controle of aanpassing</th>
       <th>&nbsp;</th>
     </c.header>
     <c.body as |site|>
@@ -51,13 +55,46 @@
       <td>
         <SiteTypeWithName @site={{site}} />
       </td>
-      {{#if (is-feature-enabled "edit-feature")}}
-        <td>
-          <AuLink @model={{site.id}} @route="sites.site.edit">
-            Bewerk
-          </AuLink>
-        </td>
-      {{/if}}
+      <td>
+        {{#each site.contacts as |contact|}}
+          {{#if (eq contact.type "Primary")}}
+            {{tel-format contact.telephone}}<br />
+          {{/if}}
+        {{/each}}
+      </td>
+      <td>
+        {{#each site.contacts as |contact|}}
+          {{#if (eq contact.type "Primary")}}
+            {{contact.email}}<br />
+          {{/if}}
+        {{/each}}
+      </td>
+      <td class="customTableData">
+
+        {{! Correctly using the let block with a helper }}
+        {{#let
+          (is-modified-longer-then-6-months site.modified)
+          as |modifiedInfo|
+        }}
+          <AuPill @icon={{modifiedInfo.icon}} @skin={{modifiedInfo.skin}}>
+            {{date-format site.modified}}
+          </AuPill>
+          {{#if (eq modifiedInfo.skin "warning")}}
+
+            <div class="modifyButtons">
+              <AuLink
+                {{on "click" (fn this.updateSiteModifiedDate site.id)}}
+              >
+                Gegevens kloppen
+              </AuLink>
+              <br />
+              <AuLink @model={{site.id}} @route="sites.site.edit">
+                Bewerken
+              </AuLink>
+            </div>
+          {{/if}}
+        {{/let}}
+      </td>
     </c.body>
   </t.content>
 </AuDataTable>

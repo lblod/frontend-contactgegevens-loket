@@ -27,7 +27,7 @@
               form="edit-site-form"
               {{on "click" this.handleCancel}}
             >
-              Annuleer
+              Geen wijzigingen doorbrengen
             </AuButton>
             <AuButton
               @loading={{this.isLoading}}
@@ -35,7 +35,7 @@
               @skin="primary"
               type="submit"
               form="edit-site-form"
-            >Opslaan</AuButton>
+            >Contactgegevens bijwerken</AuButton>
           </AuButtonGroup>
           {{#if this.hasError}}
             <Error::Save @showSaveError={{this.hasError}} />
