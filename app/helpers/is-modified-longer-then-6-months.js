@@ -1,16 +1,17 @@
 import { helper } from '@ember/component/helper';
-import { isBefore } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 
-export function isModifiedWithinLast6Months(params) {
-  const [modifiedDate] = params;
+export function isModifiedWithinLast6Months([modifiedDate]) {
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
+  const today = new Date();
   let result = {};
-  if (isBefore(new Date(modifiedDate), sixMonthsAgo)) {
+  if (format(today, 'dd-MM-yyyy') === format(modifiedDate, 'dd-MM-yyyy')) {
+    result = { skin: 'success', icon: 'circle-check' };
+  } else if (isBefore(new Date(modifiedDate), sixMonthsAgo)) {
     result = { skin: 'warning', icon: 'alert-triangle' };
   } else {
-    result = { skin: 'success', icon: 'circle-check' };
+    result = { skin: 'regular', icon: 'info-circle' };
   }
   return result;
 }
