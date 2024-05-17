@@ -8,9 +8,7 @@ export function isModifiedWithinLast6Months([modifiedDate]) {
   let result = {};
   if (format(today, 'dd-MM-yyyy') === format(modifiedDate, 'dd-MM-yyyy')) {
     result = { skin: 'success', icon: 'circle-check' };
-  } else if (isBefore(new Date(modifiedDate), sixMonthsAgo)) {
-    result = { skin: 'warning', icon: 'alert-triangle' };
-  } else if (format(modifiedDate, 'dd-MM-yyyy') === undefined || null) {
+  } else if (isBefore(new Date(modifiedDate), sixMonthsAgo) || !modifiedDate) {
     result = { skin: 'warning', icon: 'alert-triangle' };
   } else {
     result = { skin: 'regular', icon: 'info-circle' };
