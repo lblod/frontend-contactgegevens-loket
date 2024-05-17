@@ -107,10 +107,14 @@ export default function formatTel(...args) {
         country: '32',
         rest: match2[1],
       };
+    } else {
+      return {
+        country: '',
+        rest: '',
+      };
     }
-    throw new Error('Could not match any telnr regex.');
   })();
 
   // Format the number based on whether it has a country code and return it
-  return `+${country} ${formatSeriesDigitsNormal(rest)}`;
+  return country ? `+${country} ${formatSeriesDigitsNormal(rest)}` : stripped;
 }
