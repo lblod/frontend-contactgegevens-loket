@@ -134,14 +134,14 @@
                 {{/if}}
               </:content>
             </Item>
-            {{#unless @model.isAPB}}
+            {{!-- {{#unless @model.isAPB}}
               <Item>
                 <:label>OVO nummer</:label>
                 <:content>
                   {{@model.ovo.localId}}
                 </:content>
               </Item>
-            {{/unless}}
+            {{/unless}} --}}
             {{#if @model.adminUnit.scope.exactMatch.notation}}
               <Item>
                 <:label>NIS nummer</:label>
@@ -151,7 +151,7 @@
                 </:content>
               </Item>
             {{/if}}
-            {{#if @model.sharepoint}}
+            {{!-- {{#if @model.sharepoint}}
               <Item>
                 <:label>Sharepoint referentie
                 </:label>
@@ -160,7 +160,7 @@
                   {{@model.sharepoint.localId}}
                 </:content>
               </Item>
-            {{/if}}
+            {{/if}} --}}
           </:right>
         </Card.Columns>
       </:card>
