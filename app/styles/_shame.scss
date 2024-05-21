@@ -10,6 +10,20 @@
   }
 }
 
+.customTableData {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.modifyButtons {
+  padding-left: 2rem;
+
+}
+.au-c-pill  {
+  max-height: 2.55rem;
+}
+
 .data-table-pagination-left {
   @extend .au-c-help-text;
 }
