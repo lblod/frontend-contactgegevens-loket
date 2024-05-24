@@ -6,7 +6,7 @@
         <AddressSearch
           @address={{@address}}
           @itemComponent={{Item}}
-          @isSearchEnabledInitially={{false}}
+          @isSearchEnabledInitially={{@isSearchEnabledInitially}}
           @required={{true}}
           @onChange={{this.automaticAddressSearchChanged}}
           @id={{concat @id "-address"}}
