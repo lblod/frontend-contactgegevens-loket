@@ -24,7 +24,6 @@ module.exports = function (environment) {
     contactEmail: 'LoketLokaalBestuur@vlaanderen.be',
     environmentName: '{{ENVIRONMENT_NAME}}',
     roleClaim: '{{CONTROLLER_ROLECLAIM}}',
-
     acmidm: {
       clientId: '{{OAUTH_API_KEY}}',
       scope: '{{OAUTH_API_SCOPE}}',
@@ -32,6 +31,23 @@ module.exports = function (environment) {
       logoutUrl: '{{OAUTH_API_LOGOUT_URL}}',
       authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
       switchRedirectUrl: '{{OAUTH_SWITCH_URL}}',
+    },
+    announce: {
+      maintenance: {
+        enabled: '{{ANNOUNCE_MAINTENANCE_ENABLED}}',
+        message: '{{ANNOUNCE_MAINTENANCE_MESSAGE}}',
+        environmentName: '{{ENVIRONMENT_NAME}}',
+      },
+      newDeployment: {
+        enabled: '{{ANNOUNCE_NEW_DEPLOYMENT_ENABLED}}',
+        message: '{{ANNOUNCE_NEW_DEPLOYMENT_MESSAGE}}',
+        environmentName: '{{ENVIRONMENT_NAME}}',
+      },
+      testing: {
+        enabled: '{{ANNOUNCE_TESTING_ENABLED}}',
+        message: '{{ANNOUNCE_TESTING_MESSAGE}}',
+        environmentName: '{{ENVIRONMENT_NAME}}',
+      },
     },
     features: {
       'edit-feature': '{{ENABLE_EDIT_FEATURE}}',
