@@ -7,14 +7,10 @@ export default class ApplicationController extends Controller {
 
   appTitle = 'Contactgegevens';
   get isLocalhost() {
-    if (
+    return (
       window.location.hostname === 'localhost' ||
       window.location.hostname === '[::1]'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   }
   get environmentName() {
     const thisEnvironmentName = this.isLocalhost
