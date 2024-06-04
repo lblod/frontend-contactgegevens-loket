@@ -74,8 +74,14 @@ export const errorValidation = Joi.object()
       .required()
       .messages({ '*': 'Geef een geldige gemeente in' }),
     province: Joi.string()
-      .required()
-      .messages({ '*': 'Geef een geldige provincie in' }),
+      // Using.when() to conditionally require the province field
+      .when('$country', {
+        // Referencing the 'country' field at the root level
+        is: 'België', // Condition: if 'country' is 'België'
+        then: Joi.required(), // Then make 'province' required
+        otherwise: Joi.allow(null), // Optionally, allow null or undefined otherwise
+      })
+      .messages({ '*': 'Geef een geldige provincie in' }), // Error message for 'province'
     fullAddress: Joi.string()
       .required()
       .messages({ '*': 'Gelieve een adres in te vullen' }),
