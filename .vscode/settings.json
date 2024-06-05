@@ -2,5 +2,8 @@
     "eslint.validate": [
         "glimmer-ts",
         "glimmer-js"
+    ],
+    "cSpell.words": [
+        "housenumber"
     ]
 }

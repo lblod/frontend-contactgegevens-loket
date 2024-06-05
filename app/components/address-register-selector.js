@@ -13,6 +13,19 @@ export default class AddressRegisterSelectorComponent extends Component {
   @service addressRegister;
   @service store;
 
+  constructor() {
+    super(...arguments);
+
+    this.addressRegister.setup({ endpoint: '/adresses-register' });
+    if (this.args.address) {
+      let addressSuggestion = this.args.address;
+
+      if (!this.addressRegister.isEmpty(addressSuggestion)) {
+        this.addressSuggestion = addressSuggestion;
+      }
+    }
+  }
+
   initComponentAfterArgs = task(async () => {
     if (!this.args.address)
       throw new Error(
@@ -87,7 +100,7 @@ export default class AddressRegisterSelectorComponent extends Component {
 function addressInstanceToAddressSuggestion(addressInstance) {
   return {
     uri: addressInstance.id,
-    addressRegisterId: addressInstance.addressRegisterUri,
+    addressRegisterId: addressInstance,
     busNumber: addressInstance.boxNumber ?? null,
     fullAddress: combineFullAddress(addressInstance),
     street: addressInstance.street,
