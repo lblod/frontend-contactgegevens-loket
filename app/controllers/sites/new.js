@@ -26,6 +26,7 @@ export default class CreateSitesNewController extends Controller {
   @tracked saveButtonPressed = 0;
   @tracked hasError = false;
   @tracked hasWarning = false;
+  @tracked savedMode = false;
   get addressSearchAddress() {
     return createAddressSearchAddressFromAddressModel(this.model.address);
   }
@@ -64,7 +65,8 @@ export default class CreateSitesNewController extends Controller {
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
 
-    const max = allowedSiteMatrix[this.model.adminUnit.classification.id] &&
+    const max =
+      allowedSiteMatrix[this.model.adminUnit.classification.id] &&
       allowedSiteMatrix[this.model.adminUnit.classification.id][
         this.model.site.siteType.id
       ];
@@ -112,7 +114,11 @@ export default class CreateSitesNewController extends Controller {
     await primaryContact.save();
     await secondaryContact.save();
     address.fullAddress = combineFullAddress(address);
-
+    if (this.savedMode === false) {
+      address.mode = 'Manually saved';
+    } else {
+      address.mode = 'Automatically saved';
+    }
     await address.save();
     this.model.site.modified = new Date();
     site.contacts = [primaryContact, secondaryContact];

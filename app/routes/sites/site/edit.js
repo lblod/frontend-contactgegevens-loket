@@ -40,12 +40,12 @@ export default class ContactDataEditSiteRoute extends Route {
 
     for (let i = 0; i < sites.length; i++) {
       const siteType = await sites[i].siteType;
-      if(siteType) {
+      if (siteType) {
         siteTypeIds.push(siteType.id);
       }
     }
-    const primarySiteType = await primarySite.siteType 
-    if(primarySiteType) {
+    const primarySiteType = await primarySite.siteType;
+    if (primarySiteType) {
       siteTypeIds.push(primarySiteType.id);
     }
     const initialObject = Object.keys(SITE_CODE).reduce((acc, curr) => {
@@ -86,7 +86,7 @@ export default class ContactDataEditSiteRoute extends Route {
       findPrimaryContact(contacts) ?? createPrimaryContact(this.store);
     const secondaryContact =
       findSecondaryContact(contacts) ?? createSecondaryContact(this.store);
-
+    console.log(primaryContact.telephone);
     const siteTypeKeyBeforeSave = Object.keys(SITE_CODE).find(
       (key) => SITE_CODE[key] === site.siteType.id,
     );
