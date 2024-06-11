@@ -58,7 +58,7 @@
       <td>
         {{#each site.contacts as |contact|}}
           {{#if (eq contact.type "Primary")}}
-            {{tel-format contact.telephone}}<br />
+            {{tel-format contact.telephone}}
           {{/if}}
         {{/each}}
       </td>
@@ -82,9 +82,7 @@
           {{#if (eq modifiedInfo.skin "warning")}}
 
             <div class="modifyButtons">
-              <AuLink
-                {{on "click" (fn this.updateSiteModifiedDate site.id)}}
-              >
+              <AuLink {{on "click" (fn this.updateSiteModifiedDate site.id)}}>
                 Gegevens bevestigen
               </AuLink>
               <br />

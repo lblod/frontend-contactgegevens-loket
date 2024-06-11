@@ -1,7 +1,8 @@
 import Joi from 'joi';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 import { SITE_CODE } from '../models/site';
-const belgiumPhoneNumberRegex = /^(tel:)?(\+32|04|0032)[1-9](?:\s?[0-9]){7,8}$/;
+const belgiumPhoneNumberRegex =
+  /^(tel:)?(\+32|04|0032|03)[1-6](?:\s?[0-9]){6,9}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
 const phoneNumberRegex = /^(tel:)?\+?[0-9\s()-]*$/;
@@ -87,9 +88,17 @@ export const errorValidation = Joi.object()
       .messages({ '*': 'Gelieve een adres in te vullen' }),
     telephonePrimary: Joi.string()
       .pattern(phoneNumberRegex)
-      .required()
+      .allow('')
+      .optional()
       .messages({
         '*': 'Enkel een plusteken en cijfers zijn toegelaten',
+      }),
+    telephoneSecondary: Joi.string()
+      .pattern(phoneNumberRegex)
+      .allow('')
+      .optional()
+      .messages({
+        '*': 'Enkel een plusteken en nummers zijn toegelaten',
       }),
     emailPrimary: Joi.string()
       .pattern(emailRegex)
@@ -103,13 +112,6 @@ export const errorValidation = Joi.object()
       .messages({
         '*': 'Geef een geldig internetadres in',
       }),
-    telephoneSecondary: Joi.string()
-      .optional()
-      .pattern(phoneNumberRegex)
-      .allow('')
-      .messages({
-        '*': 'Enkel een plusteken en nummers zijn toegelaten',
-      }),
   })
   .options({ abortEarly: false });
 
@@ -122,14 +124,20 @@ export const warningValidation = Joi.object()
     postcode: Joi.optional(),
     municipality: Joi.optional(),
     province: Joi.optional(),
-    telephonePrimary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-    }),
+    telephonePrimary: Joi.string()
+      .allow('')
+      .pattern(belgiumPhoneNumberRegex)
+      .messages({
+        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
+      }),
     fullAddress: Joi.optional(),
     emailPrimary: Joi.optional(),
     websitePrimary: Joi.string().optional(),
-    telephoneSecondary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-    }),
+    telephoneSecondary: Joi.string()
+      .allow('')
+      .pattern(belgiumPhoneNumberRegex)
+      .messages({
+        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
+      }),
   })
   .options({ abortEarly: false });
