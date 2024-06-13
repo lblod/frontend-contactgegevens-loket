@@ -1,4 +1,4 @@
-const NR_WITH_COUNTRY = /^(?:\+|00)(\d\d)(\d{8,12})$/;
+const NR_WITH_COUNTRY = /^(?:\+|00)(\d\d)0(\d{7,11})$/;
 const NR_WITHOUT_COUNTRY = /^0(\d{8,11})$/;
 const SHORT_NR = /^\d{4}$/;
 const FREE_NR = /^0800(\d{4,9})$/;
@@ -73,7 +73,8 @@ export default function formatTel(...args) {
   const input = args[0];
 
   // If input is empty, return an empty string
-  if (input === '') return '';
+
+  if (!input || input.trim() === '') return '';
 
   // Check if the input is a string, if not, throw an error
   if (typeof input !== 'string') throw new Error('Parameter must be a string');
