@@ -87,7 +87,8 @@ export const errorValidation = Joi.object()
       .messages({ '*': 'Gelieve een adres in te vullen' }),
     telephonePrimary: Joi.string()
       .pattern(phoneNumberRegex)
-      .required()
+      .optional()
+      .allow('')
       .messages({
         '*': 'Enkel een plusteken en cijfers zijn toegelaten',
       }),
