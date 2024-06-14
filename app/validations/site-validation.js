@@ -123,14 +123,20 @@ export const warningValidation = Joi.object()
     postcode: Joi.optional(),
     municipality: Joi.optional(),
     province: Joi.optional(),
-    telephonePrimary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-    }),
+    telephonePrimary: Joi.string()
+      .allow('')
+      .pattern(belgiumPhoneNumberRegex)
+      .messages({
+        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
+      }),
     fullAddress: Joi.optional(),
     emailPrimary: Joi.optional(),
     websitePrimary: Joi.string().optional(),
-    telephoneSecondary: Joi.string().pattern(belgiumPhoneNumberRegex).messages({
-      '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-    }),
+    telephoneSecondary: Joi.string()
+      .allow('')
+      .pattern(belgiumPhoneNumberRegex)
+      .messages({
+        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
+      }),
   })
   .options({ abortEarly: false });
