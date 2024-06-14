@@ -10,29 +10,32 @@
       <:subtitle>{{@model.adminUnit.name}}</:subtitle>
       <:action>
         {{#if (is-feature-enabled "edit-feature")}}
-          <AuLink
-            @route="sites.site.edit"
-            @model={{@model.site.id}}
-            @skin="button-secondary"
-            @icon="pencil"
-            @iconAlignment="left"
-          >
-            Bewerk
-          </AuLink>
-        {{else}}
-          <ReportWrongData />
+
+            <div>
+            <AuLink
+              @route="sites.site.edit"
+              @model={{@model.site.id}}
+              @skin="button-secondary"
+              @icon="pencil"
+              @iconAlignment="left"
+            >
+              Bewerk
+            </AuLink>
+            <div class="modified">
+            {{#if @model.site.modified}}
+              <AuPill @icon="clock-rewind">
+                Laatst Gewijzigd op
+                {{date-format @model.site.modified}}
+              </AuPill>
+            {{/if}}
+          </div>
+          </div>
         {{/if}}
 
       </:action>
     </PageHeader>
 
     <div class="au-u-flex--column">
-      {{#if @model.site.modified}}
-        <AuPill @icon="clock-rewind">
-          Laatst Gewijzigd op
-          {{date-format @model.site.modified}}
-        </AuPill>
-      {{/if}}
       <ReportWrongData />
     </div>
 

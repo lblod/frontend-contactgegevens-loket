@@ -10,6 +10,12 @@
   }
 }
 
+.modified {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
 .customTableData {
   display: flex;
   flex: 1;
