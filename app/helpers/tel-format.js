@@ -73,7 +73,8 @@ export default function formatTel(...args) {
   const input = args[0];
 
   // If input is empty, return an empty string
-  if (input === '') return '';
+
+  if (!input || input.trim() === '') return '';
 
   // Check if the input is a string, if not, throw an error
   if (typeof input !== 'string') throw new Error('Parameter must be a string');
