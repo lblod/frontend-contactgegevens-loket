@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 import { SITE_CODE } from '../models/site';
 const belgiumPhoneNumberRegex =
-  /^(tel:)?(\+32|04|0032|03)[1-6](?:\s?[0-9]){6,9}$/;
+  /^(tel:)?(\+32|04|0032|03|09|011|016)[1-6](?:\s?[0-9]){6,9}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
 const phoneNumberRegex = /^(tel:)?\+?[0-9\s()-]*$/;
