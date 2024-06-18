@@ -52,6 +52,9 @@ export const allowedSiteMatrix = {
   [CLASSIFICATION_CODE.CENTRAL_WORSHIP_SERVICE]: {
     [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
   },
+  [CLASSIFICATION_CODE.REPRESENTATIVE_BODY]: {
+    [SITE_CODE.MAATSCHAPPELIJKE_ZETEL]: 1,
+  },
 };
 
 export const errorValidation = Joi.object()
