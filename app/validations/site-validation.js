@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import { CLASSIFICATION_CODE } from 'frontend-contactgegevens-loket/models/administrative-unit-classification-code';
 import { SITE_CODE } from '../models/site';
-const belgiumPhoneNumberRegex = /^(tel:)?(\+32|04|0032)[1-9](?:\s?[0-9]){7,8}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websiteRegex = /^https:\/\//;
 const phoneNumberRegex = /^(tel:)?\+?[0-9\s()-]*$/;
@@ -123,20 +122,10 @@ export const warningValidation = Joi.object()
     postcode: Joi.optional(),
     municipality: Joi.optional(),
     province: Joi.optional(),
-    telephonePrimary: Joi.string()
-      .allow('')
-      .pattern(belgiumPhoneNumberRegex)
-      .messages({
-        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-      }),
+    telephonePrimary: Joi.optional(),
     fullAddress: Joi.optional(),
     emailPrimary: Joi.optional(),
     websitePrimary: Joi.string().optional(),
-    telephoneSecondary: Joi.string()
-      .allow('')
-      .pattern(belgiumPhoneNumberRegex)
-      .messages({
-        '*': 'Geen Belgisch telefoonnummer. Weet je zeker dat je dit nummer wilt gebruiken?',
-      }),
+    telephoneSecondary: Joi.optional(),
   })
   .options({ abortEarly: false });
