@@ -26,6 +26,7 @@ export default class CreateSitesNewController extends Controller {
   @tracked saveButtonPressed = 0;
   @tracked hasError = false;
   @tracked hasWarning = false;
+  @tracked savedMode = true;
   get addressSearchAddress() {
     return createAddressSearchAddressFromAddressModel(this.model.address);
   }
@@ -111,7 +112,14 @@ export default class CreateSitesNewController extends Controller {
     await primaryContact.save();
     await secondaryContact.save();
     address.fullAddress = combineFullAddress(address);
-
+    // if (this.savedMode === false) {
+    //   address.mode = 'Manually saved';
+    //   console.log(address.mode);
+    // } else {
+    //   address.mode = 'Automatically saved';
+    //   console.log(address.mode);
+    // }
+    
     await address.save();
     this.model.site.modified = new Date();
     site.contacts = [primaryContact, secondaryContact];
