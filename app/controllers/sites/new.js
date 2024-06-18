@@ -54,17 +54,17 @@ export default class CreateSitesNewController extends Controller {
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
-      fullAddress: combineFullAddress(address),
+      fullAddress: address.fullAddress,
       telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
       telephoneSecondary: secondaryContact.telephone,
     };
-
     const errorValidationResult = errorValidation.validate(validationData);
     const warningValidationResult = warningValidation.validate(validationData);
 
-    const max = allowedSiteMatrix[this.model.adminUnit.classification.id] &&
+    const max =
+      allowedSiteMatrix[this.model.adminUnit.classification.id] &&
       allowedSiteMatrix[this.model.adminUnit.classification.id][
         this.model.site.siteType.id
       ];
@@ -84,7 +84,6 @@ export default class CreateSitesNewController extends Controller {
         errorValidationResult.error.details,
       );
     }
-
     if (warningValidationResult && warningValidationResult.error) {
       warnings = mapValidationDetailsToErrors(
         warningValidationResult.error.details,
