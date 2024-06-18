@@ -10,7 +10,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 export default class AddressSearchComponent extends Component {
   @service addressRegister;
   @service store;
-
+  @tracked isAddressSearchMode = this.args.initialInputMode || true;
   initComponentAfterArgs = task(async () => {
     if (!this.args.address)
       throw new Error(

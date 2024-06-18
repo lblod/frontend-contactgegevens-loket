@@ -203,10 +203,13 @@ export default class ContactDataEditSiteController extends Controller {
 
       await secondaryContact.save();
     }
+    console.log(this.savedMode);
     if (this.savedMode === false) {
       address.mode = 'Manually saved';
+      console.log(address.mode);
     } else {
       address.mode = 'Automatically saved';
+      console.log(address.mode);
     }
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';
