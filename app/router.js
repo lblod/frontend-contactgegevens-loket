@@ -23,7 +23,7 @@ Router.map(function () {
       if (ENV.acmidm.clientId === '{{OAUTH_API_KEY}}') {
         this.route('mock-login');
       }
-      this.route('switch-login');
+      this.route('switch');
     } else {
       this.route('controller-login');
     }
