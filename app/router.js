@@ -20,7 +20,7 @@ Router.map(function () {
     this.route('login');
     this.route('logout');
     if (ENV.controllerLogin !== 'true') {
-      if (ENV.acmidm.clientId === '{{OAUTH_API_KEY}}') {
+      if (ENV.acmidm.clientId !== '{{OAUTH_API_KEY}}') {
         this.route('mock-login');
       }
       this.route('switch');
