@@ -26,6 +26,7 @@ function assert(value, message) {
 export default class ContactDataEditSiteController extends Controller {
   @service router;
   @service store;
+  @service currentSession;
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
@@ -177,8 +178,11 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     this.model.site.modified = new Date();
+    this.model.site.modifiedlabel = this.currentSession.groupClassification.label;
+    this.model.site.modifiedname = this.currentSession.group.name;
     // Save the models.
 
+    console.log(this.model.site.modifiedlabel)
     if (primaryContact.hasDirtyAttributes) {
       primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
       if (primaryContact.isNew) {
