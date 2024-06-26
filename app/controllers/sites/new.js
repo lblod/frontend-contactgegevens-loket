@@ -54,7 +54,7 @@ export default class CreateSitesNewController extends Controller {
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
-      fullAddress: address.fullAddress,
+      fullAddress: combineFullAddress(address),
       telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
