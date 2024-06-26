@@ -10,7 +10,7 @@ export default class CountriesService extends Service {
     const nationalities = await this.store.query('nationality', {
       sort: 'country-label',
       page: {
-        size: 200, // There are about 195 countries in the world
+        size: 300, // There are about 195 countries in the world
       },
     });
     this.countryNames = nationalities.map(
