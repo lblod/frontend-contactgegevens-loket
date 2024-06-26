@@ -61,6 +61,7 @@ export default class AddressSearchComponent extends Component {
   @action
   toggleInputMode() {
     this.isAddressSearchMode = !this.isAddressSearchMode;
+    this.args.updateStatusOfAddressSearchMode(this.isAddressSearchMode)
     if (this.isAddressSearchMode) {
       // From manual to automatic transition
     } else {

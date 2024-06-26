@@ -32,7 +32,6 @@ export default class ContactDataEditSiteController extends Controller {
   @tracked saveButtonPressed = 0;
   @tracked hasError = false;
   @tracked hasWarning = false;
-  @tracked savedMode = true;
 
   // Varies with user select
   @tracked selectedPrimaryStatus;
@@ -71,6 +70,17 @@ export default class ContactDataEditSiteController extends Controller {
 
   get addressSearchAddress() {
     return createAddressSearchAddressFromAddressModel(this.model.address);
+  }
+  @action
+  updateStatusOfAddressSearchMode(status) {
+    if (status === false) {
+      this.model.address.mode = 'Manually saved';
+      console.log(this.model.address.mode);
+    } else {
+      this.model.address.mode = 'Automatically saved';
+      console.log(this.model.address.mode);
+    }
+    this.model.address.save();
   }
 
   validateFormData() {
@@ -202,14 +212,6 @@ export default class ContactDataEditSiteController extends Controller {
       secondaryContact = setEmptyStringsToNull(secondaryContact);
 
       await secondaryContact.save();
-    }
-    console.log(this.savedMode);
-    if (this.savedMode === false) {
-      address.mode = 'Manually saved';
-      console.log(address.mode);
-    } else {
-      address.mode = 'Automatically saved';
-      console.log(address.mode);
     }
     await site.save();
     address.fullAddress = combineFullAddress(address) ?? 'Adres niet compleet';

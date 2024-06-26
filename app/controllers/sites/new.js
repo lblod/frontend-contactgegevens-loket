@@ -114,14 +114,7 @@ export default class CreateSitesNewController extends Controller {
     await primaryContact.save();
     await secondaryContact.save();
     address.fullAddress = combineFullAddress(address);
-    // if (this.savedMode === false) {
-    //   address.mode = 'Manually saved';
-    //   console.log(address.mode);
-    // } else {
-    //   address.mode = 'Automatically saved';
-    //   console.log(address.mode);
-    // }
-    
+
     await address.save();
     this.model.site.modified = new Date();
     site.contacts = [primaryContact, secondaryContact];
@@ -156,7 +149,15 @@ export default class CreateSitesNewController extends Controller {
       [field]: undefined,
     };
   }
-
+  @action
+  updateStatusOfAddressSearchMode(status) {
+    if (status === false) {
+      this.model.address.mode = 'Manually saved';
+    } else {
+      this.model.address.mode = 'Automatically saved';
+    }
+    this.model.address.save();
+  }
   @action
   handleSubmit(event) {
     event.preventDefault();
