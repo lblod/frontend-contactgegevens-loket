@@ -54,7 +54,7 @@ export default class CreateSitesNewController extends Controller {
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
-      fullAddress: address.fullAddress,
+      fullAddress: combineFullAddress(address),
       telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
@@ -89,12 +89,10 @@ export default class CreateSitesNewController extends Controller {
         warningValidationResult.error.details,
       );
     }
-
     // Voeg de maxReachedMessage toe aan de foutmeldingen als het aantal site types dat wordt ingevoerd niet groter is dan het maximum
     if (maxReachedMessage) {
       errors['siteType'] = maxReachedMessage;
     }
-
     return {
       errors: errors,
       warnings: warnings,
