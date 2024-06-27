@@ -90,7 +90,7 @@ export default class ContactDataEditSiteController extends Controller {
       postcode: address.postcode,
       municipality: address.municipality,
       province: address.province,
-      fullAddress: combineFullAddress(address),
+      fullAddress: address.fullAddress || combineFullAddress(address),
       telephonePrimary: primaryContact.telephone,
       emailPrimary: primaryContact.email,
       websitePrimary: primaryContact.website,
