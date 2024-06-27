@@ -20,12 +20,8 @@ Router.map(function () {
     this.route('login');
     this.route('logout');
     if (ENV.controllerLogin !== 'true') {
-<<<<<<< clbv-765
       if (ENV.environmentName === 'DEV' || (window.location.hostname === 'localhost' ||
       window.location.hostname === '[::1]')) {
-=======
-      if (ENV.acmidm.clientId !== '{{OAUTH_API_KEY}}') {
->>>>>>> master
         this.route('mock-login');
       }
       this.route('switch');
