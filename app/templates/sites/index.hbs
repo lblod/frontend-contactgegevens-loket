@@ -2,8 +2,7 @@
 <PageHeader class="au-o-box">
 
   <:title>Vestigingen</:title>
-  <:subtitle>{{this.currentSession.group.name}}
-    ({{this.currentSession.groupClassificationLabel}})</:subtitle>
+  <:subtitle>{{this.currentSession.groupClassificationLabel}} {{this.currentSession.group.name}}</:subtitle>
   <:action>
     {{#if (is-feature-enabled "edit-feature")}}
       <AuLink
