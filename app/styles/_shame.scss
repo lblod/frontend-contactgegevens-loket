@@ -104,3 +104,27 @@
 .primary-site-column {
   width: 70px;
 }
+
+
+$ember-power-select-search-field-border: $ember-power-select-default-border !default;
+$ember-power-select-search-input-border-radius: 3px !default;
+$ember-power-select-search-field-focus-border: $ember-power-select-default-focus-border !default;
+
+
+.ember-power-select-movable-cursor {
+  border: $ember-power-select-search-field-border;
+  border-radius: $ember-power-select-search-input-border-radius;
+  width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0 5px;
+
+  &:focus {
+    border: $ember-power-select-search-field-focus-border;
+    box-shadow: $ember-power-select-focus-box-shadow;
+
+    @if $ember-power-select-focus-outline {
+      outline: $ember-power-select-focus-outline;
+    }
+  }
+}
