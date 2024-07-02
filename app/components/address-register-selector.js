@@ -4,6 +4,7 @@ import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { combineFullAddress } from 'frontend-contactgegevens-loket/models/address';
 import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { action } from '@ember/object';
 
 /**
  * @typedef {uri: string, addressRegisterId: string, fullAddress: string, street:string,housenumber:string,busNumber:string | null,zipCode:string,municipality:string,country:string | null} AddressSuggestion
@@ -12,6 +13,7 @@ import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
 export default class AddressRegisterSelectorComponent extends Component {
   @service addressRegister;
   @service store;
+  powerselectApi;
 
   constructor() {
     super(...arguments);
@@ -19,7 +21,6 @@ export default class AddressRegisterSelectorComponent extends Component {
     this.addressRegister.setup({ endpoint: '/adresses-register' });
     if (this.args.address) {
       let addressSuggestion = this.args.address;
-
       if (!this.addressRegister.isEmpty(addressSuggestion)) {
         this.addressSuggestion = addressSuggestion;
       }
@@ -95,7 +96,20 @@ export default class AddressRegisterSelectorComponent extends Component {
     });
     this.options = options;
   });
+
+  @action
+  powerselectApiRegistration(api) {
+    this.powerselectApi = api
+  }
+  @action
+  searchForCurrentAddress() {
+    if(this.powerselectApi) {
+      this.powerselectApi.actions.search(this.addressSuggestion.fullAddress)
+    }
+  }
 }
+
+
 
 function addressInstanceToAddressSuggestion(addressInstance) {
   return {
