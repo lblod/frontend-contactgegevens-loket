@@ -37,7 +37,8 @@ export default class SiteModel extends Model {
   get isOtherSite() {
     return (
       this.siteType &&
-      this.siteType.get('id') === 'dcc01338-842c-4fbd-ba68-3ca6f3af975c'
+      (this.siteType.get('id') === 'dcc01338-842c-4fbd-ba68-3ca6f3af975c' || // Andere vestiging
+      this.siteType.get('id') === 'fbec5e94aba343b0a7361aca8a0c7d79') // Ander administratief adres
     );
   }
 }
