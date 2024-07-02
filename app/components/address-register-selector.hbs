@@ -12,7 +12,7 @@
     @noMatchesMessage="Geen resultaten"
     @searchMessage="Typ om te zoeken"
     @disabled={{false}}
-    @placeholder="Geef adres in"
+    @beforeOptionsComponent={{component "power-select/before-options-with-pre-filled-text" addressSuggestion=this.addressSuggestion}}
     @onClose={{@onClose}}
     as |suggestion|
 

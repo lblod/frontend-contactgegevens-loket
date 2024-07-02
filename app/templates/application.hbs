@@ -4,15 +4,14 @@
     (if this.showEnvironment (concat " - " this.environmentName))
   )
 }}
-
-<AuApp class="{{if this.showEnvironment 'au-c-app--environment'}}">
+<AuApp>
   {{#if this.showEnvironment}}
-    <EnvironmentBanner
-      @applicationName="Contact- en Organisatiegegevens"
-      @environmentName={{this.environmentName}}
-      @skin={{this.environmentInfo.skin}}
-      @message='Dit is de <strong>{{this.environmentInfo.title}}</strong> van het Contact- en Organisatiegegevens met fictieve en testgegevens. De productieomgeving met de echte data vind je op <a href="https://contactgegevens.lokaalbestuur.vlaanderen.be/" title="Contact-Organisatiegegevens" rel="tag">https://contactgegevens.lokaalbestuur.vlaanderen.be</a>.'
-    />
+  <EnvironmentBanner
+    @applicationName="Contact- en Organisatiegegevens"
+    @environmentName={{this.environmentName}}
+    @skin={{this.environmentInfo.skin}}
+    @message='Dit is de <strong>{{this.environmentInfo.title}}</strong> van het Contact- en Organisatiegegevens met fictieve en testgegevens. De productieomgeving met de echte data vind je op <a href="https://contactgegevens.lokaalbestuur.vlaanderen.be/" title="Contact-Organisatiegegevens" rel="tag">https://contactgegevens.lokaalbestuur.vlaanderen.be</a>.'
+  />
   {{/if}}
   <AppHeader />
   {{#if (eq "true" (config "announce.maintenance.enabled"))}}
@@ -40,13 +39,16 @@
       <p>{{config "announce.testing.message"}}</p>
     </AuAlert>
   {{/if}}
-  <main id="main" class="au-c-main-container">
-    <div
-      class="au-c-main-container__content au-c-main-container__content--scroll"
-      id="content"
-      tabindex="-1"
-    >
-      {{outlet}}
-    </div>
-  </main>
+  {{#if this.session.isAuthenticated}}
+    <Shared::BreadCrumb />
+  {{/if}}
+  <AuMainContainer class="au-u-flex" as |m|>
+    <m.content @scroll={{true}}>
+      <AuBodyContainer @scroll={{true}}>
+        {{outlet}}
+      </AuBodyContainer>
+    </m.content>
+  </AuMainContainer>
 </AuApp>
+<AuModalContainer />
+<AuToaster />

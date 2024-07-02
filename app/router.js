@@ -20,7 +20,13 @@ Router.map(function () {
     this.route('login');
     this.route('logout');
     if (ENV.controllerLogin !== 'true') {
+      if (ENV.environmentName === 'DEV' || (window.location.hostname === 'localhost' ||
+      window.location.hostname === '[::1]')) {
+        this.route('mock-login');
+      }
       this.route('switch');
+    } else {
+      this.route('controller-login');
     }
   });
 
