@@ -44,7 +44,7 @@ export default class ContactDataEditSiteRoute extends Route {
         siteTypeIds.push(siteType.id);
       }
     }
-    const primarySiteType = await primarySite.siteType 
+    const primarySiteType = await primarySite.siteType
     if(primarySiteType) {
       siteTypeIds.push(primarySiteType.id);
     }
@@ -58,7 +58,7 @@ export default class ContactDataEditSiteRoute extends Route {
         (key) => SITE_CODE[key] === current,
       );
       if (!key)
-        throw new Error(
+        console.error(
           `Id ${current} not found in site keys ${Object.keys(
             SITE_CODE,
           )}. Impossible`,
