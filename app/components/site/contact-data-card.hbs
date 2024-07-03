@@ -67,6 +67,13 @@
               {{@primaryContact.email}}
             </:content>
           </Item>
+        {{else}}
+          <Item>
+            <:label>E-mail</:label>
+            <:content>
+              Niet opgegeven
+            </:content>
+          </Item>
         {{/if}}
         {{#if @primaryContact.website}}
           <Item>
