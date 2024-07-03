@@ -112,7 +112,7 @@ export default class SiteTypeSelectComponent extends Component {
       filteredTypes.push(
         allTypes.find(
           (type) => type.id == 'dcc01338-842c-4fbd-ba68-3ca6f3af975c',
-        ), // CorrespondentieAddres
+        ), // Andere Vestiging
       );
     } else if (this.isProvince) {
       filteredTypes.push(
