@@ -103,7 +103,7 @@ export default class AddressRegisterSelectorComponent extends Component {
   }
   @action
   searchForCurrentAddress() {
-    if(this.powerselectApi) {
+    if(this.powerselectApi && this.addressSuggestion.fullAddress) {
       this.powerselectApi.actions.search(this.addressSuggestion.fullAddress)
     }
   }
