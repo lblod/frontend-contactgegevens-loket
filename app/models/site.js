@@ -26,7 +26,7 @@ export default class SiteModel extends Model {
   })
   organization;
 
-  @belongsTo('user', {
+  @belongsTo('administrative-unit', {
     inverse: null,
     async: true,
   })

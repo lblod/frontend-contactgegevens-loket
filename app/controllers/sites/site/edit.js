@@ -178,7 +178,7 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     this.model.site.modified = new Date();
-    this.model.site.modifiedBy = this.currentSession.user;
+    this.model.site.modifiedBy = this.currentSession.group;
     // Save the models.
 
     if (primaryContact.hasDirtyAttributes) {

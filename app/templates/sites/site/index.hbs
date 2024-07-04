@@ -26,7 +26,7 @@
                 <AuPill @icon="clock-rewind" class="au-u-padding">
                   Laatst Gewijzigd op
                   {{date-format @model.site.modified}}
-                  <br /> {{@model.site.modifiedBy.fullName}}
+                  <br /> {{@model.site.modifiedBy.name}} ({{@model.site.modifiedBy.classification.label}})
                 </AuPill>
               {{/if}}
             </div>
