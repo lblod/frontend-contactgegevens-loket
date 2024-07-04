@@ -2,8 +2,6 @@ import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 
 export default class SiteModel extends Model {
   @attr('date') modified;
-  @attr('string') modifiedlabel;
-  @attr('string') modifiedname;
   @belongsTo('address', {
     inverse: null,
     async: true,
@@ -27,6 +25,12 @@ export default class SiteModel extends Model {
     async: true,
   })
   organization;
+
+  @belongsTo('user', {
+    inverse: null,
+    async: true,
+  })
+  modifiedBy;
 
   @attr siteTypeName;
 
