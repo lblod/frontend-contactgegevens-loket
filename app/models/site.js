@@ -26,6 +26,12 @@ export default class SiteModel extends Model {
   })
   organization;
 
+  @belongsTo('administrative-unit', {
+    inverse: null,
+    async: true,
+  })
+  modifiedBy;
+
   @attr siteTypeName;
 
   // Maybe await and get primary site if not loaded?

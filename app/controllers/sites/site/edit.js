@@ -26,6 +26,7 @@ function assert(value, message) {
 export default class ContactDataEditSiteController extends Controller {
   @service router;
   @service store;
+  @service currentSession;
   @tracked isPrimarySite = false;
   @tracked validationErrors = {};
   @tracked validationWarnings = {};
@@ -177,6 +178,7 @@ export default class ContactDataEditSiteController extends Controller {
     }
 
     this.model.site.modified = new Date();
+    this.model.site.modifiedBy = this.currentSession.group;
     // Save the models.
 
     if (primaryContact.hasDirtyAttributes) {

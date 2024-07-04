@@ -11,7 +11,7 @@
       <:action>
         {{#if (is-feature-enabled "edit-feature")}}
 
-            <div>
+          <div>
             <AuLink
               @route="sites.site.edit"
               @model={{@model.site.id}}
@@ -22,20 +22,24 @@
               Bewerk
             </AuLink>
             <div class="au-u-flex--column au-u-margin-top-small">
-            {{#if @model.site.modified}}
-              <AuPill @icon="clock-rewind">
-                Laatst Gewijzigd op
-                {{date-format @model.site.modified}}
-              </AuPill>
-            {{/if}}
-          </div>
+              {{#if @model.site.modified}}
+                <AuPill @icon="clock-rewind" class="au-u-padding">
+                  Laatst Gewijzigd op
+                  {{date-format @model.site.modified}}
+                  <br /> 
+                  {{#if @model.site.modifiedBy}}
+                    door {{@model.site.modifiedBy.name}} ({{@model.site.modifiedBy.classification.label}})
+                  {{/if}}
+                </AuPill>
+              {{/if}}
+            </div>
           </div>
         {{/if}}
       </:action>
     </PageHeader>
 
     <DataCard>
-      <:title>Algemeen</:title>
+      <:title>Kerngegevens</:title>
       <:card as |Card|>
         <Card.Columns>
 
