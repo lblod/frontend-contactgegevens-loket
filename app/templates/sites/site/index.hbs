@@ -24,9 +24,9 @@
             <div class="au-u-flex--column au-u-margin-top-small">
               {{#if @model.site.modified}}
                 <AuPill @icon="clock-rewind" class="au-u-padding">
-                  Laatst Gewijzigd op
+                  Laatst gewijzigd op
                   {{date-format @model.site.modified}}
-                  <br /> 
+                  <br />
                   {{#if @model.site.modifiedBy}}
                     door {{@model.site.modifiedBy.name}} ({{@model.site.modifiedBy.classification.label}})
                   {{/if}}
