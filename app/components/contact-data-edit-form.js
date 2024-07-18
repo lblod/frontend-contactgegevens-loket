@@ -92,7 +92,7 @@ export default class ContactDataEditFormComponent extends Component {
   }
 
   @action
-  automaticAddressSearchChanged(...args) {}
+  automaticAddressSearchChanged() {}
 
   @action
   handleManualStreetControl(event) {

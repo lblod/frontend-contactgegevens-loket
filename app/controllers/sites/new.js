@@ -44,8 +44,7 @@ export default class CreateSitesNewController extends Controller {
   }
   validateFormData() {
     let maxReachedMessage = '';
-    const { address, primaryContact, secondaryContact, site, siteTypeCount } =
-      this.model;
+    const { address, primaryContact, secondaryContact, site } = this.model;
     const validationData = {
       siteType: site.siteType.get('label'),
       street: address.street,

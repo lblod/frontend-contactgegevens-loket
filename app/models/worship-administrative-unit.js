@@ -1,4 +1,4 @@
-import { belongsTo, hasMany } from '@ember-data/model';
+import { belongsTo } from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
 
 export default class WorshipAdministrativeUnitModel extends AdministrativeUnitModel {
