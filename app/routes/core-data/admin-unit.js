@@ -35,7 +35,7 @@ export default class AdminUnitRoute extends Route {
       },
     );
     assert(adminUnit, 'Current session', 'administrative-unit');
-    
+
     const organizationStatus = await adminUnit.organizationStatus;
     const classification = await adminUnit.classification;
     const primarySite = await adminUnit.primarySite;
@@ -110,7 +110,7 @@ export default class AdminUnitRoute extends Route {
           return (await scope.locatedWithin).label;
         })()
       : null;
-    const changeEvents = [...(await adminUnit.changedBy)]
+    const changeEvents = [...(await adminUnit.changedBy)];
     let isCity = false;
     for (const event of changeEvents) {
       const eventType = await event.type;
@@ -140,7 +140,7 @@ export default class AdminUnitRoute extends Route {
       isAPB,
       isDistrict,
       isProvince,
-      isWorshipService
+      isWorshipService,
     };
     return result;
   }

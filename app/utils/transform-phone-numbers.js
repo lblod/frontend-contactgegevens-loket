@@ -1,6 +1,6 @@
 export function transformPhoneNumbers(tel) {
   if (tel) {
-    if(!tel.includes('tel')) {
+    if (!tel.includes('tel')) {
       tel = 'tel:' + tel;
     }
   }

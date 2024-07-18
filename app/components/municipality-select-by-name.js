@@ -50,7 +50,9 @@ export default class MunicipalitySelectByNameComponent extends Component {
     if (!municipalities || municipalities.length === 0)
       throw new Error('Did not receive any municipalities from the back-end.');
     //Filter out Agentschap Binnenlands Bestuur as it's not a real gemeente
-    const result = municipalities.filter((item) => item.id !== '3183ade3-7ee8-409c-8394-296b1fbfe478').map((item) => item.name)
+    const result = municipalities
+      .filter((item) => item.id !== '3183ade3-7ee8-409c-8394-296b1fbfe478')
+      .map((item) => item.name);
 
     this.prevMunicipalities = result;
     this.prevSelectedProvince = this.args.selectedProvince;

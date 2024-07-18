@@ -99,17 +99,15 @@ export default class AddressRegisterSelectorComponent extends Component {
 
   @action
   powerselectApiRegistration(api) {
-    this.powerselectApi = api
+    this.powerselectApi = api;
   }
   @action
   searchForCurrentAddress() {
-    if(this.powerselectApi && this.addressSuggestion.fullAddress) {
-      this.powerselectApi.actions.search(this.addressSuggestion.fullAddress)
+    if (this.powerselectApi && this.addressSuggestion.fullAddress) {
+      this.powerselectApi.actions.search(this.addressSuggestion.fullAddress);
     }
   }
 }
-
-
 
 function addressInstanceToAddressSuggestion(addressInstance) {
   return {

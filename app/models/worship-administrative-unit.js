@@ -7,5 +7,4 @@ export default class WorshipAdministrativeUnitModel extends AdministrativeUnitMo
     async: true,
   })
   recognizedWorshipType;
-
 }

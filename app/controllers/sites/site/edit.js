@@ -50,7 +50,7 @@ export default class ContactDataEditSiteController extends Controller {
     address.rollbackAttributes();
     primaryContact.rollbackAttributes();
 
-    if(!secondaryContact.isDestroyed) {
+    if (!secondaryContact.isDestroyed) {
       secondaryContact.rollbackAttributes();
     }
 
@@ -62,7 +62,6 @@ export default class ContactDataEditSiteController extends Controller {
     this.saveButtonPressed = 0;
     this.hasError = false;
     this.hasWarning = false;
-
   }
 
   get isLoading() {
@@ -104,7 +103,8 @@ export default class ContactDataEditSiteController extends Controller {
     const currentAdminUnitClassificationId =
       this.model.adminUnit.classification.id;
     const currentSiteTypeId = this.model.site.siteType.id;
-    const maxAllowedSitesOfThisType = allowedSiteMatrix[currentAdminUnitClassificationId] &&
+    const maxAllowedSitesOfThisType =
+      allowedSiteMatrix[currentAdminUnitClassificationId] &&
       allowedSiteMatrix[currentAdminUnitClassificationId][currentSiteTypeId];
 
     const siteTypeKeyAfterSave = Object.keys(SITE_CODE).find(
@@ -182,7 +182,9 @@ export default class ContactDataEditSiteController extends Controller {
     // Save the models.
 
     if (primaryContact.hasDirtyAttributes) {
-      primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
+      primaryContact.telephone = transformPhoneNumbers(
+        primaryContact.telephone,
+      );
       if (primaryContact.isNew) {
         (await site.contacts).push(primaryContact);
       }
@@ -192,7 +194,7 @@ export default class ContactDataEditSiteController extends Controller {
     }
     if (secondaryContact.hasDirtyAttributes) {
       secondaryContact.telephone = transformPhoneNumbers(
-        secondaryContact.telephone
+        secondaryContact.telephone,
       );
       if (secondaryContact.isNew) {
         (await site.contacts).push(secondaryContact);
