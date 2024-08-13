@@ -13,7 +13,6 @@ Router.map(function () {
     this.route('controller-login');
   }
 
-  this.route('contact');
   this.route('auth', { path: '/authorization' }, function () {
     this.route('callback');
     this.route('callback-error');
