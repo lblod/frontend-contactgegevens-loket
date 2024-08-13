@@ -26,7 +26,7 @@
   },
   "overrides": {
     "@appuniversum/ember-appuniversum": {
-      "ember-source": "5.2.0"
+      "ember-source": "$ember-source"
     }
   },
   "devDependencies": {
