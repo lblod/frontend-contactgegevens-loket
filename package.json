@@ -25,12 +25,12 @@
     "test:ember": "ember test"
   },
   "overrides": {
-    "@appuniversum/ember-appuniversum": {
+    "@lblod/ember-environment-banner": {
       "ember-source": "$ember-source"
     }
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^2.18.0",
+    "@appuniversum/ember-appuniversum": "^3.5.0",
     "@babel/core": "^7.24.4",
     "@babel/eslint-parser": "^7.24.1",
     "@babel/plugin-proposal-decorators": "^7.24.1",
@@ -41,7 +41,7 @@
     "@glimmer/tracking": "^1.1.2",
     "@lblod/ember-acmidm-login": "^2.0.0",
     "@lblod/ember-address-search": "^0.1.0",
-    "@lblod/ember-environment-banner": "^0.2.0",
+    "@lblod/ember-environment-banner": "^0.5.0",
     "@lblod/ember-mock-login": "^0.7.0",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.2.2",
