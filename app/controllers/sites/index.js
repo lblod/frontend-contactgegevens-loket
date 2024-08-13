@@ -7,7 +7,6 @@ export default class ContactDataSitesOverviewController extends Controller {
 
   @action
   async updateSiteModifiedDate(siteId) {
-    console.log('Site Id', siteId);
     const site = await this.store.findRecord('site', siteId);
     site.modified = new Date();
     await site.save();
