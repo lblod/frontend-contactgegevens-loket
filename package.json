@@ -24,6 +24,11 @@
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },
+  "overrides": {
+    "@appuniversum/ember-appuniversum": {
+      "ember-source": "5.2.0"
+    }
+  },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^2.18.0",
     "@babel/eslint-parser": "^7.22.10",
@@ -92,10 +97,5 @@
   },
   "ember": {
     "edition": "octane"
-  },
-  "overrides": {
-    "@appuniversum/ember-appuniversum": {
-      "ember-source": "5.2.0"
-    }
   }
 }
