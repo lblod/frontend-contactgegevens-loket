@@ -39,9 +39,6 @@
       <p>{{config "announce.testing.message"}}</p>
     </AuAlert>
   {{/if}}
-  {{#if this.session.isAuthenticated}}
-    <Shared::BreadCrumb />
-  {{/if}}
   <AuMainContainer class="au-u-flex" as |m|>
     <m.content @scroll={{true}}>
       <AuBodyContainer @scroll={{true}}>
