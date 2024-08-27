@@ -2,8 +2,8 @@
   "name": "frontend-contactgegevens-loket",
   "version": "1.8.3",
   "private": true,
-  "description": "Small description for frontend-contactgegevens-loket goes here",
-  "repository": "",
+  "description": "Frontend for the app-contactgegevens-loket app",
+  "repository": "github:lblod/frontend-contactgegevens-loket",
   "license": "MIT",
   "author": "",
   "directories": {
