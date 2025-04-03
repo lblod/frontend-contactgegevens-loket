@@ -16,7 +16,6 @@ import {
 } from 'frontend-contactgegevens-loket/helpers/address-helpers';
 import { SITE_CODE } from '../../../models/site';
 
-import { transformPhoneNumbers } from '../../../utils/transform-phone-numbers';
 import { setEmptyStringsToNull } from '../../../utils/empty-string-to-null';
 
 function assert(value, message) {
@@ -182,9 +181,6 @@ export default class ContactDataEditSiteController extends Controller {
     // Save the models.
 
     if (primaryContact.hasDirtyAttributes) {
-      primaryContact.telephone = transformPhoneNumbers(
-        primaryContact.telephone,
-      );
       if (primaryContact.isNew) {
         (await site.contacts).push(primaryContact);
       }
@@ -193,9 +189,6 @@ export default class ContactDataEditSiteController extends Controller {
       await primaryContact.save();
     }
     if (secondaryContact.hasDirtyAttributes) {
-      secondaryContact.telephone = transformPhoneNumbers(
-        secondaryContact.telephone,
-      );
       if (secondaryContact.isNew) {
         (await site.contacts).push(secondaryContact);
       }
