@@ -15,7 +15,6 @@ import {
 } from 'frontend-contactgegevens-loket/helpers/address-helpers';
 import { SITE_CODE } from '../../models/site';
 
-import { transformPhoneNumbers } from '../../utils/transform-phone-numbers';
 import { combineFullAddress } from '../../models/address';
 export default class CreateSitesNewController extends Controller {
   @service router;
@@ -103,10 +102,6 @@ export default class CreateSitesNewController extends Controller {
   saveTask = task(async () => {
     const { address, primaryContact, secondaryContact, site, adminUnit } =
       this.model;
-    primaryContact.telephone = transformPhoneNumbers(primaryContact.telephone);
-    secondaryContact.telephone = transformPhoneNumbers(
-      secondaryContact.telephone,
-    );
     await primaryContact.save();
     await secondaryContact.save();
     address.fullAddress = combineFullAddress(address);
