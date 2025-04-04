@@ -32,7 +32,9 @@
       <th class="au-c-data-table__header-title">Type vestiging</th>
       <th class="au-c-data-table__header-title">Primair telefoonnummer</th>
       <th class="au-c-data-table__header-title">Email</th>
-      <th class="au-c-data-table__header-title">Laatste controle of aanpassing</th>
+      {{#if (is-feature-enabled "edit-feature")}}
+        <th class="au-c-data-table__header-title">Laatste controle of aanpassing</th>
+      {{/if}}
     </c.header>
     <c.body as |site|>
       <td class="primary-site-column">
@@ -66,32 +68,34 @@
           {{/if}}
         {{/each}}
       </td>
-      <td class="customTableData">
+      {{#if (is-feature-enabled "edit-feature")}}
+        <td class="customTableData">
 
-        {{! Correctly using the let block with a helper }}
-        {{#let
-          (is-modified-longer-then-6-months site.modified)
-          as |modifiedInfo|
-        }}
-          <AuPill @icon={{modifiedInfo.icon}} @skin={{modifiedInfo.skin}}>
-            {{date-format site.modified}}
-          </AuPill>
-          {{#if (eq modifiedInfo.skin "warning")}}
+          {{! Correctly using the let block with a helper }}
+          {{#let
+            (is-modified-longer-then-6-months site.modified)
+            as |modifiedInfo|
+          }}
+            <AuPill @icon={{modifiedInfo.icon}} @skin={{modifiedInfo.skin}}>
+              {{date-format site.modified}}
+            </AuPill>
+            {{#if (eq modifiedInfo.skin "warning")}}
 
-            <div class="modifyButtons">
-              <AuLink
-                {{on "click" (fn this.updateSiteModifiedDate site.id)}}
-              >
-                Gegevens bevestigen
-              </AuLink>
-              <br />
-              <AuLink @model={{site.id}} @route="sites.site.edit">
-                Bewerken
-              </AuLink>
-            </div>
-          {{/if}}
-        {{/let}}
-      </td>
+              <div class="modifyButtons">
+                <AuLink
+                  {{on "click" (fn this.updateSiteModifiedDate site.id)}}
+                >
+                  Gegevens bevestigen
+                </AuLink>
+                <br />
+                <AuLink @model={{site.id}} @route="sites.site.edit">
+                  Bewerken
+                </AuLink>
+              </div>
+            {{/if}}
+          {{/let}}
+        </td>
+      {{/if}}
     </c.body>
   </t.content>
 </AuDataTable>
