@@ -1,3 +1,11 @@
+## v1.9.2 (2025-04-04)
+
+#### :house: Internal
+* [#142](https://github.com/lblod/frontend-contactgegevens-loket/pull/142) Update Woodpecker CI config files ([@claire-lovisa](https://github.com/claire-lovisa))
+
+#### Committers: 1
+- Claire Lovisa ([@claire-lovisa](https://github.com/claire-lovisa))
+
 ## v1.9.1 (2025-04-04)
 
 #### :rocket: Enhancement
