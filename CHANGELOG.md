@@ -1,3 +1,7 @@
+## v1.9.3 (2025-04-04)
+#### :house: Enhancement
+* [#143](https://github.com/lblod/frontend-contactgegevens-loket/pull/143) Update Woodpecker CI config files ([@cecemel](https://github.com/cecemel))
+
 ## v1.9.2 (2025-04-04)
 
 #### :house: Internal
