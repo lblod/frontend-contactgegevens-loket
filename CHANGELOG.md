@@ -1,3 +1,13 @@
+## v1.9.1 (2025-04-04)
+
+#### :rocket: Enhancement
+* [#141](https://github.com/lblod/frontend-contactgegevens-loket/pull/141) [CLBV-1005] Phone number formatting improvements ([@Windvis](https://github.com/Windvis))
+* [#140](https://github.com/lblod/frontend-contactgegevens-loket/pull/140) Update mock-login accounts label display ([@claire-lovisa](https://github.com/claire-lovisa))
+
+#### Committers: 2
+- Claire Lovisa ([@claire-lovisa](https://github.com/claire-lovisa))
+- Sam Van Campenhout ([@Windvis](https://github.com/Windvis))
+
 ## v1.9.0 (2024-08-27)
 
 #### :rocket: Enhancement
