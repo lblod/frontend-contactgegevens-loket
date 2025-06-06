@@ -6,9 +6,9 @@ export default class Router extends EmberRouter {
 }
 Router.map(function () {
   this.route('login');
+  this.route('switch-login');
   if (ENV.controllerLogin !== 'true') {
     this.route('mock-login');
-    this.route('switch-login');
   } else {
     this.route('controller-login');
   }
@@ -17,6 +17,7 @@ Router.map(function () {
     this.route('callback');
     this.route('callback-error');
     this.route('login');
+    this.route('switch');
     this.route('logout');
     if (ENV.controllerLogin !== 'true') {
       if (
@@ -26,7 +27,6 @@ Router.map(function () {
       ) {
         this.route('mock-login');
       }
-      this.route('switch');
     } else {
       this.route('controller-login');
     }

@@ -4,9 +4,7 @@
 <AuAlert @icon="circle-x" @skin="error" @title="Fout bij het aanmelden">
   <p>
     Er ging iets fout bij het aanmelden.
-    {{#unless this.session.isControllerLoginSession}}
-      <AuLink @route="auth.switch">Probeer het opnieuw</AuLink>.
-    {{/unless}}
+    <AuLink @route="auth.switch">Probeer het opnieuw</AuLink>.
     <AuHelpText>
       Indien dit probleem zich blijft voordoen, contacteer
       <AuLinkExternal
