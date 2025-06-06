@@ -1,3 +1,7 @@
+## v1.9.4 (2025-06-06)
+#### :rocket: Enhancement
+* [#145](https://github.com/lblod/frontend-contactgegevens-loket/pull/145) [DL-5635]: update privacy policy disclaimer ([@wolfderechter](https://github.com/wolfderechter))
+
 ## v1.9.3 (2025-04-04)
 #### :house: Enhancement
 * [#143](https://github.com/lblod/frontend-contactgegevens-loket/pull/143) Update Woodpecker CI config files ([@cecemel](https://github.com/cecemel))
