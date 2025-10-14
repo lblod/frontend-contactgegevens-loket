@@ -1,6 +1,6 @@
 {
   "name": "frontend-contactgegevens-loket",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "private": true,
   "description": "Frontend for the app-contactgegevens-loket app",
   "repository": "github:lblod/frontend-contactgegevens-loket",
